@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Menu, Send } from 'lucide-react'
+import { Download, Menu, Send } from 'lucide-react'
 
 import { Container } from '@/components/common/container'
 import { ThemeToggle } from '@/components/common/theme-toggle'
@@ -29,6 +29,7 @@ export function NavbarSection({ activeSection }: NavbarSectionProps) {
     }
 
     updateScrolledState()
+
     window.addEventListener('scroll', updateScrolledState, {
       passive: true,
     })
@@ -38,42 +39,57 @@ export function NavbarSection({ activeSection }: NavbarSectionProps) {
     }
   }, [])
 
+  useEffect(() => {
+    const closeMenuOnDesktop = () => {
+      if (window.innerWidth >= 1280) {
+        setMobileMenuOpen(false)
+      }
+    }
+
+    window.addEventListener('resize', closeMenuOnDesktop)
+
+    return () => {
+      window.removeEventListener('resize', closeMenuOnDesktop)
+    }
+  }, [])
+
   return (
     <header className="pointer-events-none fixed inset-x-0 top-0 z-50">
-      <div className="px-3 pt-3 sm:px-4 sm:pt-4 lg:px-6">
-        <Container className="pointer-events-auto">
+      <div className="px-2 pt-2 sm:px-4 sm:pt-3 lg:px-6 lg:pt-4">
+        <Container className="pointer-events-auto px-0">
           <div
             className={cn(
-              'flex items-center justify-between gap-3 rounded-[1.5rem] border border-border/60 bg-background/70 px-4 py-3 backdrop-blur-2xl transition-[padding,background-color,box-shadow,border-color] duration-300 supports-[backdrop-filter]:bg-background/70',
+              'flex min-w-0 items-center justify-between gap-2 rounded-2xl border border-border/60 bg-background/75 px-3 py-2.5 shadow-sm backdrop-blur-2xl transition-all duration-300 supports-[backdrop-filter]:bg-background/70 sm:gap-3 sm:rounded-[1.5rem] sm:px-4 sm:py-3',
               isScrolled &&
-                'border-border/70 bg-background/88 py-2.5 shadow-[0_16px_50px_rgba(15,23,42,0.12)] supports-[backdrop-filter]:bg-background/84',
+                'border-border/75 bg-background/90 py-2 shadow-[0_16px_50px_rgba(15,23,42,0.12)] supports-[backdrop-filter]:bg-background/85 sm:py-2.5',
             )}
           >
             <a
               href="#hero"
-              className="group inline-flex items-center gap-3 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="group flex min-w-0 items-center gap-2 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:gap-3"
+              aria-label={`${portfolioData.name} home`}
             >
               <img
                 src="/images/profile.png"
                 alt={portfolioData.name}
-                width={40}
-                height={40}
-                className="size-10 rounded-full border border-sky-400/50 object-cover object-top shadow-sm"
+                width={44}
+                height={44}
+                className="size-9 shrink-0 rounded-full border border-sky-400/50 object-cover object-top shadow-sm sm:size-10 lg:size-11"
               />
 
-              <span className="hidden flex-col leading-none sm:flex">
-                <span className="font-heading text-sm font-semibold">
+              <span className="hidden min-w-0 flex-col leading-none min-[420px]:flex">
+                <span className="truncate font-heading text-xs font-semibold sm:text-sm">
                   {portfolioData.name}
                 </span>
 
-                <span className="text-xs text-muted-foreground">
+                <span className="mt-1 truncate text-[10px] text-muted-foreground sm:text-xs">
                   {portfolioData.primaryRole}
                 </span>
               </span>
             </a>
 
             <nav
-              className="hidden items-center gap-1 rounded-full border border-border/60 bg-card/75 p-1 shadow-sm backdrop-blur-md lg:flex"
+              className="hidden items-center gap-1 rounded-full border border-border/60 bg-card/75 p-1 shadow-sm backdrop-blur-md xl:flex"
               aria-label="Primary navigation"
             >
               {portfolioData.navLinks.map((link) => {
@@ -84,9 +100,9 @@ export function NavbarSection({ activeSection }: NavbarSectionProps) {
                     key={link.href}
                     href={link.href}
                     className={cn(
-                      'rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-all duration-200 hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+                      'whitespace-nowrap rounded-full px-3 py-2 text-xs font-medium text-muted-foreground transition-all duration-200 hover:bg-muted/60 hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background 2xl:px-4 2xl:text-sm',
                       isActive &&
-                        'bg-gradient-to-r from-sky-500 via-cyan-500 to-violet-600 text-white shadow-[0_10px_24px_rgba(14,165,233,0.24)] hover:text-white',
+                        'bg-gradient-to-r from-sky-500 via-cyan-500 to-violet-600 text-white shadow-[0_10px_24px_rgba(14,165,233,0.24)] hover:bg-gradient-to-r hover:text-white',
                     )}
                     aria-current={isActive ? 'page' : undefined}
                   >
@@ -96,19 +112,26 @@ export function NavbarSection({ activeSection }: NavbarSectionProps) {
               })}
             </nav>
 
-            <div className="flex items-center gap-2">
+            <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
               <ThemeToggle />
 
               <Button
                 variant="outline"
                 size="sm"
-                render={<a href={portfolioData.resumeHref} download />}
-                className="hidden rounded-full border-border/70 bg-background/80 backdrop-blur-md md:inline-flex"
+                render={
+                  <a
+                    href={portfolioData.resumeHref}
+                    download
+                    aria-label="Download resume"
+                  />
+                }
+                className="hidden rounded-full border-border/70 bg-background/80 backdrop-blur-md lg:inline-flex xl:hidden 2xl:inline-flex"
               >
+                <Download className="size-4" />
                 Resume
               </Button>
 
-              <div className="lg:hidden">
+              <div className="xl:hidden">
                 <Sheet
                   open={mobileMenuOpen}
                   onOpenChange={setMobileMenuOpen}
@@ -119,24 +142,50 @@ export function NavbarSection({ activeSection }: NavbarSectionProps) {
                         type="button"
                         variant="outline"
                         size="icon-sm"
-                        className="rounded-full border-border/70 bg-background/80 backdrop-blur-md"
+                        className="size-9 rounded-full border-border/70 bg-background/80 backdrop-blur-md sm:size-10"
                         aria-label="Open navigation menu"
                       />
                     }
                   >
-                    <Menu />
+                    <Menu className="size-4 sm:size-5" />
                   </SheetTrigger>
 
                   <SheetContent
                     side="right"
-                    className="w-[min(100vw-1rem,22rem)] border-l border-border/60 bg-background/96 px-4 py-6 backdrop-blur-xl"
+                    className="w-[calc(100vw-1rem)] max-w-sm overflow-y-auto border-l border-border/60 bg-background/96 px-4 py-5 backdrop-blur-xl sm:w-96 sm:px-6 sm:py-6"
                   >
-                    <SheetHeader className="px-0 pt-2">
-                      <SheetTitle>Navigation</SheetTitle>
+                    <SheetHeader className="border-b border-border/60 px-0 pb-5 pt-1">
+                      <SheetTitle className="sr-only">
+                        Portfolio navigation
+                      </SheetTitle>
+
+                      <a
+                        href="#hero"
+                        className="flex min-w-0 items-center gap-3"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <img
+                          src="/images/profile.png"
+                          alt={portfolioData.name}
+                          width={48}
+                          height={48}
+                          className="size-12 shrink-0 rounded-full border border-sky-400/50 object-cover object-top"
+                        />
+
+                        <span className="min-w-0">
+                          <span className="block truncate font-heading text-base font-semibold text-foreground">
+                            {portfolioData.name}
+                          </span>
+
+                          <span className="mt-1 block truncate text-sm text-muted-foreground">
+                            {portfolioData.primaryRole}
+                          </span>
+                        </span>
+                      </a>
                     </SheetHeader>
 
                     <nav
-                      className="mt-6 flex flex-col gap-2"
+                      className="mt-5 flex flex-col gap-2"
                       aria-label="Mobile navigation"
                     >
                       {portfolioData.navLinks.map((link) => {
@@ -150,9 +199,9 @@ export function NavbarSection({ activeSection }: NavbarSectionProps) {
                               <a
                                 href={link.href}
                                 className={cn(
-                                  'rounded-xl px-3 py-3 text-base font-medium text-foreground transition-colors hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+                                  'flex min-h-12 items-center rounded-xl border border-transparent px-4 py-3 text-base font-medium text-foreground transition-colors hover:border-border/60 hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
                                   isActive &&
-                                    'bg-muted text-foreground',
+                                    'border-sky-400/30 bg-gradient-to-r from-sky-500/10 via-cyan-500/10 to-violet-500/10 text-sky-600 dark:text-sky-400',
                                 )}
                                 onClick={() =>
                                   setMobileMenuOpen(false)
@@ -166,28 +215,43 @@ export function NavbarSection({ activeSection }: NavbarSectionProps) {
                       })}
                     </nav>
 
-                    <div className="mt-6 grid gap-3">
+                    <div className="mt-6 grid gap-3 border-t border-border/60 pt-5">
                       <Button
                         variant="outline"
-                        className="rounded-full"
+                        className="min-h-11 w-full rounded-full"
                         render={
                           <a
                             href={portfolioData.resumeHref}
                             download
+                            onClick={() =>
+                              setMobileMenuOpen(false)
+                            }
                           />
                         }
                       >
-                        Resume
+                        <Download />
+                        Download Resume
                       </Button>
 
-                      <Button
-                        className="rounded-full"
-                        render={<a href="#contact" />}
+                      <SheetClose
+                        render={
+                          <Button
+                            className="min-h-11 w-full rounded-full"
+                            render={<a href="#contact" />}
+                            onClick={() =>
+                              setMobileMenuOpen(false)
+                            }
+                          />
+                        }
                       >
-                        Contact
+                        Contact Me
                         <Send />
-                      </Button>
+                      </SheetClose>
                     </div>
+
+                    <p className="mt-6 text-center text-xs leading-5 text-muted-foreground">
+                      {portfolioData.location}
+                    </p>
                   </SheetContent>
                 </Sheet>
               </div>
