@@ -27,6 +27,9 @@ import { Textarea } from '@/components/ui/textarea'
 import { socialLinks } from '@/constants/social-links'
 import { portfolioData } from '@/data/portfolio'
 
+const WEB3FORMS_FORM_ID =
+  '7c8b13ce-deb0-4235-bd9a-fe9165dab0fe'
+
 const contactSchema = z.object({
   name: z
     .string()
@@ -72,7 +75,7 @@ const contactSocialLinks = [
     description: 'Professional profile',
     href: socialLinks.linkedin,
     icon: BriefcaseBusiness,
-    className:
+    containerClassName:
       'hover:border-sky-400/40 hover:bg-sky-500/10',
     iconClassName:
       'bg-sky-500/10 text-sky-600 dark:text-sky-400',
@@ -82,7 +85,7 @@ const contactSocialLinks = [
     description: 'Connect socially',
     href: socialLinks.facebook,
     icon: Users,
-    className:
+    containerClassName:
       'hover:border-blue-400/40 hover:bg-blue-500/10',
     iconClassName:
       'bg-blue-500/10 text-blue-600 dark:text-blue-400',
@@ -92,7 +95,7 @@ const contactSocialLinks = [
     description: 'Chat directly',
     href: socialLinks.whatsapp,
     icon: MessageCircle,
-    className:
+    containerClassName:
       'hover:border-emerald-400/40 hover:bg-emerald-500/10',
     iconClassName:
       'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
@@ -133,24 +136,8 @@ export function ContactSection() {
       message: '',
     })
 
-    const accessKey =
-      import.meta.env
-        .VITE_WEB3FORMS_ACCESS_KEY?.trim()
-
-    if (!accessKey) {
-      setSubmissionStatus({
-        type: 'error',
-        message:
-          'Contact form access key is missing. Please add VITE_WEB3FORMS_ACCESS_KEY to the environment variables.',
-      })
-
-      return
-    }
-
     try {
       const formData = new FormData()
-
-      formData.append('access_key', accessKey)
 
       formData.append(
         'name',
@@ -178,6 +165,11 @@ export function ContactSection() {
       )
 
       formData.append(
+        'from_name',
+        'Md. Nazmus Shakib Portfolio',
+      )
+
+      formData.append(
         'Website',
         'mdnazmusshakib.me',
       )
@@ -188,7 +180,7 @@ export function ContactSection() {
       )
 
       const response = await fetch(
-        'https://api.web3forms.com/submit',
+        `https://api.web3forms.com/submit/${WEB3FORMS_FORM_ID}`,
         {
           method: 'POST',
           body: formData,
@@ -263,7 +255,7 @@ export function ContactSection() {
               </p>
             </div>
 
-            {/* Email, phone and location */}
+            {/* Basic contact information */}
             <div className="mt-8 grid gap-3">
               <a
                 href={`mailto:${portfolioData.email}`}
@@ -320,7 +312,7 @@ export function ContactSection() {
               </div>
             </div>
 
-            {/* Social accounts */}
+            {/* Social links */}
             <div className="mt-7">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                 Social Profiles
@@ -339,7 +331,7 @@ export function ContactSection() {
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={`Open ${socialLink.label}`}
-                        className={`group rounded-2xl border border-border/60 bg-background/55 p-4 transition-all duration-300 hover:-translate-y-1 ${socialLink.className}`}
+                        className={`group rounded-2xl border border-border/60 bg-background/55 p-4 transition-all duration-300 hover:-translate-y-1 ${socialLink.containerClassName}`}
                       >
                         <span
                           className={`flex size-10 items-center justify-center rounded-xl ${socialLink.iconClassName}`}
@@ -372,8 +364,8 @@ export function ContactSection() {
                     </p>
 
                     <p className="mt-1 text-xs leading-5 text-muted-foreground">
-                      Form submissions will arrive in my
-                      registered email inbox.
+                      Form submissions will arrive directly
+                      in my registered email inbox.
                     </p>
                   </div>
                 </div>
