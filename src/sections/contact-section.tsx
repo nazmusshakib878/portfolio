@@ -1,12 +1,15 @@
 import { useState } from 'react'
 
 import {
+  BriefcaseBusiness,
   CheckCircle2,
   LoaderCircle,
   Mail,
   MapPin,
+  MessageCircle,
   Phone,
   Send,
+  Users,
 } from 'lucide-react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -21,6 +24,7 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { socialLinks } from '@/constants/social-links'
 import { portfolioData } from '@/data/portfolio'
 
 const contactSchema = z.object({
@@ -61,6 +65,39 @@ type SubmissionStatus = {
   type: 'idle' | 'success' | 'error'
   message: string
 }
+
+const contactSocialLinks = [
+  {
+    label: 'LinkedIn',
+    description: 'Professional profile',
+    href: socialLinks.linkedin,
+    icon: BriefcaseBusiness,
+    className:
+      'hover:border-sky-400/40 hover:bg-sky-500/10',
+    iconClassName:
+      'bg-sky-500/10 text-sky-600 dark:text-sky-400',
+  },
+  {
+    label: 'Facebook',
+    description: 'Connect socially',
+    href: socialLinks.facebook,
+    icon: Users,
+    className:
+      'hover:border-blue-400/40 hover:bg-blue-500/10',
+    iconClassName:
+      'bg-blue-500/10 text-blue-600 dark:text-blue-400',
+  },
+  {
+    label: 'WhatsApp',
+    description: 'Chat directly',
+    href: socialLinks.whatsapp,
+    icon: MessageCircle,
+    className:
+      'hover:border-emerald-400/40 hover:bg-emerald-500/10',
+    iconClassName:
+      'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
+  },
+]
 
 export function ContactSection() {
   const [submissionStatus, setSubmissionStatus] =
@@ -196,11 +233,11 @@ export function ContactSection() {
       <SectionHeading
         eyebrow="Contact"
         title="Have a project or opportunity in mind?"
-        description="Send a message using the form below. Your message will be delivered directly to my email inbox."
+        description="Send a message using the form or connect with me through LinkedIn, Facebook, WhatsApp, email, or phone."
         align="center"
       />
 
-      <div className="grid gap-5 lg:grid-cols-[0.82fr_1.18fr]">
+      <div className="grid gap-5 lg:grid-cols-[0.86fr_1.14fr]">
         {/* Contact information */}
         <Card className="relative overflow-hidden border-border/60 bg-card/75 shadow-[0_25px_90px_rgba(15,23,42,0.08)] backdrop-blur-2xl">
           <div
@@ -219,13 +256,14 @@ export function ContactSection() {
               </h3>
 
               <p className="mt-4 text-sm leading-7 text-muted-foreground">
-                Contact me regarding web development,
-                Laravel applications, API integration,
-                internships, collaborations, or graduate
-                opportunities.
+                Contact me regarding Laravel
+                applications, web development, API
+                integration, internships, collaborations,
+                or graduate opportunities.
               </p>
             </div>
 
+            {/* Email, phone and location */}
             <div className="mt-8 grid gap-3">
               <a
                 href={`mailto:${portfolioData.email}`}
@@ -282,7 +320,48 @@ export function ContactSection() {
               </div>
             </div>
 
-            <div className="mt-auto pt-8">
+            {/* Social accounts */}
+            <div className="mt-7">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                Social Profiles
+              </p>
+
+              <div className="mt-3 grid gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
+                {contactSocialLinks.map(
+                  (socialLink) => {
+                    const SocialIcon =
+                      socialLink.icon
+
+                    return (
+                      <a
+                        key={socialLink.label}
+                        href={socialLink.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Open ${socialLink.label}`}
+                        className={`group rounded-2xl border border-border/60 bg-background/55 p-4 transition-all duration-300 hover:-translate-y-1 ${socialLink.className}`}
+                      >
+                        <span
+                          className={`flex size-10 items-center justify-center rounded-xl ${socialLink.iconClassName}`}
+                        >
+                          <SocialIcon className="size-5" />
+                        </span>
+
+                        <p className="mt-3 text-sm font-semibold text-foreground">
+                          {socialLink.label}
+                        </p>
+
+                        <p className="mt-1 text-[11px] text-muted-foreground">
+                          {socialLink.description}
+                        </p>
+                      </a>
+                    )
+                  },
+                )}
+              </div>
+            </div>
+
+            <div className="mt-auto pt-7">
               <div className="rounded-2xl border border-emerald-400/20 bg-emerald-500/10 p-4">
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-emerald-500" />
