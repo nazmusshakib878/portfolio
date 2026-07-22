@@ -1,4 +1,7 @@
-import { useState } from 'react'
+import {
+  useState,
+  type FormEvent,
+} from 'react'
 
 import {
   BriefcaseBusiness,
@@ -12,10 +15,6 @@ import {
   Users,
 } from 'lucide-react'
 
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-
 import { SectionHeading } from '@/components/common/section-heading'
 import { Button } from '@/components/ui/button'
 import {
@@ -27,46 +26,17 @@ import { Textarea } from '@/components/ui/textarea'
 import { socialLinks } from '@/constants/social-links'
 import { portfolioData } from '@/data/portfolio'
 
-const WEB3FORMS_FORM_ID =
+const WEB3FORMS_ACCESS_KEY =
   '7c8b13ce-deb0-4235-bd9a-fe9165dab0fe'
-
-const contactSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(2, 'Please enter your name.'),
-
-  email: z
-    .string()
-    .trim()
-    .email('Please enter a valid email address.'),
-
-  subject: z
-    .string()
-    .trim()
-    .min(3, 'Please enter a subject.'),
-
-  message: z
-    .string()
-    .trim()
-    .min(
-      10,
-      'Please write at least 10 characters.',
-    ),
-})
-
-type ContactFormValues = z.infer<
-  typeof contactSchema
->
-
-type Web3FormsResponse = {
-  success?: boolean
-  message?: string
-}
 
 type SubmissionStatus = {
   type: 'idle' | 'success' | 'error'
   message: string
+}
+
+type Web3FormsResponse = {
+  success?: boolean
+  message?: string
 }
 
 const contactSocialLinks = [
@@ -75,7 +45,7 @@ const contactSocialLinks = [
     description: 'Professional profile',
     href: socialLinks.linkedin,
     icon: BriefcaseBusiness,
-    containerClassName:
+    cardClassName:
       'hover:border-sky-400/40 hover:bg-sky-500/10',
     iconClassName:
       'bg-sky-500/10 text-sky-600 dark:text-sky-400',
@@ -85,7 +55,7 @@ const contactSocialLinks = [
     description: 'Connect socially',
     href: socialLinks.facebook,
     icon: Users,
-    containerClassName:
+    cardClassName:
       'hover:border-blue-400/40 hover:bg-blue-500/10',
     iconClassName:
       'bg-blue-500/10 text-blue-600 dark:text-blue-400',
@@ -95,7 +65,7 @@ const contactSocialLinks = [
     description: 'Chat directly',
     href: socialLinks.whatsapp,
     icon: MessageCircle,
-    containerClassName:
+    cardClassName:
       'hover:border-emerald-400/40 hover:bg-emerald-500/10',
     iconClassName:
       'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
@@ -103,106 +73,137 @@ const contactSocialLinks = [
 ]
 
 export function ContactSection() {
+  const [isSubmitting, setIsSubmitting] =
+    useState(false)
+
   const [submissionStatus, setSubmissionStatus] =
     useState<SubmissionStatus>({
       type: 'idle',
       message: '',
     })
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: {
-      errors,
-      isSubmitting,
-    },
-  } = useForm<ContactFormValues>({
-    resolver: zodResolver(contactSchema),
-
-    defaultValues: {
-      name: '',
-      email: '',
-      subject: '',
-      message: '',
-    },
-  })
-
-  const onSubmit = async (
-    values: ContactFormValues,
+  const handleSubmit = async (
+    event: FormEvent<HTMLFormElement>,
   ) => {
+    event.preventDefault()
+
+    const form = event.currentTarget
+
+    setIsSubmitting(true)
+
     setSubmissionStatus({
       type: 'idle',
       message: '',
     })
 
     try {
-      const formData = new FormData()
+      const formData = new FormData(form)
 
-      formData.append(
-        'name',
-        values.name.trim(),
+      const senderName = String(
+        formData.get('name') ?? '',
+      ).trim()
+
+      const senderEmail = String(
+        formData.get('email') ?? '',
+      ).trim()
+
+      const userSubject = String(
+        formData.get('subject') ?? '',
+      ).trim()
+
+      const message = String(
+        formData.get('message') ?? '',
+      ).trim()
+
+      if (senderName.length < 2) {
+        throw new Error(
+          'Please enter your name.',
+        )
+      }
+
+      if (
+        !senderEmail ||
+        !senderEmail.includes('@')
+      ) {
+        throw new Error(
+          'Please enter a valid email address.',
+        )
+      }
+
+      if (userSubject.length < 3) {
+        throw new Error(
+          'Please enter a valid subject.',
+        )
+      }
+
+      if (message.length < 10) {
+        throw new Error(
+          'Please write at least 10 characters.',
+        )
+      }
+
+      formData.set(
+        'access_key',
+        WEB3FORMS_ACCESS_KEY,
       )
 
-      formData.append(
-        'email',
-        values.email.trim(),
-      )
-
-      formData.append(
-        'replyto',
-        values.email.trim(),
-      )
-
-      formData.append(
+      formData.set(
         'subject',
-        `Portfolio Contact: ${values.subject.trim()}`,
+        `Portfolio Contact: ${userSubject}`,
       )
 
-      formData.append(
-        'message',
-        values.message.trim(),
-      )
-
-      formData.append(
+      formData.set(
         'from_name',
         'Md. Nazmus Shakib Portfolio',
       )
 
-      formData.append(
-        'Website',
-        'mdnazmusshakib.me',
+      formData.set(
+        'replyto',
+        senderEmail,
       )
 
-      formData.append(
-        'Page URL',
+      formData.set(
+        'website',
+        'https://mdnazmusshakib.me',
+      )
+
+      formData.set(
+        'page_url',
         window.location.href,
       )
 
       const response = await fetch(
-        `https://api.web3forms.com/submit/${WEB3FORMS_FORM_ID}`,
+        'https://api.web3forms.com/submit',
         {
           method: 'POST',
           body: formData,
         },
       )
 
-      const data =
-        (await response.json()) as Web3FormsResponse
+      let result: Web3FormsResponse = {}
 
-      if (!response.ok || !data.success) {
+      try {
+        result =
+          (await response.json()) as Web3FormsResponse
+      } catch {
         throw new Error(
-          data.message ||
+          'The email service returned an invalid response.',
+        )
+      }
+
+      if (!response.ok || !result.success) {
+        throw new Error(
+          result.message ||
             'The message could not be sent.',
         )
       }
 
-      reset()
+      form.reset()
 
       setSubmissionStatus({
         type: 'success',
         message:
-          'Your message was sent successfully. Thank you for contacting me!',
+          'Your message was sent successfully. I will respond as soon as possible.',
       })
     } catch (error) {
       const errorMessage =
@@ -214,6 +215,8 @@ export function ContactSection() {
         type: 'error',
         message: errorMessage,
       })
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -225,7 +228,7 @@ export function ContactSection() {
       <SectionHeading
         eyebrow="Contact"
         title="Have a project or opportunity in mind?"
-        description="Send a message using the form or connect with me through LinkedIn, Facebook, WhatsApp, email, or phone."
+        description="Send a message using the contact form or connect with me through LinkedIn, Facebook, WhatsApp, email, or phone."
         align="center"
       />
 
@@ -250,12 +253,12 @@ export function ContactSection() {
               <p className="mt-4 text-sm leading-7 text-muted-foreground">
                 Contact me regarding Laravel
                 applications, web development, API
-                integration, internships, collaborations,
-                or graduate opportunities.
+                integration, internships,
+                collaborations, or graduate
+                opportunities.
               </p>
             </div>
 
-            {/* Basic contact information */}
             <div className="mt-8 grid gap-3">
               <a
                 href={`mailto:${portfolioData.email}`}
@@ -312,7 +315,6 @@ export function ContactSection() {
               </div>
             </div>
 
-            {/* Social links */}
             <div className="mt-7">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                 Social Profiles
@@ -331,7 +333,7 @@ export function ContactSection() {
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={`Open ${socialLink.label}`}
-                        className={`group rounded-2xl border border-border/60 bg-background/55 p-4 transition-all duration-300 hover:-translate-y-1 ${socialLink.containerClassName}`}
+                        className={`group rounded-2xl border border-border/60 bg-background/55 p-4 transition-all duration-300 hover:-translate-y-1 ${socialLink.cardClassName}`}
                       >
                         <span
                           className={`flex size-10 items-center justify-center rounded-xl ${socialLink.iconClassName}`}
@@ -364,7 +366,7 @@ export function ContactSection() {
                     </p>
 
                     <p className="mt-1 text-xs leading-5 text-muted-foreground">
-                      Form submissions will arrive directly
+                      Your message will arrive directly
                       in my registered email inbox.
                     </p>
                   </div>
@@ -374,7 +376,7 @@ export function ContactSection() {
           </CardContent>
         </Card>
 
-        {/* Contact form */}
+        {/* Form */}
         <Card className="relative overflow-hidden border-border/60 bg-card/75 shadow-[0_25px_90px_rgba(15,23,42,0.08)] backdrop-blur-2xl">
           <div
             aria-hidden="true"
@@ -384,9 +386,17 @@ export function ContactSection() {
           <CardContent className="relative p-6 sm:p-8">
             <form
               className="space-y-5"
-              onSubmit={handleSubmit(onSubmit)}
-              noValidate
+              onSubmit={handleSubmit}
             >
+              {/* Spam protection */}
+              <input
+                type="checkbox"
+                name="botcheck"
+                className="hidden"
+                tabIndex={-1}
+                autoComplete="off"
+              />
+
               <div className="grid gap-5 sm:grid-cols-2">
                 <div className="space-y-2">
                   <label
@@ -398,21 +408,14 @@ export function ContactSection() {
 
                   <Input
                     id="contact-name"
+                    name="name"
                     type="text"
                     placeholder="Your name"
                     autoComplete="name"
-                    aria-invalid={Boolean(
-                      errors.name,
-                    )}
-                    {...register('name')}
+                    required
+                    minLength={2}
                     className="h-12 rounded-xl bg-background/60"
                   />
-
-                  {errors.name ? (
-                    <p className="text-sm text-destructive">
-                      {errors.name.message}
-                    </p>
-                  ) : null}
                 </div>
 
                 <div className="space-y-2">
@@ -425,21 +428,13 @@ export function ContactSection() {
 
                   <Input
                     id="contact-email"
+                    name="email"
                     type="email"
                     placeholder="you@example.com"
                     autoComplete="email"
-                    aria-invalid={Boolean(
-                      errors.email,
-                    )}
-                    {...register('email')}
+                    required
                     className="h-12 rounded-xl bg-background/60"
                   />
-
-                  {errors.email ? (
-                    <p className="text-sm text-destructive">
-                      {errors.email.message}
-                    </p>
-                  ) : null}
                 </div>
               </div>
 
@@ -453,20 +448,13 @@ export function ContactSection() {
 
                 <Input
                   id="contact-subject"
+                  name="subject"
                   type="text"
                   placeholder="Project inquiry"
-                  aria-invalid={Boolean(
-                    errors.subject,
-                  )}
-                  {...register('subject')}
+                  required
+                  minLength={3}
                   className="h-12 rounded-xl bg-background/60"
                 />
-
-                {errors.subject ? (
-                  <p className="text-sm text-destructive">
-                    {errors.subject.message}
-                  </p>
-                ) : null}
               </div>
 
               <div className="space-y-2">
@@ -479,26 +467,20 @@ export function ContactSection() {
 
                 <Textarea
                   id="contact-message"
+                  name="message"
                   placeholder="Tell me about your project, timeline, and goals."
                   rows={7}
-                  aria-invalid={Boolean(
-                    errors.message,
-                  )}
-                  {...register('message')}
+                  required
+                  minLength={10}
                   className="resize-y rounded-xl bg-background/60"
                 />
-
-                {errors.message ? (
-                  <p className="text-sm text-destructive">
-                    {errors.message.message}
-                  </p>
-                ) : null}
               </div>
 
               {submissionStatus.type !==
               'idle' ? (
                 <div
                   role="status"
+                  aria-live="polite"
                   className={
                     submissionStatus.type ===
                     'success'
@@ -506,7 +488,16 @@ export function ContactSection() {
                       : 'rounded-2xl border border-destructive/25 bg-destructive/10 p-4 text-sm leading-6 text-foreground'
                   }
                 >
-                  {submissionStatus.message}
+                  <div className="flex items-start gap-3">
+                    {submissionStatus.type ===
+                    'success' ? (
+                      <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-emerald-500" />
+                    ) : null}
+
+                    <span>
+                      {submissionStatus.message}
+                    </span>
+                  </div>
                 </div>
               ) : null}
 
