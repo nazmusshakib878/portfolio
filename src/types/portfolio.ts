@@ -1,4 +1,4 @@
-export interface NavLink {
+﻿export interface NavLink {
   label: string
   href: string
 }
@@ -6,7 +6,7 @@ export interface NavLink {
 export interface SocialLink {
   label: string
   href: string
-  icon: 'github' | 'linkedin' | 'email' | 'phone'
+  icon: 'github' | 'linkedin' | 'facebook' | 'whatsapp' | 'email' | 'phone'
 }
 
 export interface HeroStat {
@@ -23,6 +23,12 @@ export interface AboutCard {
   description: string
 }
 
+export interface TechnologyShowcaseItem {
+  name: string
+  featured?: boolean
+  ai?: boolean
+  description?: string
+}
 export interface SkillCategory {
   name: string
   items: string[]
@@ -37,6 +43,11 @@ export interface ExperienceItem {
   responsibilities: string[]
   technologies: string[]
   repositoryUrl?: string
+}
+
+export interface ProfessionalStrength {
+  title: string
+  description: string
 }
 
 export interface ProjectItem {
@@ -124,8 +135,10 @@ export interface PortfolioData {
   socialLinks: SocialLink[]
   heroStats: HeroStat[]
   heroBadges: HeroBadge[]
+  technologyShowcase: TechnologyShowcaseItem[]
   aboutCards: AboutCard[]
   skills: SkillCategory[]
+  professionalStrengths: ProfessionalStrength[]
   experience: ExperienceItem[]
   projects: ProjectItem[]
   education: EducationItem[]
@@ -136,3 +149,5 @@ export interface PortfolioData {
   githubRepos: GithubRepoLink[]
   technologies: string[]
 }
+
+
