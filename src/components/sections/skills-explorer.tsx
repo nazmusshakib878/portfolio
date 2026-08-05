@@ -1,4 +1,4 @@
-﻿import type { IconType } from 'react-icons'
+import type { IconType } from 'react-icons'
 import { Network, ShieldCheck } from 'lucide-react'
 import { SiBootstrap, SiGit, SiGithub, SiHtml5, SiJavascript, SiLaravel, SiMysql, SiPhp, SiPostman, SiReact, SiTailwindcss, SiVite } from 'react-icons/si'
 import { VscVscode } from 'react-icons/vsc'
@@ -15,7 +15,7 @@ const rows=[technologies.slice(0,1),technologies.slice(1,3),technologies.slice(3
 
 function TechnologyTile({technology}:{technology:(typeof technologies)[number]}){
   const Icon=technology.icon
-  return <li className={`group flex h-[82px] w-[88px] shrink-0 flex-col items-center justify-center gap-2 rounded-xl border px-2 text-center transition duration-300 hover:-translate-y-1 ${technology.featured?'border-[rgba(170,150,255,.34)] bg-[rgba(139,114,255,.1)]':'border-white/10 bg-white/[.025] hover:border-[rgba(43,217,181,.3)]'}`}>
+  return <li className={`group flex h-[82px] w-full min-w-0 shrink-0 flex-col items-center justify-center gap-2 rounded-xl border px-1.5 text-center transition sm:w-[88px] sm:px-2 duration-300 hover:-translate-y-1 ${technology.featured?'border-[rgba(170,150,255,.34)] bg-[rgba(139,114,255,.1)]':'border-white/10 bg-white/[.025] hover:border-[rgba(43,217,181,.3)]'}`}>
     <Icon aria-hidden focusable="false" className={`size-6 ${technology.featured?'text-[#aa96ff]':'text-[#69e6cd]'}`}/>
     <span className="text-[9px] font-semibold uppercase tracking-[.08em] text-[#d9dee7]">{technology.name}</span>
   </li>

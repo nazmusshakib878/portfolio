@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState,type ReactNode } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -36,9 +36,9 @@ export function ContactForm(){
     }
   }
 
-  return <form onSubmit={handleSubmit(submit)} className="space-y-4" noValidate>
+  return <form onSubmit={handleSubmit(submit)} className="min-w-0 space-y-4" noValidate>
     <input {...register('company')} className="hidden" tabIndex={-1} autoComplete="off"/>
-    <div className="grid gap-4 sm:grid-cols-2">
+    <div className="grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2">
       <Field label="Name" error={errors.name?.message}><input {...register('name')} autoComplete="name"/></Field>
       <Field label="Email" error={errors.email?.message}><input {...register('email')} type="email" autoComplete="email"/></Field>
     </div>
@@ -52,9 +52,9 @@ export function ContactForm(){
 }
 
 function Field({label,error,children}:{label:string,error?:string,children:ReactNode}){
-  return <label className="block text-sm font-semibold text-[#dfe3ea]">
+  return <label className="block min-w-0 text-sm font-semibold text-[#dfe3ea]">
     {label}
-    <span className="mt-2 block [&_input]:w-full [&_input]:rounded-xl [&_input]:border [&_input]:border-white/10 [&_input]:bg-white/[.035] [&_input]:px-4 [&_input]:py-3.5 [&_input]:text-white [&_input]:outline-none [&_input]:transition [&_input]:focus:border-[#7c5cff] [&_input]:focus:bg-white/[.05] [&_textarea]:w-full [&_textarea]:resize-y [&_textarea]:rounded-xl [&_textarea]:border [&_textarea]:border-white/10 [&_textarea]:bg-white/[.035] [&_textarea]:px-4 [&_textarea]:py-3.5 [&_textarea]:text-white [&_textarea]:outline-none [&_textarea]:transition [&_textarea]:focus:border-[#7c5cff] [&_textarea]:focus:bg-white/[.05]">{children}</span>
+    <span className="mt-2 block min-w-0 [&_input]:box-border [&_input]:min-w-0 [&_input]:w-full [&_input]:rounded-xl [&_input]:border [&_input]:border-white/10 [&_input]:bg-white/[.035] [&_input]:px-4 [&_input]:py-3.5 [&_input]:text-white [&_input]:outline-none [&_input]:transition [&_input]:focus:border-[#7c5cff] [&_input]:focus:bg-white/[.05] [&_textarea]:box-border [&_textarea]:min-w-0 [&_textarea]:w-full [&_textarea]:resize-y [&_textarea]:rounded-xl [&_textarea]:border [&_textarea]:border-white/10 [&_textarea]:bg-white/[.035] [&_textarea]:px-4 [&_textarea]:py-3.5 [&_textarea]:text-white [&_textarea]:outline-none [&_textarea]:transition [&_textarea]:focus:border-[#7c5cff] [&_textarea]:focus:bg-white/[.05]">{children}</span>
     {error&&<span className="mt-2 block text-xs text-red-300">{error}</span>}
   </label>
 }

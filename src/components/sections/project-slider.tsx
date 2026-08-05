@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useRef } from 'react'
 import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react'
@@ -29,9 +29,9 @@ export function ProjectSlider(){
       </Reveal>
     </div>
 
-    <div ref={rail} tabIndex={0} aria-label="Featured project slider" className="shell mt-9 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-5 [scrollbar-color:rgba(139,114,255,.45)_transparent] [scrollbar-width:thin]">
-      {portfolioData.projects.map((project,index)=><div key={project.title} className="w-[86vw] max-w-[390px] shrink-0 snap-start sm:w-[370px]"><ProjectCard project={project} cover={projectCovers[index]} priority={index<2}/></div>)}
-      <a href={`${portfolioData.githubUrl}?tab=repositories`} target="_blank" rel="noopener noreferrer" className="group flex min-h-[480px] w-[86vw] max-w-[390px] shrink-0 snap-start flex-col justify-between rounded-[20px] border border-[rgba(43,217,181,.2)] bg-[radial-gradient(circle_at_70%_20%,rgba(43,217,181,.13),transparent_42%),rgba(11,14,20,.82)] p-6 transition hover:-translate-y-1 hover:border-[rgba(43,217,181,.42)] sm:w-[370px]">
+    <div ref={rail} tabIndex={0} aria-label="Featured project slider" className="shell mt-8 flex snap-x snap-mandatory scroll-px-2 gap-4 overflow-x-auto overscroll-x-contain pb-5 sm:mt-9 [scrollbar-color:rgba(139,114,255,.45)_transparent] [scrollbar-width:thin]">
+      {portfolioData.projects.map((project,index)=><div key={project.title} className="w-[calc(100vw-2rem)] max-w-[390px] shrink-0 snap-start sm:w-[370px]"><ProjectCard project={project} cover={projectCovers[index]} priority={index<2}/></div>)}
+      <a href={`${portfolioData.githubUrl}?tab=repositories`} target="_blank" rel="noopener noreferrer" className="group flex min-h-[480px] w-[calc(100vw-2rem)] max-w-[390px] shrink-0 snap-start flex-col justify-between rounded-[20px] border border-[rgba(43,217,181,.2)] bg-[radial-gradient(circle_at_70%_20%,rgba(43,217,181,.13),transparent_42%),rgba(11,14,20,.82)] p-6 transition hover:-translate-y-1 hover:border-[rgba(43,217,181,.42)] sm:w-[370px]">
         <div className="relative -mx-6 -mt-6 h-[190px] overflow-hidden border-b border-white/10 bg-[radial-gradient(circle_at_50%_35%,rgba(139,114,255,.32),transparent_42%),linear-gradient(145deg,#101421,#080a10)]">
           <div aria-hidden className="absolute inset-0 opacity-25 [background-image:linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] [background-size:28px_28px]"/>
           <div className="absolute inset-0 grid place-items-center"><span className="grid size-20 place-items-center rounded-[24px] border border-[rgba(170,150,255,.35)] bg-[#0b0e17]/80 text-[#c4b8ff] shadow-[0_18px_55px_rgba(91,67,207,.32)] backdrop-blur-md"><SiGithub aria-hidden size={40}/></span></div>

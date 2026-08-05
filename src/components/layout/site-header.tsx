@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useEffect,useRef,useState } from 'react'
 import { Menu,X } from 'lucide-react'
@@ -72,10 +72,10 @@ export function SiteHeader(){
       </div>
       <button ref={menuButton} className="grid size-11 place-items-center xl:hidden" onClick={()=>setOpen(!open)} aria-expanded={open} aria-controls="mobile-nav" aria-label={open?'Close menu':'Open menu'}>{open?<X/>:<Menu/>}</button>
     </div>
-    {open&&<nav ref={mobileNav} id="mobile-nav" className="shell flex min-h-[calc(100vh-5rem)] flex-col justify-center gap-6 pb-20" aria-label="Mobile">
+    {open&&<nav ref={mobileNav} id="mobile-nav" className="shell flex min-h-[calc(100dvh-5rem)] flex-col justify-center gap-[clamp(1rem,4vh,1.5rem)] overflow-y-auto py-6" aria-label="Mobile">
       {portfolioData.navLinks.map((link,index)=>{
         const active=activeSection===link.href.slice(1)
-        return <a key={link.href} onClick={()=>setOpen(false)} href={link.href} aria-current={active?'location':undefined} className={`display border-b pb-4 text-4xl ${active?'border-[#2bd9b5] text-[#69e6cd]':'border-white/10'}`}><span className="mr-4 text-sm text-[#2bd9b5]">0{index+1}</span>{link.label}</a>
+        return <a key={link.href} onClick={()=>setOpen(false)} href={link.href} aria-current={active?'location':undefined} className={`display border-b pb-3 text-[clamp(1.8rem,7vw,2.25rem)] ${active?'border-[#2bd9b5] text-[#69e6cd]':'border-white/10'}`}><span className="mr-3 text-xs text-[#2bd9b5] sm:mr-4 sm:text-sm">0{index+1}</span>{link.label}</a>
       })}
       <a className="button primary mt-4" href={portfolioData.resumeHref} target="_blank" rel="noopener noreferrer">View resume</a>
     </nav>}

@@ -1,6 +1,6 @@
 export const socialLinks = {
   linkedin:
-    'https://www.linkedin.com/in/md-nazmus-shakib-8741a8424/',
+    'https://www.linkedin.com/in/mdnazmusshakib878/',
 
   facebook:
     'https://www.facebook.com/share/1Ttouf8TPY/',
