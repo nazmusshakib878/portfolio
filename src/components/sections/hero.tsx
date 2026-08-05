@@ -30,19 +30,18 @@ export function Hero(){
 
       <div className="relative mx-auto h-[clamp(300px,95vw,410px)] w-full max-w-[450px] lg:h-[500px] lg:max-w-[460px]">
         <HeroVisual/>
-        <div className="absolute bottom-0 left-0 rounded-tr-2xl border border-white/10 bg-[#090d15]/90 p-3.5 backdrop-blur-md sm:p-4">
+        <div className="absolute bottom-0 left-0 max-w-[calc(100%-1.5rem)] rounded-tr-2xl border border-white/10 bg-[#090d15]/90 p-3.5 backdrop-blur-md sm:max-w-none sm:p-4">
           <p className="eyebrow">Status</p>
           <p className="mt-2 flex items-center gap-2 text-xs sm:text-sm"><span className="size-2 rounded-full bg-[#2bd9b5]"/>{portfolioData.availability}</p>
         </div>
-        <div className="absolute right-3 top-3 rounded-xl border border-white/10 bg-[#090d15]/72 px-3 py-2 text-right backdrop-blur-sm">
+        <div className="absolute right-3 top-3 max-w-[calc(100%-1.5rem)] rounded-xl border border-white/10 bg-[#090d15]/72 px-3 py-2 text-right backdrop-blur-sm sm:max-w-none">
           <p className="text-[10px] uppercase tracking-[.12em] text-[#aeb6c3]">Core stack</p>
-          <p className="mt-1 text-xs sm:text-sm">Laravel <span aria-hidden="true">&middot;</span> PHP <span aria-hidden="true">&middot;</span> MySQL</p>
+          <p className="mt-1 text-xs leading-5 sm:text-sm">Laravel <span aria-hidden="true">&middot;</span> PHP <span aria-hidden="true">&middot;</span> MySQL</p>
         </div>
       </div>
     </div>
   </section>
 }
-
 
 
 

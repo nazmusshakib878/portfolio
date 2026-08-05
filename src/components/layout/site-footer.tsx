@@ -11,11 +11,10 @@ export function SiteFooter(){
       <div className="flex flex-wrap gap-4 md:justify-center">
         {portfolioData.socialLinks.map(link=><a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" className="text-xs uppercase tracking-widest text-[#9aa6b7] hover:text-white">{link.label}</a>)}
       </div>
-      <div className="flex items-center justify-between gap-4 md:justify-end">
-        <p className="muted text-xs">&copy; {new Date().getFullYear()} <span aria-hidden="true">&middot;</span> Designed &amp; developed by Md. Nazmus Shakib</p>
+      <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between md:justify-end">
+        <p className="muted max-w-[22rem] text-xs">&copy; {new Date().getFullYear()} <span aria-hidden="true">&middot;</span> Designed &amp; developed by Md. Nazmus Shakib</p>
         <a href="#hero" className="grid size-11 shrink-0 place-items-center rounded-xl border border-white/10 transition hover:border-[#2bd9b5]" aria-label="Back to top"><ArrowUp size={17}/></a>
       </div>
     </div>
   </footer>
 }
-
