@@ -8,8 +8,8 @@ A production-ready Next.js portfolio for backend developer Md. Nazmus Shakib. Th
 - Motion-powered portrait parallax, section reveals, loader and custom cursor
 - Real profile portrait—no generated or procedural face
 - Four static project case studies with optimized WebP covers
-- React Hook Form, Zod and a server-side contact Route Handler
-- Honeypot validation, throttling and explicit missing-provider fallback
+- React Hook Form, Zod and direct Web3Forms contact delivery
+- Honeypot validation and explicit missing-provider fallback
 - Open Graph image, manifest, sitemap, robots and JSON-LD
 - Responsive navigation, social rail, skills tabs and project slider
 
@@ -33,9 +33,9 @@ npm start
 ## Environment variables
 
 - `NEXT_PUBLIC_SITE_URL`: canonical production origin.
-- `WEB3FORMS_ACCESS_KEY`: optional server-only delivery key.
+- `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY`: Web3Forms access key used by the browser submission.
 
-Without the delivery key, the form returns an honest configuration message and the visible email link remains available. Never expose provider keys in Client Components.
+Without the delivery key, the form returns an honest configuration message and the visible email link remains available. Do not commit real environment values to the repository.
 
 ## Updating content
 
@@ -52,4 +52,4 @@ The reference MP4 and extracted analysis remain in ignored `.reference-assets/` 
 
 ## Vercel deployment
 
-Import the Git repository in Vercel, keep the detected Next.js preset, configure `NEXT_PUBLIC_SITE_URL` and optional `WEB3FORMS_ACCESS_KEY`, deploy, then verify the home page, project routes, resume and contact delivery.
+Import the Git repository in Vercel, keep the detected Next.js preset, configure `NEXT_PUBLIC_SITE_URL` and `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY`, deploy, then verify the home page, project routes, resume and contact delivery.

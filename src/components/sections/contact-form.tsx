@@ -25,11 +25,26 @@ export function ContactForm(){
 
   async function submit(values:Values){
     setStatus({kind:'idle',message:''})
+    const accessKey=process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY
+    if(!accessKey){
+      setStatus({kind:'error',message:'Contact delivery is not configured yet. Please use the email link instead.'})
+      return
+    }
     try{
-      const response=await fetch('/api/contact',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(values)})
-      const body=await response.json() as {message?:string}
-      if(!response.ok)throw new Error(body.message??'Message could not be sent.')
-      setStatus({kind:'ok',message:body.message??'Message sent.'})
+      const response=await fetch('https://api.web3forms.com/submit',{
+        method:'POST',
+        headers:{'content-type':'application/json'},
+        body:JSON.stringify({
+          access_key:accessKey,
+          name:values.name,
+          email:values.email,
+          subject:values.subject,
+          message:values.message,
+        }),
+      })
+      const body=await response.json().catch(()=>({})) as {success?:boolean;message?:string}
+      if(!response.ok||!body.success)throw new Error(typeof body.message==='string'&&body.message.trim()?body.message.trim():'Message could not be sent. Please try again.')
+      setStatus({kind:'ok',message:typeof body.message==='string'&&body.message.trim()?body.message.trim():'Your message was sent successfully. I will respond as soon as possible.'})
       reset()
     }catch(error){
       setStatus({kind:'error',message:error instanceof Error?error.message:'Message could not be sent.'})
