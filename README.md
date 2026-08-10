@@ -1,420 +1,840 @@
 <div align="center">
 
-<img src="./public/images/profile.png" alt="Md. Nazmus Shakib" width="150" />
+<img src="./public/images/profile.png" alt="Md. Nazmus Shakib" width="155" />
 
 # Md. Nazmus Shakib — Developer Portfolio
 
 ### Backend Developer · Laravel · PHP · MySQL · REST APIs
 
-A production-ready cinematic portfolio built with **Next.js, React, TypeScript, Tailwind CSS and Motion** to showcase real projects, backend expertise, academic work, technical skills, experience and contact information.
+A cinematic, production-ready developer portfolio built with **Next.js 16, React 19, TypeScript, Tailwind CSS v4 and Motion**.
 
-[![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=for-the-badge\&logo=nextdotjs\&logoColor=white)](https://nextjs.org/)
-[![React](https://img.shields.io/badge/React-19-20232A?style=for-the-badge\&logo=react\&logoColor=61DAFB)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-Strict-3178C6?style=for-the-badge\&logo=typescript\&logoColor=white)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?style=for-the-badge\&logo=tailwindcss\&logoColor=white)](https://tailwindcss.com/)
-[![Vercel](https://img.shields.io/badge/Deploy-Vercel-000000?style=for-the-badge\&logo=vercel\&logoColor=white)](https://vercel.com/)
+<br/>
 
-[GitHub](https://github.com/nazmusshakib878) · [LinkedIn](https://www.linkedin.com/in/mdnazmusshakib878/) · [AI Smart Campus Live Demo](https://ai-smart-campus-system-ce9i.onrender.com/) · [Email](mailto:nazmusshakib335@gmail.com)
+[![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Strict-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Vercel](https://img.shields.io/badge/Deployment-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/)
+
+<br/>
+
+[![GitHub](https://img.shields.io/badge/GitHub-nazmusshakib878-181717?style=flat-square&logo=github)](https://github.com/nazmusshakib878)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Md.%20Nazmus%20Shakib-0A66C2?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/mdnazmusshakib878/)
+[![Email](https://img.shields.io/badge/Email-nazmusshakib335%40gmail.com-EA4335?style=flat-square&logo=gmail&logoColor=white)](mailto:nazmusshakib335@gmail.com)
+[![WhatsApp](https://img.shields.io/badge/WhatsApp-Contact-25D366?style=flat-square&logo=whatsapp&logoColor=white)](https://wa.me/8801716333670?text=Hello%20Nazmus%2C%20I%20visited%20your%20portfolio%20and%20would%20like%20to%20connect.)
 
 </div>
 
 ---
 
-## About This Portfolio
+## 📌 Table of Contents
 
-This portfolio presents my work as a **Backend Developer** focused on **Laravel, PHP, MySQL, relational databases, authentication, RESTful APIs and reliable application workflows**.
-
-It combines a responsive editorial dark interface with subtle motion, real project case studies, a skills explorer, experience and education sections, downloadable resume support, SEO metadata and a validated contact experience.
-
-* **Developer:** Md. Nazmus Shakib
-* **Role:** Backend Developer
-* **Location:** Khulna, Bangladesh
-* **Status:** Open to new opportunities
-* **Academic Status:** Final-semester BSc CSE student
-* **Expected Graduation:** November 2026
+- [Overview](#-overview)
+- [Quick Links](#-quick-links)
+- [Project Gallery](#️-project-gallery)
+- [Core Features](#-core-features)
+- [Tech Stack](#-tech-stack)
+- [Application Architecture](#-application-architecture)
+- [Project Structure](#-project-structure)
+- [Featured Projects](#-featured-projects)
+- [Experience](#-experience)
+- [Education](#-education)
+- [Certification & Highlights](#-certification--highlights)
+- [Local Development](#️-local-development)
+- [Available Scripts](#-available-scripts)
+- [Continuous Integration](#-continuous-integration)
+- [Contact Form Workflow](#-contact-form-workflow)
+- [Security](#-security)
+- [Accessibility](#-accessibility)
+- [Performance & Optimization](#-performance--optimization)
+- [SEO](#-seo)
+- [Deployment](#-deployment)
+- [Updating Portfolio Content](#️-updating-portfolio-content)
+- [Quality Check](#-quality-check-before-handoff)
+- [Development Workflow](#️-development-workflow)
+- [Future Improvements](#-future-improvements)
+- [License](#-license)
+- [Connect With Me](#-connect-with-me)
 
 ---
 
-## Project Preview
+## ✨ Overview
+
+This portfolio showcases my work as a **Backend Developer** focused on building reliable, database-driven web applications with **Laravel, PHP, MySQL, authentication, REST APIs and modern frontend integration**.
+
+The website uses an editorial dark visual system, subtle motion, accessible interactions, optimized project visuals, dedicated case-study routes, SEO metadata and a production-ready contact experience.
+
+### Quick Profile
+
+| | |
+|---|---|
+| **Name** | Md. Nazmus Shakib |
+| **Primary Role** | Backend Developer |
+| **Location** | Khulna, Bangladesh |
+| **Academic Status** | Final-semester BSc CSE student |
+| **Current CGPA** | 3.60 / 4.00 |
+| **Expected Graduation** | November 2026 |
+| **Laravel Training** | 80 Hours |
+| **Availability** | Open to new opportunities |
+
+---
+
+## 🔗 Quick Links
+
+- **GitHub Profile:** https://github.com/nazmusshakib878
+- **LinkedIn:** https://www.linkedin.com/in/mdnazmusshakib878/
+- **AI Smart Campus Live Demo:** https://ai-smart-campus-system-ce9i.onrender.com/
+- **Email:** nazmusshakib335@gmail.com
+- **WhatsApp:** +8801716333670
+
+---
+
+## 🖼️ Project Gallery
 
 <table>
   <tr>
     <td width="50%" align="center">
-      <img src="./public/projects/securex-cover-v2.webp" alt="Securex preview" width="100%" />
-      <br><strong>Securex</strong>
+      <img src="./public/projects/securex-cover-v2.webp" alt="Securex project cover" width="100%" />
+      <br/>
+      <strong>Securex</strong>
+      <br/>
+      <sub>CCTV & Security Service Management System</sub>
     </td>
     <td width="50%" align="center">
-      <img src="./public/projects/ai-smart-campus-cover-v2.webp" alt="AI Smart Campus preview" width="100%" />
-      <br><strong>AI Smart Campus System</strong>
+      <img src="./public/projects/ai-smart-campus-cover-v2.webp" alt="AI Smart Campus System project cover" width="100%" />
+      <br/>
+      <strong>AI Smart Campus System</strong>
+      <br/>
+      <sub>AI-powered academic management platform</sub>
     </td>
   </tr>
   <tr>
     <td width="50%" align="center">
-      <img src="./public/projects/library-management-cover-v2.webp" alt="Library Management preview" width="100%" />
-      <br><strong>Library Management Project</strong>
+      <img src="./public/projects/library-management-cover-v2.webp" alt="Library Management project cover" width="100%" />
+      <br/>
+      <strong>Library Management Project</strong>
+      <br/>
+      <sub>Laravel MVC academic project</sub>
     </td>
     <td width="50%" align="center">
-      <img src="./public/projects/logistica-cover-v3.webp" alt="Logistica preview" width="100%" />
-      <br><strong>Logistica</strong>
+      <img src="./public/projects/logistica-cover-v3.webp" alt="Logistica project cover" width="100%" />
+      <br/>
+      <strong>Logistica</strong>
+      <br/>
+      <sub>Transport & courier workflow platform</sub>
     </td>
   </tr>
 </table>
 
-> Add a real homepage screenshot later as `public/portfolio-preview.webp` if you want a full-width portfolio preview at the top of this README.
+> The repository currently includes optimized project cover assets. A real full-page portfolio screenshot can be added later when available.
 
 ---
 
-## Key Features
+## 🚀 Core Features
 
-* Cinematic editorial dark-mode design
-* Fully responsive navigation and layouts
-* Real profile portrait with subtle interactive depth
-* Motion-powered section reveals and intro loader
-* Custom desktop cursor
-* Horizontal featured-project slider
-* Dedicated project case-study pages
-* Interactive skills and technology explorer
-* Experience, education, certification and achievements sections
-* Downloadable resume
-* React Hook Form + Zod contact validation
-* Web3Forms contact delivery
-* Honeypot spam protection
-* Contact fallback when provider configuration is missing
-* Open Graph image and per-project metadata
-* Sitemap, robots, manifest and JSON-LD
-* Reduced-motion support
-* Security headers and Content Security Policy
-* GitHub Actions CI for lint, typecheck and build
+### Portfolio Experience
 
----
+- Cinematic editorial dark interface
+- Responsive desktop, tablet and mobile layouts
+- Real profile portrait with subtle interactive depth
+- Smooth section reveal animations
+- Intro loading experience
+- Custom desktop cursor
+- Responsive navigation
+- Social rail on supported desktop widths
+- Downloadable resume
+- Project case-study routes
+- Interactive skills explorer
+- Project slider with dedicated navigation
 
-## Tech Stack
+### Contact Experience
 
-| Area       | Technologies                            |
-| ---------- | --------------------------------------- |
-| Framework  | Next.js 16, React 19                    |
-| Language   | TypeScript                              |
-| Styling    | Tailwind CSS v4                         |
-| Motion     | Motion                                  |
-| Forms      | React Hook Form                         |
-| Validation | Zod                                     |
-| Contact    | Web3Forms                               |
-| Icons      | Lucide React, React Icons               |
-| Quality    | Oxlint, TypeScript checks               |
-| CI/CD      | GitHub Actions, Vercel-ready deployment |
+- React Hook Form
+- Zod validation
+- Web3Forms submission
+- Honeypot anti-spam field
+- Success and error feedback
+- Clear fallback when contact delivery is not configured
 
-### Backend & Development Skills Highlighted
+### Production & SEO
 
-`Laravel 12` · `PHP` · `MySQL` · `Eloquent ORM` · `REST APIs` · `Laravel Sanctum` · `MVC` · `Authentication` · `Middleware` · `Google OAuth 2.0` · `Role-Based Access Control` · `React` · `Vite` · `Git` · `GitHub` · `Postman` · `Gemini API` · `OpenAI API` · `Hugging Face API Integration`
+- Open Graph image
+- Twitter card metadata
+- Canonical URLs
+- JSON-LD structured data
+- Sitemap generation
+- Robots metadata
+- Web manifest
+- Dynamic project metadata
+- GitHub Actions CI
+- Security headers
 
 ---
 
-## Featured Projects
+## 🧰 Tech Stack
 
-### 1. Securex — CCTV & Security Service Management System
+### Portfolio Application
 
-A Laravel MVC platform for security-service discovery, client bookings, administrative review, scheduling, communication and invoice workflows.
+| Layer | Technologies |
+|---|---|
+| **Framework** | Next.js 16 |
+| **Frontend** | React 19 |
+| **Language** | TypeScript |
+| **Styling** | Tailwind CSS v4 |
+| **Animation** | Motion |
+| **Forms** | React Hook Form |
+| **Validation** | Zod |
+| **Contact Delivery** | Web3Forms |
+| **Icons** | Lucide React, React Icons |
+| **Linting** | Oxlint |
+| **CI** | GitHub Actions |
+| **Deployment** | Vercel-ready |
 
-**Highlights:** authentication, Google OAuth 2.0, role-based administration, service CRUD, booking review, status updates, email notifications, PDF invoices, time-slot conflict detection and duplicate-booking prevention.
+### Development Skills Highlighted
 
-**Tech:** Laravel · PHP · MySQL · Google OAuth 2.0 · SMTP · PDF Generation
+<p>
+<img src="https://img.shields.io/badge/Laravel-12-FF2D20?style=flat-square&logo=laravel&logoColor=white" />
+<img src="https://img.shields.io/badge/PHP-Backend-777BB4?style=flat-square&logo=php&logoColor=white" />
+<img src="https://img.shields.io/badge/MySQL-Database-4479A1?style=flat-square&logo=mysql&logoColor=white" />
+<img src="https://img.shields.io/badge/REST-API-009688?style=flat-square" />
+<img src="https://img.shields.io/badge/React-Frontend-20232A?style=flat-square&logo=react&logoColor=61DAFB" />
+<img src="https://img.shields.io/badge/Git-Version%20Control-F05032?style=flat-square&logo=git&logoColor=white" />
+<img src="https://img.shields.io/badge/Postman-API%20Testing-FF6C37?style=flat-square&logo=postman&logoColor=white" />
+</p>
 
-[View Repository](https://github.com/nazmusshakib878/Securex)
+**Backend:** Laravel 12 · PHP · Laravel Sanctum · RESTful APIs · MVC · Authentication · Middleware · Google OAuth 2.0 · Role-Based Access Control
 
-### 2. AI Smart Campus System
+**Database:** MySQL · Eloquent ORM · Relational Schema Design · Database Normalization · SQL · Database Integrity
 
-An AI-powered academic management and student-success platform built as an academic team project.
+**Frontend:** React · Vite · Tailwind CSS · Bootstrap · Material UI · HTML5 · CSS3
 
-**Role:** Team Leader & Database Lead
+**AI Integration:** Gemini API · OpenAI API · Hugging Face API Integration
 
-**Highlights:** React/Vite frontend, Laravel 12 REST API, Laravel Sanctum authentication, MySQL-backed workflows and AI-assisted campus features.
-
-**Tech:** React · Vite · Laravel 12 · Laravel Sanctum · MySQL · REST API · AI Integration
-
-[View Repository](https://github.com/nazmusshakib878/CSE4204-8A-T07-ai-smart-campus-system) · [Live Demo](https://ai-smart-campus-system-ce9i.onrender.com/)
-
-### 3. Library Management Project
-
-A Laravel academic project demonstrating structured MVC development, CRUD operations and database-backed library workflows.
-
-**Tech:** PHP · Laravel · MySQL · MVC · CRUD
-
-[View Repository](https://github.com/nazmusshakib878/Library-management-project)
-
-### 4. Logistica
-
-A country-to-country transport, courier and supply-shipment management project developed collaboratively during a backend-development internship.
-
-**Contributions:** Laravel/PHP implementation support, reusable logic, debugging, database-integrity checks and collaborative Git/GitHub workflow.
-
-**Tech:** PHP · Laravel · MySQL · Git · GitHub
-
-[View Repository](https://github.com/nazmusshakib878/Logistica)
+**Tools & Practices:** Git · GitHub · Postman · VS Code · SMTP · PDF Invoice Generation · SDLC · Agile · Scrum · Testing · Debugging · Technical Documentation
 
 ---
 
-## Project Structure
+## 🧩 Application Architecture
+
+```mermaid
+flowchart TD
+    A[Visitor] --> B[Next.js App Router]
+    B --> C[Portfolio Sections]
+    B --> D[Project Case Study Routes]
+    B --> E[Contact Form]
+
+    C --> C1[Hero]
+    C --> C2[Projects]
+    C --> C3[Experience]
+    C --> C4[Skills]
+    C --> C5[Education]
+    C --> C6[Contact]
+
+    D --> F[Portfolio Data Layer]
+    C --> F
+
+    F --> G[src/data/portfolio-facts.ts]
+    F --> H[src/data/portfolio.ts]
+
+    E --> I[React Hook Form]
+    I --> J[Zod Validation]
+    J --> K[Web3Forms API]
+
+    B --> L[SEO & Metadata]
+    L --> L1[Open Graph]
+    L --> L2[Sitemap]
+    L --> L3[Robots]
+    L --> L4[JSON-LD]
+```
+
+---
+
+## 📁 Project Structure
 
 ```text
-.
+nazmusshakib878-portfolio/
 ├── public/
-│   ├── images/profile.png
+│   ├── images/
+│   │   └── profile.png
 │   ├── projects/
 │   │   ├── securex-cover-v2.webp
 │   │   ├── ai-smart-campus-cover-v2.webp
 │   │   ├── library-management-cover-v2.webp
 │   │   └── logistica-cover-v3.webp
 │   └── resume.pdf
+│
 ├── src/
 │   ├── app/
-│   │   └── projects/[slug]/
+│   │   ├── page.tsx
+│   │   ├── layout.tsx
+│   │   ├── loading.tsx
+│   │   ├── error.tsx
+│   │   ├── not-found.tsx
+│   │   ├── manifest.ts
+│   │   ├── robots.ts
+│   │   ├── sitemap.ts
+│   │   ├── opengraph-image.tsx
+│   │   └── projects/
+│   │       └── [slug]/
+│   │           └── page.tsx
+│   │
 │   ├── components/
 │   │   ├── layout/
 │   │   ├── sections/
 │   │   └── ui/
+│   │
 │   ├── constants/
 │   ├── data/
 │   ├── lib/
 │   └── types/
-├── .github/workflows/ci.yml
+│
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+│
 ├── .env.example
 ├── next.config.ts
 ├── package.json
+├── postcss.config.mjs
 └── tsconfig.json
 ```
 
 ---
 
-## Getting Started
+# 💼 Featured Projects
 
-### Prerequisites
+## 1. Securex — CCTV & Security Service Management System
 
-* Node.js 22 recommended
-* npm
-* Git
+An end-to-end Laravel MVC platform designed to simplify security service discovery, bookings, administrative review, status management, notifications and invoice workflows.
 
-### Clone
+### Key Features
+
+- Email/password authentication
+- Google OAuth 2.0
+- Role-based administration
+- Dynamic service CRUD
+- Client service booking
+- Administrative booking review
+- Booking status updates
+- Automated email notifications
+- PDF invoice generation
+- Time-slot conflict detection
+- Alternative available-slot recommendations
+- Duplicate-booking prevention
+
+### Technologies
+
+`PHP` · `Laravel` · `MySQL` · `Laravel MVC` · `Google OAuth 2.0` · `SMTP` · `PDF Generation`
+
+**Repository:** https://github.com/nazmusshakib878/Securex
+
+---
+
+## 2. AI Smart Campus System
+
+An AI-powered academic management and student-success platform developed as an academic team project.
+
+### My Role
+
+**Team Leader & Database Lead**
+
+### Key Features
+
+- Led the academic project team
+- Designed and coordinated the MySQL-backed data layer
+- React + Vite frontend
+- Laravel 12 REST API
+- Laravel Sanctum authentication
+- Academic and student-management workflows
+- AI-assisted campus features
+
+### Technologies
+
+`React` · `Vite` · `Laravel 12` · `Laravel Sanctum` · `MySQL` · `RESTful API` · `AI API Integration`
+
+**Repository:** https://github.com/nazmusshakib878/CSE4204-8A-T07-ai-smart-campus-system
+
+**Live Demo:** https://ai-smart-campus-system-ce9i.onrender.com/
+
+---
+
+## 3. Library Management Project
+
+A Laravel academic project demonstrating database-backed library workflows and structured MVC development.
+
+### Key Features
+
+- Laravel application logic
+- MVC architecture
+- Database-backed workflows
+- Core library operations
+- CRUD functionality
+- GitHub-based source management
+
+### Technologies
+
+`PHP` · `Laravel` · `MySQL` · `MVC` · `CRUD`
+
+**Repository:** https://github.com/nazmusshakib878/Library-management-project
+
+---
+
+## 4. Logistica
+
+A country-to-country transport, courier and supply-shipment management system developed collaboratively during an internship.
+
+### Contributions
+
+- Supported Laravel and PHP implementation
+- Worked with reusable application logic
+- Assisted with debugging and troubleshooting
+- Performed database integrity checks
+- Used Git and GitHub collaboratively
+
+### Technologies
+
+`PHP` · `Laravel` · `MySQL` · `Git` · `GitHub`
+
+**Repository:** https://github.com/nazmusshakib878/Logistica
+
+---
+
+# 🧑‍💻 Experience
+
+## Backend Developer Intern — Appstick Tech Firm
+
+**Period:** February 2026 – March 2026  
+**Location:** Khulna, Bangladesh
+
+Worked collaboratively on the **Logistica** project, supporting Laravel/PHP implementation, reusable application logic, debugging, database integrity and Git/GitHub workflows.
+
+---
+
+# 🎓 Education
+
+## Bachelor of Science in Computer Science and Engineering
+
+**Northern University of Business and Technology Khulna (NUBTK)**
+
+- Final year, final semester
+- Current CGPA: **3.60 / 4.00**
+- Expected graduation: **November 2026**
+
+### Relevant Coursework
+
+- Distributed Databases
+- Software Architecture and Design
+- Advanced Data Structures
+- Network Routing Protocols
+
+---
+
+## Higher Secondary Certificate — Science
+
+**Satkhira Government College**
+
+- Year: 2020
+- GPA: **5.00 / 5.00**
+
+---
+
+## Secondary School Certificate — Science
+
+**Alipur Union Secondary School**
+
+- Year: 2018
+- GPA: **5.00 / 5.00**
+
+---
+
+# 🏆 Certification & Highlights
+
+## PHP (Laravel) Training — 80 Hours
+
+Structured Laravel training under the **EDGE Project, Bangladesh Computer Council and ICT Division**.
+
+### Covered Topics
+
+- Laravel MVC architecture
+- Authentication
+- Middleware
+- CRUD development
+- Relational schema design
+- MySQL
+- SQL
+- Backend application development
+
+### Additional Highlights
+
+- Current CGPA: **3.60 / 4.00**
+- Team Leader & Database Lead — AI Smart Campus System
+- GPA 5.00 in both HSC and SSC
+- 80 hours of formal Laravel training
+
+---
+
+# ⚙️ Local Development
+
+## Prerequisites
+
+Before starting, make sure your system has:
+
+- **Node.js 22** recommended
+- **npm**
+- **Git**
+
+---
+
+## 1. Clone the Repository
 
 ```bash
-git clone <YOUR_PORTFOLIO_REPOSITORY_URL>
-cd <YOUR_PORTFOLIO_REPOSITORY_FOLDER>
+git clone <YOUR_REPOSITORY_URL>
+cd <YOUR_REPOSITORY_FOLDER>
 ```
 
-> Replace the placeholders above with the final GitHub repository URL and folder name.
+> Replace the placeholders with the final URL and local folder name of this portfolio repository.
 
-### Install Dependencies
+---
+
+## 2. Install Dependencies
 
 ```bash
 npm install
 ```
 
-### Create Environment File
+---
 
-**Windows**
+## 3. Create the Environment File
+
+### Windows
 
 ```bash
 copy .env.example .env.local
 ```
 
-**macOS / Linux**
+### macOS / Linux
 
 ```bash
 cp .env.example .env.local
 ```
 
-### Environment Variables
+---
+
+## 4. Configure Environment Variables
 
 ```env
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY=your_web3forms_access_key
 ```
 
-### Run Development Server
+### Environment Variable Reference
+
+| Variable | Purpose |
+|---|---|
+| `NEXT_PUBLIC_SITE_URL` | Canonical site URL used for metadata and production links |
+| `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY` | Web3Forms key used for contact-form delivery |
+
+> Never commit real private credentials or production secrets to GitHub.
+
+---
+
+## 5. Start Development Server
 
 ```bash
 npm run dev
 ```
 
-Open `http://localhost:3000`.
-
----
-
-## Available Scripts
-
-```bash
-npm run dev        # Development server
-npm run lint       # Oxlint
-npm run typecheck  # TypeScript validation
-npm run build      # Production build
-npm start          # Start production server
-npm run check      # Lint + typecheck + build
-```
-
----
-
-## Contact Form
-
-The contact section uses **React Hook Form + Zod + Web3Forms** and includes:
-
-* Name
-* Email
-* Subject
-* Message
-* Hidden honeypot field
-* Success/error status feedback
-* Email fallback when Web3Forms is not configured
-
-> Do not commit real credentials or private secrets to the repository.
-
----
-
-## SEO & Metadata
-
-The portfolio includes:
-
-* Next.js Metadata API
-* Canonical URL support
-* Dynamic Open Graph image
-* Twitter card metadata
-* JSON-LD `Person` structured data
-* Dynamic sitemap
-* Robots metadata
-* Web manifest
-* Per-project metadata and OG previews
-
----
-
-## Security
-
-Configured response protections include:
-
-* Content Security Policy
-* Referrer Policy
-* `X-Content-Type-Options`
-* `X-Frame-Options`
-* Permissions Policy
-* Cross-Origin Opener Policy
-* HSTS in production
-* Disabled `X-Powered-By` header
-
----
-
-## Accessibility & Performance
-
-The portfolio has been audited across mobile, tablet, laptop and desktop layouts.
-
-Important improvements include:
-
-* Keyboard navigation and visible focus states
-* Skip-to-content link
-* Reduced-motion behavior
-* Responsive touch behavior
-* Improved contrast
-* No audited horizontal overflow
-* Accessible project and skills interactions
-* Optimized WebP project covers
-* Project cover size reduced by more than 96% during optimization
-* No serious/critical Axe findings in the documented audit
-
----
-
-## Continuous Integration
-
-GitHub Actions runs on pushes and pull requests using Node.js 22.
+Then open:
 
 ```text
-Checkout
-  ↓
-npm ci
-  ↓
-Lint
-  ↓
-Typecheck
-  ↓
-Production Build
+http://localhost:3000
 ```
 
 ---
 
-## Deployment
+# 📜 Available Scripts
 
-The project is ready for **Vercel**.
+| Command | Description |
+|---|---|
+| `npm run dev` | Start the development server |
+| `npm run lint` | Run Oxlint checks |
+| `npm run typecheck` | Run TypeScript validation |
+| `npm run build` | Create the production build |
+| `npm start` | Start the production server |
+| `npm run check` | Run lint + typecheck + build |
 
-1. Push the repository to GitHub.
-2. Import it into Vercel.
-3. Keep the detected Next.js preset.
-4. Configure:
+---
+
+# 🔄 Continuous Integration
+
+GitHub Actions automatically checks the project on every **push** and **pull request**.
+
+```mermaid
+flowchart LR
+    A[Push / Pull Request] --> B[Checkout Repository]
+    B --> C[Setup Node.js 22]
+    C --> D[Install Dependencies<br/>npm ci]
+    D --> E[Lint<br/>npm run lint]
+    E --> F[Type Check<br/>npm run typecheck]
+    F --> G[Production Build<br/>npm run build]
+    G --> H[CI Passed ✅]
+```
+
+### CI Quality Gates
+
+```text
+Code pushed
+   │
+   ▼
+Dependencies installed
+   │
+   ▼
+Lint passes
+   │
+   ▼
+TypeScript passes
+   │
+   ▼
+Production build succeeds
+   │
+   ▼
+Ready for review / deployment
+```
+
+---
+
+# 📬 Contact Form Workflow
+
+```mermaid
+flowchart LR
+    A[Visitor] --> B[Contact Form]
+    B --> C[React Hook Form]
+    C --> D[Zod Validation]
+    D -->|Valid| E[Web3Forms API]
+    D -->|Invalid| F[Inline Validation Error]
+    E -->|Success| G[Success Message]
+    E -->|Failure| H[Error / Email Fallback]
+```
+
+---
+
+# 🔐 Security
+
+The portfolio configures multiple response-level protections.
+
+- Content Security Policy
+- Referrer Policy
+- `X-Content-Type-Options`
+- `X-Frame-Options`
+- Permissions Policy
+- Cross-Origin Opener Policy
+- Production HSTS
+- Disabled `X-Powered-By`
+- Contact-form validation
+- Honeypot spam protection
+
+---
+
+# ♿ Accessibility
+
+The portfolio includes accessibility-focused behavior such as:
+
+- Keyboard-accessible navigation
+- Visible focus states
+- Skip-to-content support
+- Reduced-motion handling
+- Mobile touch behavior
+- Improved contrast
+- Responsive layouts
+- Accessible project navigation
+
+The documented design QA also reports no serious/critical Axe findings in the audited layouts.
+
+---
+
+# ⚡ Performance & Optimization
+
+Key optimization work includes:
+
+- Optimized WebP project covers
+- More than 96% reduction in project-cover asset size during the documented optimization pass
+- Reduced unnecessary slider geometry work
+- Responsive image loading
+- Subtle motion rather than heavy animation
+- No documented horizontal overflow in audited layouts
+- No documented missing project images or console errors after the QA pass
+
+---
+
+# 🔍 SEO
+
+The project includes a complete metadata foundation:
+
+```mermaid
+flowchart TD
+    A[Portfolio Content] --> B[Next.js Metadata]
+    B --> C[Page Titles]
+    B --> D[Descriptions]
+    B --> E[Canonical URLs]
+    B --> F[Open Graph]
+    B --> G[Twitter Cards]
+
+    A --> H[Structured Discovery]
+    H --> I[Sitemap]
+    H --> J[Robots]
+    H --> K[JSON-LD]
+    H --> L[Web Manifest]
+```
+
+### Included SEO Features
+
+- Metadata API
+- Canonical URLs
+- Dynamic Open Graph image
+- Twitter card metadata
+- Person JSON-LD
+- Sitemap
+- Robots metadata
+- Manifest
+- Project-specific metadata
+
+---
+
+# 🚀 Deployment
+
+The application is ready for deployment on **Vercel**.
+
+## Deployment Flow
+
+```mermaid
+flowchart LR
+    A[GitHub Repository] --> B[Vercel Import]
+    B --> C[Next.js Detection]
+    C --> D[Environment Variables]
+    D --> E[Production Build]
+    E --> F[Deploy]
+    F --> G[Verify Routes & Contact Form]
+```
+
+## Required Environment Variables
 
 ```env
 NEXT_PUBLIC_SITE_URL=https://your-domain.com
-NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY=your_key
+NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY=your_web3forms_access_key
 ```
 
-5. Deploy.
-6. Verify the home page, project routes, images, resume, contact form, metadata and sitemap.
+### After Deployment Verify
+
+- Homepage
+- Navigation
+- Project case-study routes
+- Project images
+- Resume download
+- Contact form
+- Open Graph metadata
+- Sitemap
+- Robots
+- Mobile responsiveness
 
 ---
 
-## Updating Portfolio Content
+# ✏️ Updating Portfolio Content
 
-Main factual content:
+Most factual portfolio information is centralized here:
 
 ```text
 src/data/portfolio-facts.ts
 ```
 
-Consolidated data facade:
+The application consumes consolidated data through:
 
 ```text
 src/data/portfolio.ts
 ```
 
-Important assets:
+### Important Asset Locations
 
-```text
-Profile        → public/images/profile.png
-Resume         → public/resume.pdf
-Project covers → public/projects/*.webp
-Hero visual    → src/components/sections/hero-visual.tsx
+| Content | Path |
+|---|---|
+| Profile image | `public/images/profile.png` |
+| Resume | `public/resume.pdf` |
+| Project covers | `public/projects/*.webp` |
+| Hero visual | `src/components/sections/hero-visual.tsx` |
+| Main portfolio data | `src/data/portfolio-facts.ts` |
+| Social links | `src/constants/social-links.ts` |
+
+---
+
+# 🧪 Quality Check Before Handoff
+
+Run:
+
+```bash
+npm run lint
+npm run typecheck
+npm run build
+```
+
+Or run everything together:
+
+```bash
+npm run check
 ```
 
 ---
 
-## Connect With Me
+# 🗺️ Development Workflow
 
-<p align="left">
-  <a href="https://github.com/nazmusshakib878"><img src="https://img.shields.io/badge/GitHub-nazmusshakib878-181717?style=for-the-badge&logo=github" alt="GitHub"></a>
-  <a href="https://www.linkedin.com/in/mdnazmusshakib878/"><img src="https://img.shields.io/badge/LinkedIn-Md.%20Nazmus%20Shakib-0A66C2?style=for-the-badge&logo=linkedin" alt="LinkedIn"></a>
-  <a href="mailto:nazmusshakib335@gmail.com"><img src="https://img.shields.io/badge/Email-Contact%20Me-EA4335?style=for-the-badge&logo=gmail&logoColor=white" alt="Email"></a>
-  <a href="https://wa.me/8801716333670?text=Hello%20Nazmus%2C%20I%20visited%20your%20portfolio%20and%20would%20like%20to%20connect."><img src="https://img.shields.io/badge/WhatsApp-Message-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="WhatsApp"></a>
-</p>
-
-**Email:** [nazmusshakib335@gmail.com](mailto:nazmusshakib335@gmail.com)
-**Location:** Khulna, Bangladesh
-
----
-
-## Future Improvements
-
-* Add the final deployed portfolio URL to the hero links
-* Add a real full-page homepage screenshot
-* Add project-specific screenshots or demo GIFs
-* Add a custom domain
-* Add automated Lighthouse checks to CI
-* Add new production case studies over time
+```mermaid
+flowchart LR
+    A[Understand] --> B[Design]
+    B --> C[Develop]
+    C --> D[Test]
+    D --> E[Review]
+    E --> F[Deploy]
+    F --> G[Improve]
+```
 
 ---
 
-## License
+# 📈 Future Improvements
 
-No dedicated `LICENSE` file is currently included. Add one if you want to define reuse, modification and distribution permissions for the source code.
+Potential future additions:
+
+- Add the final deployed portfolio URL
+- Add a real full-page homepage screenshot
+- Add project-specific screenshots
+- Add demo GIFs or short videos
+- Add a custom production domain
+- Add automated Lighthouse checks
+- Add more production case studies
+- Add automated dependency/security checks
+- Add unit/integration tests where appropriate
 
 ---
+
+# 📄 License
+
+A dedicated `LICENSE` file is not currently included in the repository.
+
+If this project is intended to be open source, add a license that clearly defines reuse, modification and distribution permissions.
+
+---
+
+# 🤝 Connect With Me
 
 <div align="center">
 
-### Built with a focus on reliable systems, thoughtful interfaces and real project work.
+[![GitHub](https://img.shields.io/badge/GitHub-nazmusshakib878-181717?style=for-the-badge&logo=github)](https://github.com/nazmusshakib878)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Md.%20Nazmus%20Shakib-0A66C2?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/mdnazmusshakib878/)
+[![Gmail](https://img.shields.io/badge/Gmail-Contact%20Me-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:nazmusshakib335@gmail.com)
+[![WhatsApp](https://img.shields.io/badge/WhatsApp-Message%20Me-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://wa.me/8801716333670?text=Hello%20Nazmus%2C%20I%20visited%20your%20portfolio%20and%20would%20like%20to%20connect.)
 
-**Md. Nazmus Shakib** · Backend Developer · Khulna, Bangladesh
+<br/>
+
+### Building reliable systems with thoughtful interfaces.
+
+**Md. Nazmus Shakib**  
+Backend Developer · Khulna, Bangladesh
 
 </div>
