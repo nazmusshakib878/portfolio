@@ -19,16 +19,38 @@ export function SiteHeader(){
   },[])
 
   useEffect(()=>{
-    const sections=['hero',...portfolioData.navLinks.map(link=>link.href.slice(1))]
+    const sections=portfolioData.navLinks.map(link=>link.href.slice(1))
       .map(id=>document.getElementById(id))
       .filter((section):section is HTMLElement=>Boolean(section))
-    const observer=new IntersectionObserver(entries=>{
-      const visible=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0]
-      if(visible)setActiveSection(visible.target.id)
-    },{rootMargin:'-22% 0px -62% 0px',threshold:[0,.15,.35,.6]})
-    sections.forEach(section=>observer.observe(section))
-    return()=>observer.disconnect()
+    let frame=0
+
+    const updateActiveSection=()=>{
+      frame=0
+      const activationLine=window.innerHeight*.32
+      const current=sections.reduce<HTMLElement|null>((active,section)=>
+        section.getBoundingClientRect().top<=activationLine?section:active
+      ,null)
+
+      if(current)setActiveSection(current.id)
+    }
+    const onScroll=()=>{
+      if(!frame)frame=requestAnimationFrame(updateActiveSection)
+    }
+
+    updateActiveSection()
+    addEventListener('scroll',onScroll,{passive:true})
+    addEventListener('resize',onScroll)
+    return()=>{
+      removeEventListener('scroll',onScroll)
+      removeEventListener('resize',onScroll)
+      if(frame)cancelAnimationFrame(frame)
+    }
   },[])
+
+  const activateLink=(href:string)=>{
+    setActiveSection(href.slice(1))
+    setOpen(false)
+  }
 
   useEffect(()=>{
     document.body.style.overflow=open?'hidden':''
@@ -69,7 +91,7 @@ export function SiteHeader(){
       <nav className="hidden items-center gap-5 xl:flex" aria-label="Primary">
         {portfolioData.navLinks.map(link=>{
           const active=activeSection===link.href.slice(1)
-          return <a key={link.href} aria-current={active?'location':undefined} className={`whitespace-nowrap text-xs uppercase tracking-[.14em] transition ${active?'text-[#69e6cd]':'text-[#9aa6b7] hover:text-white'}`} href={link.href}>{link.label}</a>
+          return <a key={link.href} onClick={()=>activateLink(link.href)} aria-current={active?'location':undefined} data-active={active||undefined} className="nav-neon-link whitespace-nowrap text-xs uppercase tracking-[.14em]" href={link.href}>{link.label}</a>
         })}
       </nav>
       <div className="hidden items-center gap-3 xl:flex">
@@ -81,7 +103,7 @@ export function SiteHeader(){
     {open&&<nav ref={mobileNav} id="mobile-nav" className="shell flex min-h-[calc(100dvh-5rem)] flex-col justify-center gap-[clamp(1rem,4vh,1.5rem)] overflow-y-auto py-6" aria-label="Mobile">
       {portfolioData.navLinks.map((link,index)=>{
         const active=activeSection===link.href.slice(1)
-        return <a key={link.href} onClick={()=>setOpen(false)} href={link.href} aria-current={active?'location':undefined} className={`display border-b pb-3 text-[clamp(1.8rem,7vw,2.25rem)] ${active?'border-[#2bd9b5] text-[#69e6cd]':'border-white/10'}`}><span className="mr-3 text-xs text-[#2bd9b5] sm:mr-4 sm:text-sm">0{index+1}</span>{link.label}</a>
+        return <a key={link.href} onClick={()=>activateLink(link.href)} href={link.href} aria-current={active?'location':undefined} data-active={active||undefined} className="nav-neon-link nav-neon-link-mobile display border-b border-white/10 pb-3 text-[clamp(1.8rem,7vw,2.25rem)]"><span className="mr-3 text-xs text-[#2bd9b5] sm:mr-4 sm:text-sm">0{index+1}</span>{link.label}</a>
       })}
       <a className="button primary mt-4" href={portfolioData.resumeHref} target="_blank" rel="noopener noreferrer">View resume</a>
     </nav>}
