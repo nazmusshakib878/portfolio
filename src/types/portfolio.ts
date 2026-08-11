@@ -66,6 +66,16 @@ export interface ProjectItem {
   accent: string
 }
 
+export interface PublicationItem {
+  title: string
+  projectTitle: string
+  type: string
+  publisher: string
+  version: string
+  doi: string
+  url: string
+}
+
 export interface EducationItem {
   type: 'degree' | 'certificate' | 'school'
   title: string
@@ -141,6 +151,7 @@ export interface PortfolioData {
   professionalStrengths: ProfessionalStrength[]
   experience: ExperienceItem[]
   projects: ProjectItem[]
+  publications: PublicationItem[]
   education: EducationItem[]
   achievements: AchievementItem[]
   certifications: CertificationItem[]

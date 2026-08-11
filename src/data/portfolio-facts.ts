@@ -51,6 +51,10 @@ export const portfolioData: PortfolioData = {
       href: '#projects',
     },
     {
+      label: 'Publications',
+      href: '#publications',
+    },
+    {
       label: 'Experience',
       href: '#experience',
     },
@@ -492,6 +496,18 @@ export const portfolioData: PortfolioData = {
 
       accent:
         'from-emerald-500/35 via-teal-500/20 to-cyan-500/20',
+    },
+  ],
+
+  publications: [
+    {
+      title: 'SecureX: A CCTV & Security Service Booking and Management System',
+      projectTitle: 'Securex - CCTV & Security Service Management System',
+      type: 'Technical Report',
+      publisher: 'Zenodo',
+      version: '1.0',
+      doi: '10.5281/zenodo.21893082',
+      url: 'https://doi.org/10.5281/zenodo.21893082',
     },
   ],
 

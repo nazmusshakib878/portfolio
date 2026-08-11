@@ -2,7 +2,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowLeft,ArrowUpRight,Check } from 'lucide-react'
+import { ArrowLeft,ArrowUpRight,Check,FileText } from 'lucide-react'
 import { portfolioData,projectSlug } from '@/data/portfolio'
 import { projectCovers } from '@/data/project-covers'
 
@@ -29,6 +29,7 @@ export default async function ProjectPage({params}:Props){
   const index=portfolioData.projects.findIndex(item=>projectSlug(item.title)===slug)
   if(index<0)notFound()
   const project=portfolioData.projects[index]
+  const publication=portfolioData.publications.find(item=>item.projectTitle===project.title)
   const previous=portfolioData.projects[(index-1+portfolioData.projects.length)%portfolioData.projects.length]
   const next=portfolioData.projects[(index+1)%portfolioData.projects.length]
 
@@ -71,7 +72,27 @@ export default async function ProjectPage({params}:Props){
             {project.keyFeatures.map(feature=><p key={feature} className="flex gap-3 rounded-xl border border-white/[.08] bg-white/[.025] p-4 text-sm leading-6"><Check aria-hidden="true" size={16} className="mt-1 shrink-0 text-[#2bd9b5]"/>{feature}</p>)}
           </div>
           <h3 className="eyebrow mt-12">Technology stack</h3>
-          <div className="mt-5 flex flex-wrap gap-3">{project.technologies.map(tech=><span key={tech} className="rounded-full border border-white/10 px-3 py-2 text-xs">{tech}</span>)}</div>
+          <div className="mt-5 flex flex-wrap gap-3">
+            {project.technologies.map(tech=><span key={tech} className="rounded-full border border-white/10 px-3 py-2 text-xs">{tech}</span>)}
+            {publication&&<span className="rounded-full border border-[rgba(124,92,255,.28)] bg-[rgba(124,92,255,.08)] px-3 py-2 text-xs font-semibold text-[#aa96ff]">Zenodo / DOI</span>}
+          </div>
+          {publication&&<aside className="mt-12 overflow-hidden rounded-[22px] border border-[rgba(124,92,255,.24)] bg-[rgba(17,15,27,.72)] p-6 sm:p-8" aria-labelledby="publication-heading">
+            <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+              <div className="flex min-w-0 gap-4">
+                <span className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-[rgba(124,92,255,.26)] bg-[rgba(124,92,255,.1)] text-[#aa96ff]"><FileText aria-hidden="true" size={20}/></span>
+                <div className="min-w-0">
+                  <p className="eyebrow text-[#aa96ff]">Technical report / Publication</p>
+                  <h3 id="publication-heading" className="display mt-3 text-[clamp(1.45rem,3vw,2.3rem)] font-semibold text-[#f2f3f7]">{publication.title}</h3>
+                </div>
+              </div>
+              <span className="w-fit shrink-0 rounded-full border border-[rgba(43,217,181,.2)] bg-[rgba(43,217,181,.07)] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[.14em] text-[#69e6cd]">Published on {publication.publisher}</span>
+            </div>
+            <dl className="mt-7 grid gap-3 border-t border-white/10 pt-6 sm:grid-cols-2">
+              <div><dt className="text-[10px] font-semibold uppercase tracking-[.14em] text-[#7f8b98]">Version</dt><dd className="mt-2 text-sm text-[#d9dee7]">{publication.version}</dd></div>
+              <div className="min-w-0"><dt className="text-[10px] font-semibold uppercase tracking-[.14em] text-[#7f8b98]">DOI</dt><dd className="mt-2 break-all text-sm text-[#d9dee7]">{publication.doi}</dd></div>
+            </dl>
+            <a className="button primary mt-7 w-full justify-center sm:w-auto" href={publication.url} target="_blank" rel="noopener noreferrer">View publication <ArrowUpRight size={15}/></a>
+          </aside>}
           <p className="muted mt-10 border-l border-[#f0b45b] pl-5 text-sm leading-7">Outcomes are limited to capabilities documented in the original portfolio data. No performance metrics or user statistics have been invented.</p>
         </div>
       </div>

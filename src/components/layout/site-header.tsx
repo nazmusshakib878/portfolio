@@ -59,16 +59,22 @@ export function SiteHeader(){
 
   return <header className={`fixed inset-x-0 top-0 z-50 border-b transition ${scrolled||open?'border-white/10 bg-[#05070be8] backdrop-blur-xl':'border-transparent'}`}>
     <div className="shell flex h-20 items-center justify-between">
-      <a href="#hero" className="display text-xl font-bold" aria-label="Home">MS<span className="text-[#2bd9b5]">.</span></a>
-      <nav className="hidden items-center gap-7 xl:flex" aria-label="Primary">
+      <a href="#hero" className="group flex items-center p-1" aria-label="Home">
+        <img
+          src="/images/logo.avif"
+          alt="Nazmus Shakib Logo"
+          className="h-[34px] md:h-[36px] w-auto object-contain"
+        />
+      </a>
+      <nav className="hidden items-center gap-5 xl:flex" aria-label="Primary">
         {portfolioData.navLinks.map(link=>{
           const active=activeSection===link.href.slice(1)
-          return <a key={link.href} aria-current={active?'location':undefined} className={`text-xs uppercase tracking-[.14em] transition ${active?'text-[#69e6cd]':'text-[#9aa6b7] hover:text-white'}`} href={link.href}>{link.label}</a>
+          return <a key={link.href} aria-current={active?'location':undefined} className={`whitespace-nowrap text-xs uppercase tracking-[.14em] transition ${active?'text-[#69e6cd]':'text-[#9aa6b7] hover:text-white'}`} href={link.href}>{link.label}</a>
         })}
       </nav>
-      <div className="hidden items-center gap-4 xl:flex">
-        <span className="flex items-center gap-2 text-xs text-[#9aa6b7]"><i aria-hidden="true" className="size-2 rounded-full bg-[#2bd9b5]"/>{portfolioData.availability}</span>
-        <a className="button" href={portfolioData.resumeHref} target="_blank" rel="noopener noreferrer">View resume</a>
+      <div className="hidden items-center gap-3 xl:flex">
+        <span className="flex items-center gap-2 whitespace-nowrap text-xs text-[#9aa6b7]"><i aria-hidden="true" className="size-2 rounded-full bg-[#2bd9b5]"/>{portfolioData.availability}</span>
+        <a className="button !min-h-10 !px-3 !py-2" href={portfolioData.resumeHref} target="_blank" rel="noopener noreferrer">View resume</a>
       </div>
       <button ref={menuButton} className="grid size-11 place-items-center xl:hidden" onClick={()=>setOpen(!open)} aria-expanded={open} aria-controls="mobile-nav" aria-label={open?'Close menu':'Open menu'}>{open?<X/>:<Menu/>}</button>
     </div>
