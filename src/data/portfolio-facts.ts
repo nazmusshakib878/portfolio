@@ -509,6 +509,15 @@ export const portfolioData: PortfolioData = {
       doi: '10.5281/zenodo.21893082',
       url: 'https://doi.org/10.5281/zenodo.21893082',
     },
+    {
+      title: 'Explainable and Bias-Aware Machine Learning for Liver Disease Severity Prediction Using Clinical Data',
+      projectTitle: 'Explainable and Bias-Aware Machine Learning for Liver Disease Severity Prediction Using Clinical Data',
+      type: 'Technical Report',
+      publisher: 'Zenodo',
+      version: '1.0',
+      doi: '10.5281/zenodo.21977490',
+      url: 'https://doi.org/10.5281/zenodo.21977490',
+    },
   ],
 
   education: [
