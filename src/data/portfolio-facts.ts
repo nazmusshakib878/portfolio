@@ -1,14 +1,15 @@
-﻿import type { PortfolioData } from '@/types/portfolio'
+import type { PortfolioData } from '@/types/portfolio'
 
 export const portfolioData: PortfolioData = {
   name: 'Md. Nazmus Shakib',
 
-  primaryRole: 'Backend Developer',
+  primaryRole: 'Full Stack Developer',
 
   supportingRoles: [
-    'Full Stack Development',
-    'Laravel Applications',
-    'Database Systems',
+    'Laravel Backend Systems',
+    'Next.js & React Applications',
+    'AI API Integrations',
+    'Database Architecture',
   ],
 
   location: 'Khulna, Bangladesh',
@@ -19,10 +20,10 @@ export const portfolioData: PortfolioData = {
 
   email: 'nazmusshakib335@gmail.com',
 
-  bio: 'I am a final-semester Computer Science and Engineering student focused on backend development, database systems, and data-driven web applications. I have practical experience building Laravel applications, designing relational databases, implementing authentication and RESTful APIs, and integrating backend services with modern frontend interfaces.',
+  bio: 'I am a final-semester Computer Science and Engineering student specializing in full-stack web applications with a strong Laravel backend foundation. I have practical experience building robust Laravel architectures, designing normalized relational databases (1NF–3NF), developing secure RESTful APIs, and pairing them with modern Next.js and React frontends with practical AI integrations.',
 
   heroDescription:
-    'Backend developer building reliable Laravel, PHP, MySQL and RESTful API applications, with modern frontend integration when a complete product requires it.',
+    'Full Stack Developer building reliable web applications with a strong Laravel & MySQL backend foundation, modern Next.js & React interfaces, and practical AI integrations.',
 
   academicStatus:
     'Final-semester BSc student in Computer Science and Engineering',
@@ -112,16 +113,19 @@ export const portfolioData: PortfolioData = {
       label: 'Laravel',
     },
     {
-      label: 'PHP',
+      label: 'MySQL',
     },
     {
-      label: 'MySQL',
+      label: 'Next.js',
+    },
+    {
+      label: 'React',
     },
     {
       label: 'REST APIs',
     },
     {
-      label: 'React',
+      label: 'AI Integration',
     },
   ],
 
@@ -129,20 +133,21 @@ export const portfolioData: PortfolioData = {
     { name: 'PHP', featured: true },
     { name: 'Laravel 12', featured: true },
     { name: 'MySQL', featured: true },
-    { name: 'React', featured: true },
+    { name: 'Next.js 16', featured: true },
+    { name: 'React 19', featured: true },
+    { name: 'TypeScript', featured: true },
     { name: 'JavaScript' },
     { name: 'REST APIs' },
     { name: 'Laravel Sanctum' },
-    { name: 'Axios' },
-    { name: 'Vite' },
+    { name: 'OpenAI & Gemini API', featured: true },
     { name: 'Tailwind CSS' },
+    { name: 'Vite' },
     { name: 'Bootstrap' },
     { name: 'Material UI' },
     { name: 'React Router' },
     { name: 'Blade' },
     { name: 'Eloquent ORM' },
     { name: 'Socialite / OAuth' },
-    { name: 'OpenAI API' },
     { name: 'Git' },
     { name: 'GitHub' },
     { name: 'Postman' },
@@ -175,57 +180,40 @@ export const portfolioData: PortfolioData = {
     },
     {
       title: 'Technical Focus',
-      description: 'Backend systems and relational databases',
+      description: 'Full-stack web applications and relational databases',
     },
     {
       title: 'Career Interest',
-      description: 'Web applications and software engineering',
+      description: 'Software engineering & full-stack development',
     },
   ],
 
   skills: [
     {
-      name: 'Programming',
-      items: ['PHP', 'JavaScript', 'C++', 'C'],
-    },
-    {
-      name: 'Backend and APIs',
+      name: 'Backend & APIs',
       items: [
         'Laravel',
         'Laravel 12',
+        'PHP',
         'Laravel Sanctum',
         'RESTful APIs',
         'MVC Architecture',
-        'Authentication',
+        'Authentication & RBAC',
         'Middleware',
         'Google OAuth 2.0',
         'Blade',
         'CRUD Development',
-        'Role-Based Access Control',
       ],
     },
     {
-      name: 'Databases',
+      name: 'Frontend & Modern Web',
       items: [
-        'MySQL',
-        'Eloquent ORM',
-        'Relational Schema Design',
-        'Database Normalization',
-        '1NF',
-        '2NF',
-        '3NF',
-        'SQL Queries',
-        'Indexing Fundamentals',
-        'Database Integrity',
-        'Conflict Detection Workflows',
-      ],
-    },
-    {
-      name: 'Frontend',
-      items: [
-        'React',
-        'Vite',
+        'Next.js 16',
+        'React 19',
+        'TypeScript',
+        'JavaScript',
         'Tailwind CSS',
+        'Vite',
         'Bootstrap',
         'Material UI',
         'HTML5',
@@ -235,32 +223,27 @@ export const portfolioData: PortfolioData = {
     {
       name: 'AI Integration',
       items: [
-        'Gemini API',
         'OpenAI API',
+        'Gemini API',
         'Hugging Face API Integration',
+        'Prompt Engineering Workflows',
+        'AI API Integration',
       ],
     },
     {
-      name: 'Tools',
+      name: 'Database & Engineering',
       items: [
-        'Git',
-        'GitHub',
+        'MySQL',
+        'Eloquent ORM',
+        'Relational Schema Design',
+        'Database Normalization (1NF–3NF)',
+        'SQL Queries & Indexing',
+        'Database Integrity',
+        'Git & GitHub',
         'Postman',
-        'SMTP and Email Workflows',
-        'PDF Invoice Generation',
-        'VS Code',
-      ],
-    },
-    {
-      name: 'Engineering Practices',
-      items: [
-        'SDLC',
-        'Agile',
-        'Scrum',
-        'Debugging',
-        'Testing',
+        'Oxlint',
+        'SDLC & Agile',
         'Technical Documentation',
-        'Collaborative Development',
       ],
     },
   ],
@@ -289,7 +272,7 @@ export const portfolioData: PortfolioData = {
 
       role: 'Backend Developer Intern',
 
-      period: 'Backend Developer Intern · Feb 2026 – Mar 2026',
+      period: 'Feb 2026 – Mar 2026',
 
       location: 'Khulna, Bangladesh',
 
@@ -332,12 +315,12 @@ export const portfolioData: PortfolioData = {
         'An end-to-end Laravel MVC platform for CCTV and security service discovery, client bookings, administrative review, status management, automated email notifications, and invoice delivery.',
 
       description:
-        'A complete security service management platform designed to simplify service discovery, booking, administrative review, communication, scheduling, and invoice workflows.',
+        'A full-stack security service management platform built with Laravel MVC and MySQL, featuring Google OAuth 2.0 authentication, conflict-aware time-slot booking logic, automated transactional emails, and dynamic invoice generation.',
 
       keyFeatures: [
         'Email and password authentication',
         'Google OAuth 2.0 authentication',
-        'Role-based administration',
+        'Role-based administration (Admin & Client)',
         'Dynamic service CRUD operations',
         'Client service booking',
         'Administrative booking review',
@@ -355,7 +338,7 @@ export const portfolioData: PortfolioData = {
         'MySQL',
         'Laravel MVC',
         'Google OAuth 2.0',
-        'Authentication',
+        'Sanctum',
         'SMTP',
         'PDF Generation',
       ],
@@ -381,28 +364,28 @@ export const portfolioData: PortfolioData = {
       role: 'Team Leader and Database Lead',
 
       summary:
-        'An AI-powered academic management and student-success platform developed for Northern University of Business and Technology Khulna.',
+        'A full-stack AI-integrated academic management and student-success platform combining a modern React frontend with a secure Laravel 12 REST API and AI integrations.',
 
       description:
-        'A modern campus platform that combines academic management, student services, secure API communication, database-driven workflows, and AI-assisted features.',
+        'A modern campus web application built with a responsive React and Vite frontend connected to a Laravel 12 RESTful backend with Sanctum authentication, MySQL relational database design, and Gemini/OpenAI API integrations for intelligent student assistance.',
 
       keyFeatures: [
-        'Led the academic project team.',
+        'Led the academic project team and database architecture.',
         'Designed and coordinated the MySQL-backed data layer.',
         'Integrated a React and Vite frontend with a Laravel 12 REST API.',
         'Used Laravel Sanctum for secure API authentication.',
+        'Integrated AI APIs (Gemini & OpenAI) for intelligent campus workflows.',
         'Implemented academic and student-management workflows.',
-        'Supported AI-assisted campus features.',
       ],
 
       technologies: [
         'React',
-        'Vite',
+        'Next.js / Vite',
         'Laravel 12',
         'Laravel Sanctum',
         'MySQL',
         'RESTful API',
-        'AI API Integration',
+        'OpenAI & Gemini API',
       ],
 
       githubUrl:
@@ -425,17 +408,17 @@ export const portfolioData: PortfolioData = {
       date: 'Academic Project',
 
       summary:
-        'A Laravel-based library management application using MVC organization and database-backed record-management workflows.',
+        'A database-driven Laravel management application demonstrating normalized relational database design (3NF), MVC architecture, and secure CRUD operations.',
 
       description:
-        'A structured web application designed to manage library records and demonstrate Laravel MVC architecture, CRUD operations, and MySQL integration.',
+        'A structured web application designed around relational database integrity and Laravel MVC principles to manage multi-entity library records, student checkouts, and catalog administration.',
 
       keyFeatures: [
-        'Developed structured Laravel application logic.',
-        'Used MVC architecture.',
-        'Built database-backed record-management workflows.',
-        'Organized core library operations.',
-        'Implemented CRUD functionality.',
+        'Normalized MySQL relational schema design (1NF, 2NF, 3NF).',
+        'Structured Laravel MVC architecture and business logic.',
+        'Role-based access control for librarians and students.',
+        'Full CRUD record-management and inventory tracking.',
+        'Eloquent ORM relationships and query optimization.',
         'Published and maintained the source code on GitHub.',
       ],
 
@@ -443,8 +426,10 @@ export const portfolioData: PortfolioData = {
         'PHP',
         'Laravel',
         'MySQL',
+        'Relational Database',
         'MVC',
         'CRUD',
+        'Eloquent ORM',
       ],
 
       githubUrl:
@@ -466,23 +451,24 @@ export const portfolioData: PortfolioData = {
       date: 'Internship Project',
 
       summary:
-        'A country-to-country transport, courier, and supply-shipment management system developed collaboratively during my internship, where I supported Laravel and PHP implementation, debugging, and database integrity workflows.',
+        'An enterprise transport, courier, and supply-shipment management system developed during my internship at Appstick, featuring robust Laravel backend logic, MySQL data integrity checks, and team Git workflows.',
 
       description:
-        'A practical transport and courier management project for coordinating country-to-country shipments and supply workflows, completed collaboratively during my internship using Laravel, PHP, MySQL, Git, and GitHub.',
+        'A practical transport and courier management project for coordinating multi-stage shipments and supply workflows, completed collaboratively during my internship using Laravel, PHP, MySQL, and team Git workflows.',
 
       keyFeatures: [
-        'Supported Laravel and PHP implementation.',
-        'Worked with reusable application logic.',
-        'Assisted with debugging and troubleshooting.',
-        'Performed database integrity checks.',
-        'Used Git and GitHub in a collaborative workflow.',
+        'Implemented reusable Laravel and PHP backend logic.',
+        'Performed relational database integrity and schema validation.',
+        'Built and tested server-side workflows for consignment tracking.',
+        'Assisted with debugging, troubleshooting, and code quality.',
+        'Collaborated in an Agile team with Git branching and code reviews.',
       ],
 
       technologies: [
         'PHP',
         'Laravel',
         'MySQL',
+        'Database Integrity',
         'Git',
         'GitHub',
       ],

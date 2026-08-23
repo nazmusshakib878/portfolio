@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next'
+import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -6,38 +6,87 @@ import { ArrowLeft,ArrowUpRight,Check,FileText } from 'lucide-react'
 import { portfolioData,projectSlug } from '@/data/portfolio'
 import { projectCovers } from '@/data/project-covers'
 
-type Props={params:Promise<{slug:string}>}
+type Props = { params: Promise<{ slug: string }> }
 
-export function generateStaticParams(){
-  return portfolioData.projects.map(project=>({slug:projectSlug(project.title)}))
+export function generateStaticParams() {
+  return portfolioData.projects.map((project) => ({ slug: projectSlug(project.title) }))
 }
 
-export async function generateMetadata({params}:Props):Promise<Metadata>{
-  const {slug}=await params
-  const index=portfolioData.projects.findIndex(item=>projectSlug(item.title)===slug)
-  if(index<0)return{}
-  const project=portfolioData.projects[index]
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params
+  const index = portfolioData.projects.findIndex((item) => projectSlug(item.title) === slug)
+  if (index < 0) return {}
+  const project = portfolioData.projects[index]
+  const coverUrl = projectCovers[index]
+
   return {
-    title:project.title,
-    description:project.summary,
-    openGraph:{title:project.title,description:project.summary,images:[projectCovers[index]]},
+    title: project.title,
+    description: project.summary,
+    alternates: {
+      canonical: `/projects/${slug}`,
+    },
+    openGraph: {
+      type: 'article',
+      url: `/projects/${slug}`,
+      title: `${project.title} | Md. Nazmus Shakib`,
+      description: project.summary,
+      images: [
+        {
+          url: coverUrl,
+          width: 1200,
+          height: 630,
+          alt: `${project.title} Case Study Cover`,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${project.title} | Md. Nazmus Shakib`,
+      description: project.summary,
+      images: [coverUrl],
+    },
   }
 }
 
-export default async function ProjectPage({params}:Props){
-  const {slug}=await params
-  const index=portfolioData.projects.findIndex(item=>projectSlug(item.title)===slug)
-  if(index<0)notFound()
-  const project=portfolioData.projects[index]
-  const publication=portfolioData.publications.find(item=>item.projectTitle===project.title)
-  const previous=portfolioData.projects[(index-1+portfolioData.projects.length)%portfolioData.projects.length]
-  const next=portfolioData.projects[(index+1)%portfolioData.projects.length]
+export default async function ProjectPage({ params }: Props) {
+  const { slug } = await params
+  const index = portfolioData.projects.findIndex((item) => projectSlug(item.title) === slug)
+  if (index < 0) notFound()
+  const project = portfolioData.projects[index]
+  const publication = portfolioData.publications.find((item) => item.projectTitle === project.title)
+  const previous =
+    portfolioData.projects[(index - 1 + portfolioData.projects.length) % portfolioData.projects.length]
+  const next = portfolioData.projects[(index + 1) % portfolioData.projects.length]
 
-  return <main id="main-content">
-    <header className="shell flex h-24 items-center justify-between">
-      <Link href="/#projects" className="button"><ArrowLeft size={15}/> All projects</Link>
-      <span className="eyebrow">Case study / 0{index+1}</span>
-    </header>
+  const projectJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: project.title,
+    applicationCategory: 'WebApplication',
+    operatingSystem: 'Any',
+    description: project.description,
+    author: {
+      '@type': 'Person',
+      name: portfolioData.name,
+    },
+    codeRepository: project.githubUrl,
+    programmingLanguage: project.technologies,
+  }
+
+  return (
+    <main id="main-content">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(projectJsonLd).replace(/</g, '\\u003c'),
+        }}
+      />
+      <header className="shell flex h-24 items-center justify-between">
+        <Link href="/#projects" className="button">
+          <ArrowLeft size={15} /> All projects
+        </Link>
+        <span className="eyebrow">Case study / 0{index + 1}</span>
+      </header>
 
     <section className="shell py-14 lg:py-20">
       <p className="eyebrow">{project.category} <span aria-hidden="true">&middot;</span> {project.date}</p>
@@ -103,6 +152,7 @@ export default async function ProjectPage({params}:Props){
       <Link href={`/projects/${projectSlug(next.title)}`} className="rounded-[18px] border border-white/10 p-6 transition hover:border-[#7c5cff] sm:text-right"><span className="eyebrow">Next</span><span className="display mt-3 block text-xl">{next.title}</span></Link>
     </nav>
   </main>
+  )
 }
 
 

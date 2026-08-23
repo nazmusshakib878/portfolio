@@ -4,7 +4,7 @@
 
 # Md. Nazmus Shakib — Developer Portfolio
 
-### Backend Developer · Laravel · PHP · MySQL · REST APIs
+### Full Stack Developer · Laravel · MySQL · Next.js · React · AI Integrations
 
 A cinematic, production-ready developer portfolio built with **Next.js 16, React 19, TypeScript, Tailwind CSS v4 and Motion**.
 
@@ -60,7 +60,7 @@ A cinematic, production-ready developer portfolio built with **Next.js 16, React
 
 ## ✨ Overview
 
-This portfolio showcases my work as a **Backend Developer** focused on building reliable, database-driven web applications with **Laravel, PHP, MySQL, authentication, REST APIs and modern frontend integration**.
+This portfolio showcases my work as a **Full Stack Developer** with a strong **Laravel & MySQL backend foundation**, modern **Next.js & React frontend interfaces**, and **practical AI integrations**.
 
 The website uses an editorial dark visual system, subtle motion, accessible interactions, optimized project visuals, dedicated case-study routes, SEO metadata and a production-ready contact experience.
 
@@ -69,7 +69,7 @@ The website uses an editorial dark visual system, subtle motion, accessible inte
 | | |
 |---|---|
 | **Name** | Md. Nazmus Shakib |
-| **Primary Role** | Backend Developer |
+| **Primary Role** | Full Stack Developer |
 | **Location** | Khulna, Bangladesh |
 | **Academic Status** | Final-semester BSc CSE student |
 | **Current CGPA** | 3.60 / 4.00 |
@@ -194,23 +194,26 @@ The website uses an editorial dark visual system, subtle motion, accessible inte
 
 <p>
 <img src="https://img.shields.io/badge/Laravel-12-FF2D20?style=flat-square&logo=laravel&logoColor=white" />
-<img src="https://img.shields.io/badge/PHP-Backend-777BB4?style=flat-square&logo=php&logoColor=white" />
+<img src="https://img.shields.io/badge/PHP-8.2+-777BB4?style=flat-square&logo=php&logoColor=white" />
 <img src="https://img.shields.io/badge/MySQL-Database-4479A1?style=flat-square&logo=mysql&logoColor=white" />
+<img src="https://img.shields.io/badge/Next.js-16-000000?style=flat-square&logo=nextdotjs&logoColor=white" />
+<img src="https://img.shields.io/badge/React-19-20232A?style=flat-square&logo=react&logoColor=61DAFB" />
+<img src="https://img.shields.io/badge/TypeScript-Strict-3178C6?style=flat-square&logo=typescript&logoColor=white" />
 <img src="https://img.shields.io/badge/REST-API-009688?style=flat-square" />
-<img src="https://img.shields.io/badge/React-Frontend-20232A?style=flat-square&logo=react&logoColor=61DAFB" />
+<img src="https://img.shields.io/badge/Tailwind-CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" />
 <img src="https://img.shields.io/badge/Git-Version%20Control-F05032?style=flat-square&logo=git&logoColor=white" />
 <img src="https://img.shields.io/badge/Postman-API%20Testing-FF6C37?style=flat-square&logo=postman&logoColor=white" />
 </p>
 
-**Backend:** Laravel 12 · PHP · Laravel Sanctum · RESTful APIs · MVC · Authentication · Middleware · Google OAuth 2.0 · Role-Based Access Control
+**Primary Backend:** Laravel 12 · PHP · Laravel Sanctum · RESTful APIs · MVC · Authentication · Middleware · Google OAuth 2.0 · Role-Based Access Control
 
-**Database:** MySQL · Eloquent ORM · Relational Schema Design · Database Normalization · SQL · Database Integrity
+**Database & Data Layer:** MySQL · Eloquent ORM · Relational Schema Design · Database Normalization (1NF–3NF) · SQL · Database Integrity
 
-**Frontend:** React · Vite · Tailwind CSS · Bootstrap · Material UI · HTML5 · CSS3
+**Frontend Engineering:** Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · Vite · HTML5 · CSS3
 
-**AI Integration:** Gemini API · OpenAI API · Hugging Face API Integration
+**AI & Workflow Integrations:** Google Antigravity · OpenAI API (GPT Workflows) · Gemini API (Multimodal Reasoning) · Hugging Face API
 
-**Tools & Practices:** Git · GitHub · Postman · VS Code · SMTP · PDF Invoice Generation · SDLC · Agile · Scrum · Testing · Debugging · Technical Documentation
+**Engineering Tools & Practices:** Git · GitHub · Postman · VS Code · SMTP · PDF Generation · SDLC · Agile · Testing · Technical Documentation
 
 ---
 
@@ -524,7 +527,7 @@ cp .env.example .env.local
 
 ```env
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
-NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY=your_web3forms_access_key
+WEB3FORMS_ACCESS_KEY=your_web3forms_access_key
 ```
 
 ### Environment Variable Reference
@@ -532,7 +535,7 @@ NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY=your_web3forms_access_key
 | Variable | Purpose |
 |---|---|
 | `NEXT_PUBLIC_SITE_URL` | Canonical site URL used for metadata and production links |
-| `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY` | Web3Forms key used for contact-form delivery |
+| `WEB3FORMS_ACCESS_KEY` | Server-side Web3Forms key used for /api/contact delivery |
 
 > Never commit real private credentials or production secrets to GitHub.
 
@@ -720,7 +723,7 @@ flowchart LR
 
 ```env
 NEXT_PUBLIC_SITE_URL=https://your-domain.com
-NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY=your_web3forms_access_key
+WEB3FORMS_ACCESS_KEY=your_web3forms_access_key
 ```
 
 ### After Deployment Verify

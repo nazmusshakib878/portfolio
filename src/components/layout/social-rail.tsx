@@ -1,6 +1,46 @@
-﻿import { FaFacebookF,FaGithub,FaLinkedinIn,FaWhatsapp } from 'react-icons/fa6'
+import { FaFacebookF, FaGithub, FaLinkedinIn, FaWhatsapp } from 'react-icons/fa6'
 import { portfolioData } from '@/data/portfolio'
-const icons={GitHub:FaGithub,LinkedIn:FaLinkedinIn,Facebook:FaFacebookF,WhatsApp:FaWhatsapp}
-export function SocialRail(){return <aside aria-label="Social profiles" className="fixed bottom-0 left-0 top-20 z-40 hidden w-16 flex-col items-center border-r border-white/10 bg-[#07070b]/72 backdrop-blur-xl lg:flex"><span className="mt-7 size-2 rounded-full bg-[#2bd9b5] shadow-[0_0_18px_#2bd9b5]"/><div className="mt-auto flex flex-col items-center gap-1 pb-7">{portfolioData.socialLinks.filter(link=>link.label!=='Facebook').map(link=>{const Icon=icons[link.label as keyof typeof icons]??FaGithub;return <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" aria-label={link.label} className="group relative grid size-11 place-items-center text-[#aeb6c3] transition hover:bg-white/[.055] hover:text-white focus-visible:text-white"><Icon aria-hidden="true" focusable="false" size={19}/><span className="pointer-events-none absolute left-[52px] whitespace-nowrap border border-white/10 bg-[#0b0b10] px-3 py-2 text-[10px] uppercase tracking-[.18em] opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100">{link.label}</span></a>})}<span className="mt-4 h-12 w-px bg-gradient-to-b from-white/25 to-transparent"/></div></aside>}
 
+const icons = {
+  GitHub: FaGithub,
+  LinkedIn: FaLinkedinIn,
+  Facebook: FaFacebookF,
+  WhatsApp: FaWhatsapp,
+}
 
+export function SocialRail() {
+  // Only render links that have a real non-empty href
+  const activeLinks = portfolioData.socialLinks.filter(
+    (link) => link.href && link.href.startsWith('http')
+  )
+
+  return (
+    <aside
+      aria-label="Social profiles"
+      className="fixed bottom-0 left-0 top-20 z-40 hidden w-16 flex-col items-center border-r border-white/10 bg-[#07070b]/72 backdrop-blur-xl lg:flex"
+    >
+      <span className="mt-7 size-2 rounded-full bg-[#2bd9b5] shadow-[0_0_18px_#2bd9b5]" />
+      <div className="mt-auto flex flex-col items-center gap-1 pb-7">
+        {activeLinks.map((link) => {
+          const Icon = icons[link.label as keyof typeof icons] ?? FaGithub
+          return (
+            <a
+              key={link.label}
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={link.label}
+              className="group relative grid size-11 place-items-center text-[#aeb6c3] transition hover:bg-white/[.055] hover:text-white focus-visible:text-white"
+            >
+              <Icon aria-hidden="true" focusable="false" size={19} />
+              <span className="pointer-events-none absolute left-[52px] whitespace-nowrap border border-white/10 bg-[#0b0b10] px-3 py-2 text-[10px] uppercase tracking-[.18em] opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100">
+                {link.label}
+              </span>
+            </a>
+          )
+        })}
+        <span className="mt-4 h-12 w-px bg-gradient-to-b from-white/25 to-transparent" />
+      </div>
+    </aside>
+  )
+}

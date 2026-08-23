@@ -1,6 +1,64 @@
-﻿'use client'
+'use client'
+
 import Image from 'next/image'
-import { motion,useMotionValue,useReducedMotion,useSpring,useTransform } from 'motion/react'
-export function HeroVisual(){const reduce=useReducedMotion();const pointerX=useMotionValue(0);const pointerY=useMotionValue(0);const x=useSpring(pointerX,{stiffness:90,damping:20});const y=useSpring(pointerY,{stiffness:90,damping:20});const imageX=useTransform(x,[-1,1],[-10,10]);const imageY=useTransform(y,[-1,1],[-6,6]);const lightX=useTransform(x,[-1,1],[-22,22]);const handleMove=(event:React.PointerEvent<HTMLDivElement>)=>{if(reduce)return;const rect=event.currentTarget.getBoundingClientRect();pointerX.set(((event.clientX-rect.left)/rect.width)*2-1);pointerY.set(((event.clientY-rect.top)/rect.height)*2-1)};const reset=()=>{pointerX.set(0);pointerY.set(0)};return <div onPointerMove={handleMove} onPointerLeave={reset} className="relative h-full w-full overflow-hidden rounded-[24px] border border-white/10 bg-[rgba(12,15,22,.65)]" aria-label="Portrait of Md. Nazmus Shakib"><motion.div aria-hidden style={{x:lightX}} className="absolute left-[16%] top-[15%] h-[62%] w-[68%] rounded-full bg-[#7c5cff]/22 blur-[80px]"/><div aria-hidden className="absolute inset-x-[10%] bottom-[3%] top-[12%] border-x border-white/10"/><div aria-hidden className="absolute inset-x-[3%] bottom-[8%] h-px bg-gradient-to-r from-transparent via-[#2bd9b5]/50 to-transparent"/><motion.div style={{x:imageX,y:imageY}} className="absolute inset-0"><Image src="/images/new%20dp.png" alt="Md. Nazmus Shakib" fill priority sizes="(max-width:1024px) 94vw, 540px" className="object-cover object-center [filter:saturate(.82)_contrast(1.06)_drop-shadow(0_32px_55px_rgba(0,0,0,.6))] [mask-image:linear-gradient(to_bottom,#000_76%,transparent_100%)]"/></motion.div><div aria-hidden className="absolute inset-0 bg-[linear-gradient(90deg,rgba(43,217,181,.06),transparent_28%,transparent_70%,rgba(124,92,255,.09))] mix-blend-screen"/></div>}
+import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from 'motion/react'
+
+export function HeroVisual() {
+  const reduce = useReducedMotion()
+  const pointerX = useMotionValue(0)
+  const pointerY = useMotionValue(0)
+  const x = useSpring(pointerX, { stiffness: 90, damping: 20 })
+  const y = useSpring(pointerY, { stiffness: 90, damping: 20 })
+  const imageX = useTransform(x, [-1, 1], [-10, 10])
+  const imageY = useTransform(y, [-1, 1], [-6, 6])
+  const lightX = useTransform(x, [-1, 1], [-22, 22])
+
+  const handleMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (reduce) return
+    const rect = event.currentTarget.getBoundingClientRect()
+    pointerX.set(((event.clientX - rect.left) / rect.width) * 2 - 1)
+    pointerY.set(((event.clientY - rect.top) / rect.height) * 2 - 1)
+  }
+
+  const reset = () => {
+    pointerX.set(0)
+    pointerY.set(0)
+  }
+
+  return (
+    <div
+      onPointerMove={handleMove}
+      onPointerLeave={reset}
+      className="relative h-full w-full overflow-hidden rounded-[24px] border border-white/10 bg-[rgba(12,15,22,.65)]"
+      aria-label="Portrait of Md. Nazmus Shakib"
+    >
+      <motion.div
+        aria-hidden
+        style={{ x: lightX }}
+        className="absolute left-[16%] top-[15%] h-[62%] w-[68%] rounded-full bg-[#7c5cff]/22 blur-[80px]"
+      />
+      <div aria-hidden className="absolute inset-x-[10%] bottom-[3%] top-[12%] border-x border-white/10" />
+      <div
+        aria-hidden
+        className="absolute inset-x-[3%] bottom-[8%] h-px bg-gradient-to-r from-transparent via-[#2bd9b5]/50 to-transparent"
+      />
+      <motion.div style={{ x: imageX, y: imageY }} className="absolute inset-0">
+        <Image
+          src="/images/profile.webp"
+          alt="Md. Nazmus Shakib"
+          fill
+          priority
+          sizes="(max-width:1024px) 94vw, 540px"
+          className="object-cover object-center [filter:saturate(.82)_contrast(1.06)_drop-shadow(0_32px_55px_rgba(0,0,0,.6))] [mask-image:linear-gradient(to_bottom,#000_76%,transparent_100%)]"
+        />
+      </motion.div>
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-[linear-gradient(90deg,rgba(43,217,181,.06),transparent_28%,transparent_70%,rgba(124,92,255,.09))] mix-blend-screen"
+      />
+    </div>
+  )
+}
+
 
 

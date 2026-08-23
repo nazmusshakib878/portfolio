@@ -1,4 +1,4 @@
-﻿import type { NextConfig } from 'next'
+import type { NextConfig } from 'next'
 
 const isDevelopment=process.env.NODE_ENV==='development'
 const contentSecurityPolicy=[
@@ -7,7 +7,7 @@ const contentSecurityPolicy=[
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self' data:",
-  "connect-src 'self' https://api.web3forms.com",
+  "connect-src 'self'",
   "form-action 'self'",
   "frame-ancestors 'none'",
   "base-uri 'self'",
