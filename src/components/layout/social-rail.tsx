@@ -19,7 +19,6 @@ export function SocialRail() {
       aria-label="Social profiles"
       className="fixed bottom-0 left-0 top-20 z-40 hidden w-16 flex-col items-center border-r border-white/10 bg-[#07070b]/72 backdrop-blur-xl lg:flex"
     >
-      <span className="mt-7 size-2 rounded-full bg-[#2bd9b5] shadow-[0_0_18px_#2bd9b5]" />
       <div className="mt-auto flex flex-col items-center gap-1 pb-7">
         {activeLinks.map((link) => {
           const Icon = icons[link.label as keyof typeof icons] ?? FaGithub
