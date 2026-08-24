@@ -127,15 +127,25 @@ export function NazmusAiPanel({
 
   return (
     <AnimatePresence>
+      {/* Mobile Backdrop Overlay */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onClose}
+        className="fixed inset-0 z-40 bg-black/65 backdrop-blur-sm sm:hidden"
+        aria-hidden="true"
+      />
+
       <motion.div
         initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.95, y: 18 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 18 }}
         transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed z-50 flex flex-col overflow-hidden border border-[rgba(139,114,255,0.28)] bg-[#070912]/95 text-white shadow-[0_24px_80px_rgba(0,0,0,0.88)] backdrop-blur-2xl transition-all duration-300 ${
+        className={`fixed z-50 flex flex-col overflow-hidden border border-[rgba(139,114,255,0.3)] bg-[#070912]/98 text-white shadow-[0_24px_80px_rgba(0,0,0,0.92)] backdrop-blur-2xl transition-all duration-300 ${
           isExpanded
-            ? 'inset-3 sm:inset-6 md:inset-10 rounded-3xl'
-            : 'bottom-4 right-4 sm:bottom-6 sm:right-6 w-[calc(100vw-2rem)] sm:w-[460px] md:w-[490px] h-[calc(100dvh-5.5rem)] sm:h-[640px] max-h-[720px] rounded-3xl'
+            ? 'inset-2 sm:inset-6 md:inset-10 rounded-2xl sm:rounded-3xl'
+            : 'inset-x-2 bottom-2 sm:inset-auto sm:bottom-6 sm:right-6 sm:w-[460px] md:w-[490px] h-[calc(100dvh-1rem)] sm:h-[640px] max-h-[calc(100dvh-1rem)] sm:max-h-[720px] rounded-2xl sm:rounded-3xl'
         }`}
         role="dialog"
         aria-modal="true"

@@ -358,8 +358,19 @@ p, h1, h2, h3, li, dd { overflow-wrap: anywhere }
 
 @media (max-width: 640px) {
   .shakib-ai-button {
-    right: 18px;
-    bottom: 18px;
+    right: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  }
+  .ai-orb {
+    width: 54px !important;
+    height: 54px !important;
+  }
+  .s-logo {
+    font-size: 23px !important;
+  }
+  .sparkle {
+    top: 10px !important;
+    right: 10px !important;
   }
 }
 
