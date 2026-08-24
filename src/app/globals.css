@@ -339,3 +339,108 @@ p, h1, h2, h3, li, dd { overflow-wrap: anywhere }
 @media (prefers-reduced-motion: reduce) {
   .availability-badge i { animation: none; }
 }
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* User Shakib AI Custom Button Styles */
+.shakib-ai-button {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 999;
+}
+
+@media (max-width: 640px) {
+  .shakib-ai-button {
+    right: 18px;
+    bottom: 18px;
+  }
+}
+
+.ai-orb {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: rgba(10, 15, 30, 0.75);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(80, 180, 255, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow:
+    0 0 20px rgba(0, 234, 255, 0.8),
+    0 0 40px rgba(140, 0, 255, 0.45);
+  animation: shakib-ai-float 3s infinite ease-in-out;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ai-orb:hover {
+  transform: scale(1.06);
+  box-shadow:
+    0 0 30px rgba(0, 234, 255, 0.95),
+    0 0 55px rgba(140, 0, 255, 0.7);
+}
+
+.s-logo {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1;
+  background: linear-gradient(
+    135deg,
+    #00f5ff,
+    #7b5cff,
+    #ff4fd8
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 16px rgba(0, 234, 255, 0.85);
+  user-select: none;
+}
+
+.sparkle {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.online-dot {
+  position: absolute;
+  right: -2px;
+  top: 5px;
+  width: 12px;
+  height: 12px;
+  background: #00ff9d;
+  border-radius: 50%;
+  box-shadow: 0 0 12px #00ff9d;
+}
+
+@keyframes shakib-ai-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-orb {
+    animation: none !important;
+  }
+}
+
+
+
