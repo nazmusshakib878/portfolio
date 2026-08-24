@@ -52,10 +52,6 @@ export const portfolioData: PortfolioData = {
       href: '#projects',
     },
     {
-      label: 'Publications',
-      href: '#publications',
-    },
-    {
       label: 'Experience',
       href: '#experience',
     },
@@ -74,6 +70,10 @@ export const portfolioData: PortfolioData = {
     {
       label: 'Process',
       href: '#process',
+    },
+    {
+      label: 'Publications',
+      href: '#publications',
     },
     {
       label: 'Contact',

@@ -37,63 +37,6 @@ export default function Home() {
         <Hero />
         <ProjectSlider />
 
-        <section id="publications" className="section relative overflow-hidden">
-          <div className="shell relative">
-            <Reveal>
-              <div className="grid gap-7 lg:grid-cols-[.32fr_1fr] lg:items-end">
-                <div>
-                  <p className="eyebrow">Publications</p>
-                  <p className="muted mt-4 max-w-[14rem] text-sm leading-6">
-                    Technical writing connected to documented software engineering work.
-                  </p>
-                </div>
-                <h2 className="display max-w-[900px] text-[clamp(2.6rem,4.8vw,4.8rem)] font-semibold text-[#f2f3f7]">
-                  Project work, preserved as a <span className="text-[#7f8b98]">technical record.</span>
-                </h2>
-              </div>
-            </Reveal>
-
-            <div className="mt-14 lg:mt-16">
-              {portfolioData.publications.map((publication, index) => (
-                <Reveal key={publication.doi}>
-                  <article className="overflow-hidden rounded-[24px] border border-[rgba(124,92,255,.24)] bg-[rgba(17,15,27,.72)] p-6 backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:border-[rgba(124,92,255,.4)] hover:shadow-[0_24px_70px_rgba(0,0,0,.25)] sm:p-8 lg:p-10">
-                    <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
-                      <div className="min-w-0">
-                        <div className="flex flex-wrap items-center gap-3">
-                          <span className="flex size-11 items-center justify-center rounded-xl border border-[rgba(124,92,255,.26)] bg-[rgba(124,92,255,.1)] text-[#aa96ff]">
-                            <FileText aria-hidden="true" size={20} />
-                          </span>
-                          <span className="rounded-full border border-[rgba(43,217,181,.2)] bg-[rgba(43,217,181,.07)] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[.14em] text-[#69e6cd]">
-                            Published on {publication.publisher}
-                          </span>
-                          <span className="display ml-auto text-xl font-semibold text-white/20">
-                            0{index + 1}
-                          </span>
-                        </div>
-                        <p className="eyebrow mt-7 text-[#aa96ff]">
-                          {publication.type} · Version {publication.version}
-                        </p>
-                        <h3 className="display mt-4 max-w-4xl text-[clamp(1.8rem,3.8vw,3.4rem)] font-semibold text-[#f2f3f7]">
-                          {publication.title}
-                        </h3>
-                        <p className="muted mt-5 break-all text-sm">DOI: {publication.doi}</p>
-                      </div>
-                      <a
-                        className="button primary w-full justify-center lg:w-auto"
-                        href={publication.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        View publication <ArrowUpRight size={15} />
-                      </a>
-                    </div>
-                  </article>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </section>
-
         <section id="experience" className="section relative overflow-hidden">
           <div className="shell relative">
             <Reveal>
@@ -453,12 +396,69 @@ export default function Home() {
           </div>
         </section>
 
+        <section id="publications" className="section relative overflow-hidden">
+          <div className="shell relative">
+            <Reveal>
+              <div className="grid gap-7 lg:grid-cols-[.32fr_1fr] lg:items-end">
+                <div>
+                  <p className="eyebrow">07 / Publications</p>
+                  <p className="muted mt-4 max-w-[14rem] text-sm leading-6">
+                    Technical writing connected to documented software engineering work.
+                  </p>
+                </div>
+                <h2 className="display max-w-[900px] text-[clamp(2.6rem,4.8vw,4.8rem)] font-semibold text-[#f2f3f7]">
+                  Project work, preserved as a <span className="text-[#7f8b98]">technical record.</span>
+                </h2>
+              </div>
+            </Reveal>
+
+            <div className="mt-14 lg:mt-16">
+              {portfolioData.publications.map((publication, index) => (
+                <Reveal key={publication.doi}>
+                  <article className="overflow-hidden rounded-[24px] border border-[rgba(124,92,255,.24)] bg-[rgba(17,15,27,.72)] p-6 backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:border-[rgba(124,92,255,.4)] hover:shadow-[0_24px_70px_rgba(0,0,0,.25)] sm:p-8 lg:p-10">
+                    <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
+                      <div className="min-w-0">
+                        <div className="flex flex-wrap items-center gap-3">
+                          <span className="flex size-11 items-center justify-center rounded-xl border border-[rgba(124,92,255,.26)] bg-[rgba(124,92,255,.1)] text-[#aa96ff]">
+                            <FileText aria-hidden="true" size={20} />
+                          </span>
+                          <span className="rounded-full border border-[rgba(43,217,181,.2)] bg-[rgba(43,217,181,.07)] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[.14em] text-[#69e6cd]">
+                            Published on {publication.publisher}
+                          </span>
+                          <span className="display ml-auto text-xl font-semibold text-white/20">
+                            0{index + 1}
+                          </span>
+                        </div>
+                        <p className="eyebrow mt-7 text-[#aa96ff]">
+                          {publication.type} · Version {publication.version}
+                        </p>
+                        <h3 className="display mt-4 max-w-4xl text-[clamp(1.8rem,3.8vw,3.4rem)] font-semibold text-[#f2f3f7]">
+                          {publication.title}
+                        </h3>
+                        <p className="muted mt-5 break-all text-sm">DOI: {publication.doi}</p>
+                      </div>
+                      <a
+                        className="button primary w-full justify-center lg:w-auto"
+                        href={publication.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        View publication <ArrowUpRight size={15} />
+                      </a>
+                    </div>
+                  </article>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <section id="contact" className="section relative overflow-hidden">
           <div className="shell relative">
             <Reveal>
               <div className="grid gap-7 lg:grid-cols-[.32fr_1fr] lg:items-end">
                 <div>
-                  <p className="eyebrow">07 / Contact</p>
+                  <p className="eyebrow">08 / Contact</p>
                   <p className="muted mt-4 max-w-[14rem] text-sm leading-6">
                     For projects, internships, collaboration or new opportunities.
                   </p>
