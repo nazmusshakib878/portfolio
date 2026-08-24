@@ -410,8 +410,8 @@ export function SkillsExplorer() {
                             {item.name}
                           </span>
 
-                          {/* Sleek Floating Hover Tooltip */}
-                          <span className="pointer-events-none absolute -bottom-2.5 z-20 hidden whitespace-nowrap rounded-full border border-white/15 bg-[#090b12] px-2 py-0.5 text-[8.5px] font-semibold text-[#69e6cd] opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100 sm:inline-block">
+                          {/* Sleek Floating Hover Tooltip — opens upward */}
+                          <span className="pointer-events-none absolute -top-7 z-20 hidden whitespace-nowrap rounded-full border border-white/15 bg-[#090b12] px-2 py-0.5 text-[8.5px] font-semibold text-[#69e6cd] opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100 sm:inline-block">
                             {item.badge}
                           </span>
                         </div>

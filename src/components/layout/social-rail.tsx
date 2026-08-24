@@ -1,11 +1,12 @@
 import { FaFacebookF, FaGithub, FaLinkedinIn, FaWhatsapp } from 'react-icons/fa6'
+import type { IconType } from 'react-icons'
 import { portfolioData } from '@/data/portfolio'
 
-const icons = {
-  GitHub: FaGithub,
-  LinkedIn: FaLinkedinIn,
-  Facebook: FaFacebookF,
-  WhatsApp: FaWhatsapp,
+const icons: Record<string, IconType> = {
+  github: FaGithub,
+  linkedin: FaLinkedinIn,
+  facebook: FaFacebookF,
+  whatsapp: FaWhatsapp,
 }
 
 export function SocialRail() {
@@ -21,10 +22,10 @@ export function SocialRail() {
     >
       <div className="mt-auto flex flex-col items-center gap-1 pb-7">
         {activeLinks.map((link) => {
-          const Icon = icons[link.label as keyof typeof icons] ?? FaGithub
+          const Icon = icons[link.icon as keyof typeof icons] ?? FaGithub
           return (
             <a
-              key={link.label}
+              key={`${link.label}-${link.href}`}
               href={link.href}
               target="_blank"
               rel="noopener noreferrer"

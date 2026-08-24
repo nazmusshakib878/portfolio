@@ -336,10 +336,6 @@ p, h1, h2, h3, li, dd { overflow-wrap: anywhere }
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .availability-badge i { animation: none; }
-}
-
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -452,6 +448,3 @@ p, h1, h2, h3, li, dd { overflow-wrap: anywhere }
     animation: none !important;
   }
 }
-
-
-

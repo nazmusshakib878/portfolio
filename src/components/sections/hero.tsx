@@ -87,18 +87,21 @@ export function Hero() {
           </div>
 
           <div className="mt-7 flex flex-wrap gap-5 lg:hidden">
-            {portfolioData.socialLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs uppercase tracking-[.14em] text-[#aeb6c3] hover:text-white"
-              >
-                {link.label}
-              </a>
-            ))}
+            {portfolioData.socialLinks
+              .filter((link) => link.href && link.href.startsWith('http'))
+              .map((link) => (
+                <a
+                  key={`${link.label}-${link.href}`}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs uppercase tracking-[.14em] text-[#aeb6c3] hover:text-white"
+                >
+                  {link.label}
+                </a>
+              ))}
           </div>
+
         </div>
 
         <div className="relative mx-auto h-[clamp(300px,95vw,410px)] w-full max-w-[450px] lg:h-[500px] lg:max-w-[460px]">

@@ -495,11 +495,11 @@ export default function Home() {
                         </span>
                         <div className="min-w-0">
                           <p className="text-[10px] font-semibold uppercase tracking-wider text-[#7f8b98]">Phone</p>
-                          <p className="text-sm text-[#d9dee7]">{portfolioData.phone}</p>
+                          <p className="truncate text-sm text-[#d9dee7]" title={portfolioData.phone}>{portfolioData.phone}</p>
                         </div>
                       </div>
                     </a>
-                    <div className="flex items-center gap-4 rounded-2xl border border-white/[.08] bg-white/[.025] p-4">
+                    <div className="group flex items-center gap-4 rounded-2xl border border-white/[.08] bg-white/[.025] p-4 transition hover:border-[rgba(43,217,181,.25)] hover:bg-white/[.04]">
                       <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[rgba(43,217,181,.08)] text-[#69e6cd]">
                         <MapPin aria-hidden="true" size={18} />
                       </span>
