@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { NazmusAiTrigger } from './nazmus-ai-trigger'
 import { NazmusAiPanel } from './nazmus-ai-panel'
+import { generateLocalResponse } from '@/lib/ai/engine'
 import type { ChatMessage, AiMode, ChatResponseBody } from '@/types/ai'
 
 const INITIAL_GREETING_MESSAGE: ChatMessage = {
@@ -110,13 +111,17 @@ export function NazmusAiAssistant() {
         setMessages((prev) => [...prev, assistantMessage])
         speakText(data.reply)
       } catch {
+        const localData = generateLocalResponse(text, mode)
         const fallbackMessage: ChatMessage = {
-          id: `assistant-fallback-${Date.now()}`,
+          id: `assistant-local-${Date.now()}`,
           role: 'assistant',
-          content: `I experienced a temporary connection issue. Please feel free to ask again or reach out directly at **nazmusshakib335@gmail.com**.`,
+          content: localData.reply,
+          cards: localData.cards,
+          suggestedQueries: localData.suggestedQueries,
           timestamp: Date.now(),
         }
         setMessages((prev) => [...prev, fallbackMessage])
+        speakText(localData.reply)
       } finally {
         setIsLoading(false)
       }
