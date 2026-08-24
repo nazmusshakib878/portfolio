@@ -10,44 +10,57 @@ interface TriggerProps {
 }
 
 /**
- * 4-Point Radiant AI Starburst Sparkle
+ * Unified Shakib AI Logo (S + Sparkle Starburst)
+ * Mathematically anchored in SVG viewBox so proportions and spacing stay 100% consistent across all sizes.
  */
-export function AiSparkleIcon({ className = 'size-3.5' }: { className?: string }) {
+export function ShakibOrbLogo({ className = 'size-8' }: { className?: string }) {
   return (
     <svg
-      viewBox="0 0 24 24"
+      viewBox="0 0 36 36"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={className}
+      className={`shrink-0 ${className}`}
       aria-hidden="true"
     >
       <defs>
-        <filter id="sparkle-aura" x="-40%" y="-40%" width="180%" height="180%">
-          <feGaussianBlur stdDeviation="1.2" result="blur" />
+        {/* Triple Gradient for S */}
+        <linearGradient id="shakib-s-grad-unified" x1="4" y1="4" x2="30" y2="30" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#00f5ff" />
+          <stop offset="48%" stopColor="#7b5cff" />
+          <stop offset="100%" stopColor="#ff4fd8" />
+        </linearGradient>
+
+        {/* Soft Bloom Filter */}
+        <filter id="shakib-glow-unified" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="1" result="blur" />
           <feComposite in="SourceGraphic" in2="blur" operator="over" />
         </filter>
       </defs>
-      {/* Soft outer glow */}
-      <circle cx="12" cy="12" r="3.5" fill="#00eaff" opacity="0.5" filter="url(#sparkle-aura)" />
-      {/* Precision 4-pointed diamond star */}
-      <path
-        d="M12 2C12.3 7 17 11.7 22 12C17 12.3 12.3 17 12 22C11.7 17 7 12.3 2 12C7 11.7 11.7 7 12 2Z"
-        fill="#ffffff"
-        filter="url(#sparkle-aura)"
-      />
-      <circle cx="12" cy="12" r="1.4" fill="#00f5ff" />
-    </svg>
-  )
-}
 
-export function ShakibOrbLogo({ className = 'size-9' }: { className?: string }) {
-  return (
-    <div className={`relative flex items-center justify-center ${className}`}>
-      <span className="s-logo text-[22px] font-extrabold leading-none pr-1">S</span>
-      <span className="sparkle">
-        <AiSparkleIcon className="size-3 text-white" />
-      </span>
-    </div>
+      {/* S Letter */}
+      <text
+        x="15.5"
+        y="25.5"
+        textAnchor="middle"
+        fill="url(#shakib-s-grad-unified)"
+        fontSize="22"
+        fontWeight="800"
+        fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+        filter="url(#shakib-glow-unified)"
+      >
+        S
+      </text>
+
+      {/* Radiant 4-Point AI Sparkle Starburst precisely spaced at top-right of S */}
+      <g transform="translate(25.5, 9.5)">
+        <circle cx="0" cy="0" r="2.5" fill="#00eaff" opacity="0.6" filter="url(#shakib-glow-unified)" />
+        <path
+          d="M0 -4.2C0.15 -1.6 1.6 -0.15 4.2 0C1.6 0.15 0.15 1.6 0 4.2C-0.15 1.6 -1.6 0.15 -4.2 0C-1.6 -0.15 -0.15 -1.6 0 -4.2Z"
+          fill="#ffffff"
+        />
+        <circle cx="0" cy="0" r="1.1" fill="#00f5ff" />
+      </g>
+    </svg>
   )
 }
 
@@ -93,10 +106,7 @@ export function NazmusAiTrigger({ isOpen, onClick }: TriggerProps) {
           <X size={22} className="text-white transition hover:scale-110" />
         ) : (
           <>
-            <div className="s-logo pr-1">S</div>
-            <div className="sparkle">
-              <AiSparkleIcon className="size-3.5 drop-shadow-[0_0_6px_#00eaff]" />
-            </div>
+            <ShakibOrbLogo className="size-10" />
             <span className="online-dot" />
           </>
         )}

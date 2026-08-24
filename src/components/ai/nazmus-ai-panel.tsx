@@ -264,7 +264,7 @@ export function NazmusAiPanel({
                 className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'}`}
               >
                 {!isUser && (
-                  <div className="flex size-7 shrink-0 items-center justify-center rounded-full border border-[rgba(139,114,255,0.4)] bg-[#080b16] shadow-sm mt-0.5 p-0.5">
+                  <div className="flex size-7 shrink-0 items-center justify-center rounded-full border border-[rgba(80,180,255,0.45)] bg-[rgba(10,15,30,0.85)] shadow-sm mt-0.5">
                     <ShakibOrbLogo className="size-5" />
                   </div>
                 )}
@@ -329,7 +329,7 @@ export function NazmusAiPanel({
           {/* AI Thinking Animation */}
           {isLoading && (
             <div className="flex items-start gap-3">
-              <div className="flex size-7 shrink-0 items-center justify-center rounded-full border border-[rgba(139,114,255,0.4)] bg-[#080b16] shadow-sm p-0.5">
+              <div className="flex size-7 shrink-0 items-center justify-center rounded-full border border-[rgba(80,180,255,0.45)] bg-[rgba(10,15,30,0.85)] shadow-sm">
                 <ShakibOrbLogo className="size-5" />
               </div>
               <div className="rounded-2xl border border-[rgba(139,114,255,0.3)] bg-[#0e1220]/90 px-4 py-3 shadow-lg">
