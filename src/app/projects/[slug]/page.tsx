@@ -12,8 +12,11 @@ import {
   ExternalLink,
   FileText,
   Layers,
+  LayoutDashboard,
+  Monitor,
   Server,
   ShieldCheck,
+  Smartphone,
   Sparkles,
   Workflow,
 } from 'lucide-react'
@@ -122,6 +125,8 @@ export default async function ProjectPage({ params }: Props) {
     codeRepository: project.githubUrl,
     programmingLanguage: project.technologies,
   }
+
+  const screenshots = caseStudy?.screenshots
 
   return (
     <main id="main-content" className="min-h-screen pb-24">
@@ -261,7 +266,7 @@ export default async function ProjectPage({ params }: Props) {
         </div>
       </section>
 
-      {/* 2. Visual Showcase & Cover Presentation */}
+      {/* 2. Visual Showcase & Cover Presentation (Hero Visual) */}
       <section className="shell">
         <div className="overflow-hidden rounded-[24px] border border-white/10 bg-[#090d15] shadow-[0_24px_60px_rgba(0,0,0,0.5)]">
           {/* Browser Chrome Header */}
@@ -279,7 +284,7 @@ export default async function ProjectPage({ params }: Props) {
             </div>
           </div>
 
-          {/* Project Screenshot / Cover Display */}
+          {/* Project Cover Display */}
           <div className="relative aspect-[16/9] max-h-[640px] w-full bg-[#05070b]">
             <Image
               src={coverUrl}
@@ -303,7 +308,7 @@ export default async function ProjectPage({ params }: Props) {
       <section className="shell mt-16 sm:mt-20">
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Problem Card */}
-          <div className="rounded-[22px] border border-rose-500/20 bg-[rgba(28,15,20,0.6)] p-6 sm:p-8 backdrop-blur-md">
+          <div className="rounded-[22px] border border-rose-500/20 bg-[#140c10] p-6 sm:p-8">
             <div className="flex items-center gap-2.5 text-rose-400">
               <ShieldCheck size={18} />
               <p className="eyebrow text-rose-400">01 / The Problem</p>
@@ -317,7 +322,7 @@ export default async function ProjectPage({ params }: Props) {
           </div>
 
           {/* Solution Card */}
-          <div className="rounded-[22px] border border-emerald-500/20 bg-[rgba(12,25,22,0.6)] p-6 sm:p-8 backdrop-blur-md">
+          <div className="rounded-[22px] border border-emerald-500/20 bg-[#091310] p-6 sm:p-8">
             <div className="flex items-center gap-2.5 text-emerald-400">
               <Layers size={18} />
               <p className="eyebrow text-emerald-400">02 / The Solution</p>
@@ -332,10 +337,59 @@ export default async function ProjectPage({ params }: Props) {
         </div>
       </section>
 
-      {/* 4. Core Features & Capabilities */}
+      {/* 4. Platform Showcase Section (Home / Landing Page Screenshot) */}
+      {screenshots?.platformShowcase && (
+        <section className="shell mt-16 sm:mt-20">
+          <div className="border-b border-white/10 pb-5">
+            <div className="flex items-center gap-2 text-[#69e6cd]">
+              <Monitor size={18} />
+              <p className="eyebrow text-[#69e6cd]">03 / Platform Showcase</p>
+            </div>
+            <h2 className="display mt-2 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
+              {screenshots.platformShowcase.title}
+            </h2>
+            <p className="muted mt-2 max-w-3xl text-sm sm:text-base leading-relaxed">
+              {screenshots.platformShowcase.description}
+            </p>
+          </div>
+
+          <div className="mt-8 overflow-hidden rounded-[24px] border border-white/[0.09] bg-[#080b11]">
+            {/* Browser Header Bar */}
+            <div className="flex h-11 items-center justify-between border-b border-white/[0.08] bg-white/[0.02] px-4">
+              <div className="flex items-center gap-2">
+                <span className="size-3 rounded-full bg-[#ff5f56]/80" />
+                <span className="size-3 rounded-full bg-[#ffbd2e]/80" />
+                <span className="size-3 rounded-full bg-[#27c93f]/80" />
+              </div>
+              <div className="flex max-w-[280px] sm:max-w-md items-center justify-center truncate rounded-md border border-white/[0.08] bg-black/40 px-3 py-1 font-mono text-[11px] text-[#747b8b]">
+                {screenshots.platformShowcase.route ?? 'localhost:5173/'}
+              </div>
+              <span className="rounded-md border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold text-emerald-400">
+                {screenshots.platformShowcase.badge ?? 'Platform Showcase'}
+              </span>
+            </div>
+
+            {/* Screenshot */}
+            <div className="relative w-full bg-[#05070b]">
+              <Image
+                src={screenshots.platformShowcase.src}
+                alt={screenshots.platformShowcase.alt}
+                width={1440}
+                height={694}
+                loading="lazy"
+                decoding="async"
+                sizes="(max-width: 1200px) 100vw, 1180px"
+                className="h-auto w-full object-contain"
+              />
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* 5. Core Features & Capabilities */}
       <section className="shell mt-16 sm:mt-20">
         <div className="border-b border-white/10 pb-5">
-          <p className="eyebrow">03 / Key Features</p>
+          <p className="eyebrow">04 / Key Features</p>
           <h2 className="display mt-2 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
             Core System Capabilities &amp; Workflows
           </h2>
@@ -345,7 +399,7 @@ export default async function ProjectPage({ params }: Props) {
           {project.keyFeatures.map((feature, idx) => (
             <div
               key={feature}
-              className="flex items-start gap-3.5 rounded-2xl border border-white/[0.08] bg-[rgba(15,18,25,0.7)] p-4 backdrop-blur-md transition duration-200 hover:border-white/20 hover:bg-white/[0.04]"
+              className="flex items-start gap-3.5 rounded-2xl border border-white/[0.08] bg-[#0c0f17] p-4 transition-colors duration-150 hover:border-white/20"
             >
               <span className="flex size-7 shrink-0 items-center justify-center rounded-lg border border-[rgba(43,217,181,0.25)] bg-[rgba(43,217,181,0.08)] text-[#2bd9b5]">
                 <Check size={14} />
@@ -359,7 +413,271 @@ export default async function ProjectPage({ params }: Props) {
         </div>
       </section>
 
-      {/* 5. My Role & Personal Contributions */}
+      {/* 6. User Experience & Role Dashboards */}
+      {screenshots?.dashboards && screenshots.dashboards.length > 0 && (
+        <section className="shell mt-16 sm:mt-20">
+          <div className="border-b border-white/10 pb-5">
+            <div className="flex items-center gap-2 text-[#aa96ff]">
+              <LayoutDashboard size={18} />
+              <p className="eyebrow text-[#aa96ff]">
+                {screenshots.dashboards.length > 1 ? '05 / User Experience & Dashboards' : '05 / System Overview & Dashboard'}
+              </p>
+            </div>
+            <h2 className="display mt-2 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
+              {screenshots.dashboards.length > 1
+                ? 'Role-Based Portals: Faculty & Student Workspaces'
+                : screenshots.dashboards[0].title}
+            </h2>
+            <p className="muted mt-2 max-w-3xl text-sm sm:text-base leading-relaxed">
+              {screenshots.dashboards.length > 1
+                ? 'Purpose-built interfaces tailored to institutional personas, streamlining teaching oversight and student degree tracking.'
+                : screenshots.dashboards[0].description}
+            </p>
+          </div>
+
+          <div className={`mt-8 grid gap-8 ${screenshots.dashboards.length > 1 ? 'lg:grid-cols-2' : 'grid-cols-1'}`}>
+            {screenshots.dashboards.map((dash) => (
+              <div
+                key={dash.id}
+                className="overflow-hidden rounded-[24px] border border-white/[0.09] bg-[#090c13]"
+              >
+                {/* Header Information for multi-dashboard */}
+                {screenshots.dashboards!.length > 1 && (
+                  <div className="border-b border-white/[0.08] bg-white/[0.02] p-5 sm:p-6">
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="rounded-full border border-[rgba(168,130,255,0.3)] bg-[rgba(168,130,255,0.08)] px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#c4b5fd]">
+                        {dash.badge ?? 'Dashboard'}
+                      </span>
+                      <span className="font-mono text-[11px] text-[#747b8b]">
+                        {dash.route ?? 'localhost:5173'}
+                      </span>
+                    </div>
+                    <h3 className="display mt-3 text-lg sm:text-xl font-semibold text-[#f2f3f7]">
+                      {dash.title}
+                    </h3>
+                    <p className="muted mt-2 text-xs sm:text-sm leading-relaxed">
+                      {dash.description}
+                    </p>
+                  </div>
+                )}
+
+                {/* Header Information for single dashboard */}
+                {screenshots.dashboards!.length === 1 && (
+                  <div className="flex h-11 items-center justify-between border-b border-white/[0.08] bg-white/[0.02] px-4">
+                    <div className="flex items-center gap-2">
+                      <span className="size-3 rounded-full bg-[#ff5f56]/80" />
+                      <span className="size-3 rounded-full bg-[#ffbd2e]/80" />
+                      <span className="size-3 rounded-full bg-[#27c93f]/80" />
+                    </div>
+                    <div className="flex max-w-[280px] sm:max-w-md items-center justify-center truncate rounded-md border border-white/[0.08] bg-black/40 px-3 py-1 font-mono text-[11px] text-[#747b8b]">
+                      {dash.route ?? '127.0.0.1:8000/admin'}
+                    </div>
+                    <span className="rounded-md border border-[rgba(168,130,255,0.3)] bg-[rgba(168,130,255,0.08)] px-2 py-0.5 text-[10px] font-semibold text-[#c4b5fd]">
+                      {dash.badge ?? 'Admin Control Room'}
+                    </span>
+                  </div>
+                )}
+
+                {/* Screenshot Display */}
+                <div className="relative w-full bg-[#05070b]">
+                  <Image
+                    src={dash.src}
+                    alt={dash.alt}
+                    width={1440}
+                    height={667}
+                    loading="lazy"
+                    decoding="async"
+                    sizes={screenshots.dashboards!.length > 1 ? '(max-width: 1024px) 100vw, 580px' : '(max-width: 1200px) 100vw, 1180px'}
+                    className="h-auto w-full object-contain"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Service Management Workflow Section */}
+      {screenshots?.workflowShowcase && (
+        <section className="shell mt-16 sm:mt-20">
+          <div className="border-b border-white/10 pb-5">
+            <div className="flex items-center gap-2 text-[#aa96ff]">
+              <Workflow size={18} />
+              <p className="eyebrow text-[#aa96ff]">06 / Service Management Workflow</p>
+            </div>
+            <h2 className="display mt-2 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
+              {screenshots.workflowShowcase.title}
+            </h2>
+            <p className="muted mt-2 max-w-3xl text-sm sm:text-base leading-relaxed">
+              {screenshots.workflowShowcase.description}
+            </p>
+          </div>
+
+          <div className="mt-8 overflow-hidden rounded-[24px] border border-white/[0.09] bg-[#080b11]">
+            {/* Browser Header Bar */}
+            <div className="flex h-11 items-center justify-between border-b border-white/[0.08] bg-white/[0.02] px-4">
+              <div className="flex items-center gap-2">
+                <span className="size-3 rounded-full bg-[#ff5f56]/80" />
+                <span className="size-3 rounded-full bg-[#ffbd2e]/80" />
+                <span className="size-3 rounded-full bg-[#27c93f]/80" />
+              </div>
+              <div className="flex max-w-[280px] sm:max-w-md items-center justify-center truncate rounded-md border border-white/[0.08] bg-black/40 px-3 py-1 font-mono text-[11px] text-[#747b8b]">
+                {screenshots.workflowShowcase.route ?? '127.0.0.1:8000/admin/services'}
+              </div>
+              <span className="rounded-md border border-[rgba(168,130,255,0.3)] bg-[rgba(168,130,255,0.08)] px-2 py-0.5 text-[10px] font-semibold text-[#c4b5fd]">
+                {screenshots.workflowShowcase.badge ?? 'Service Operations'}
+              </span>
+            </div>
+
+            {/* Screenshot */}
+            <div className="relative w-full bg-[#05070b]">
+              <Image
+                src={screenshots.workflowShowcase.src}
+                alt={screenshots.workflowShowcase.alt}
+                width={1440}
+                height={667}
+                loading="lazy"
+                decoding="async"
+                sizes="(max-width: 1200px) 100vw, 1180px"
+                className="h-auto w-full object-contain"
+              />
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* 7. AI Intelligence Section (Risk Alert + AI Assistant Workspace) */}
+      {screenshots?.aiIntelligence && screenshots.aiIntelligence.length > 0 && (
+        <section className="shell mt-16 sm:mt-20">
+          <div className="border-b border-white/10 pb-5">
+            <div className="flex items-center gap-2 text-[#c4b5fd]">
+              <Sparkles size={18} />
+              <p className="eyebrow text-[#c4b5fd]">06 / AI Intelligence &amp; Workflows</p>
+            </div>
+            <h2 className="display mt-2 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
+              Intelligent Early Warning &amp; Chat Assistant
+            </h2>
+            <p className="muted mt-2 max-w-3xl text-sm sm:text-base leading-relaxed">
+              Integrated machine intelligence powered by Google Gemini and OpenAI models, analyzing live student attendance, CGPA trends, and academic queries.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-8 lg:grid-cols-2">
+            {screenshots.aiIntelligence.map((aiItem) => (
+              <div
+                key={aiItem.id}
+                className="overflow-hidden rounded-[24px] border border-white/[0.09] bg-[#090c13]"
+              >
+                {/* Header Information */}
+                <div className="border-b border-white/[0.08] bg-white/[0.02] p-5 sm:p-6">
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="rounded-full border border-[rgba(43,217,181,0.25)] bg-[rgba(43,217,181,0.08)] px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#69e6cd]">
+                      {aiItem.badge ?? 'AI Module'}
+                    </span>
+                    <span className="font-mono text-[11px] text-[#747b8b]">
+                      {aiItem.route?.replace('localhost:5173/', '/')}
+                    </span>
+                  </div>
+                  <h3 className="display mt-3 text-lg sm:text-xl font-semibold text-[#f2f3f7]">
+                    {aiItem.title}
+                  </h3>
+                  <p className="muted mt-2 text-xs sm:text-sm leading-relaxed">
+                    {aiItem.description}
+                  </p>
+                </div>
+
+                {/* Screenshot Display */}
+                <div className="relative w-full bg-[#05070b]">
+                  <Image
+                    src={aiItem.src}
+                    alt={aiItem.alt}
+                    width={1440}
+                    height={694}
+                    loading="lazy"
+                    decoding="async"
+                    sizes="(max-width: 1024px) 100vw, 580px"
+                    className="h-auto w-full object-contain"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* 8. Mobile Experience Section */}
+      {screenshots?.mobileExperience && (
+        <section className="shell mt-16 sm:mt-20">
+          <div className="rounded-[24px] border border-[rgba(43,217,181,0.2)] bg-[#0a1112] p-6 sm:p-8 lg:p-10">
+            <div className="grid items-center gap-8 lg:grid-cols-12">
+              {/* Left Column: Narrative */}
+              <div className="lg:col-span-7">
+                <div className="flex items-center gap-2 text-[#69e6cd]">
+                  <Smartphone size={18} />
+                  <p className="eyebrow text-[#69e6cd]">07 / Mobile Experience</p>
+                </div>
+                <h2 className="display mt-3 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
+                  {screenshots.mobileExperience.title}
+                </h2>
+                <p className="muted mt-4 text-sm sm:text-base leading-7">
+                  {screenshots.mobileExperience.description}
+                </p>
+
+                <div className="mt-6 space-y-3">
+                  <div className="flex items-start gap-3 rounded-xl border border-white/[0.07] bg-white/[0.025] p-3.5 text-xs sm:text-sm text-[#d9dee7]">
+                    <Check size={16} className="mt-0.5 shrink-0 text-[#2bd9b5]" />
+                    <span>Adaptive touch controls optimized for fast mobile navigation</span>
+                  </div>
+                  <div className="flex items-start gap-3 rounded-xl border border-white/[0.07] bg-white/[0.025] p-3.5 text-xs sm:text-sm text-[#d9dee7]">
+                    <Check size={16} className="mt-0.5 shrink-0 text-[#2bd9b5]" />
+                    <span>Real-time cloud deployment on Render for anywhere, anytime student access</span>
+                  </div>
+                  <div className="flex items-start gap-3 rounded-xl border border-white/[0.07] bg-white/[0.025] p-3.5 text-xs sm:text-sm text-[#d9dee7]">
+                    <Check size={16} className="mt-0.5 shrink-0 text-[#2bd9b5]" />
+                    <span>Optimized lightweight asset delivery ensuring sub-second rendering speeds</span>
+                  </div>
+                </div>
+
+                <div className="mt-6 inline-flex items-center gap-2 rounded-xl border border-white/10 bg-black/40 px-4 py-2 font-mono text-xs text-[#aeb6c3]">
+                  <span className="size-2 rounded-full bg-emerald-400" />
+                  <span>Hosted Target: {screenshots.mobileExperience.route ?? 'Render Cloud'}</span>
+                </div>
+              </div>
+
+              {/* Right Column: Phone Mockup Frame */}
+              <div className="flex justify-center lg:col-span-5">
+                <div className="w-full max-w-[280px] sm:max-w-[300px] overflow-hidden rounded-[32px] border-4 border-[#232a3b] bg-[#090d15]">
+                  {/* Phone Bezel Header */}
+                  <div className="flex h-6 items-center justify-center bg-[#151a27] px-6">
+                    <span className="h-3 w-16 rounded-full bg-black/60" />
+                  </div>
+
+                  {/* Mobile Screen Image */}
+                  <div className="relative bg-[#05070b]">
+                    <Image
+                      src={screenshots.mobileExperience.src}
+                      alt={screenshots.mobileExperience.alt}
+                      width={480}
+                      height={1042}
+                      loading="lazy"
+                      decoding="async"
+                      sizes="(max-width: 768px) 280px, 300px"
+                      className="h-auto w-full object-contain"
+                    />
+                  </div>
+
+                  {/* Phone Bezel Footer */}
+                  <div className="flex h-5 items-center justify-center bg-[#151a27]">
+                    <span className="h-1 w-20 rounded-full bg-white/20" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* 9. My Role & Personal Contributions */}
       <section className="shell mt-16 sm:mt-20">
         <div className="rounded-[24px] border border-[rgba(124,92,255,0.22)] bg-[rgba(17,15,27,0.72)] p-6 sm:p-8 lg:p-10 backdrop-blur-md">
           <div className="flex items-center gap-3">
@@ -367,7 +685,7 @@ export default async function ProjectPage({ params }: Props) {
               <Code2 size={20} />
             </span>
             <div>
-              <p className="eyebrow text-[#aa96ff]">04 / Engineering Contribution</p>
+              <p className="eyebrow text-[#aa96ff]">08 / Engineering Contribution</p>
               <h2 className="display mt-1 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
                 My Specific Role &amp; Responsibilities
               </h2>
@@ -392,10 +710,10 @@ export default async function ProjectPage({ params }: Props) {
         </div>
       </section>
 
-      {/* 6. Grouped Technology Stack */}
+      {/* 10. Grouped Technology Stack */}
       <section className="shell mt-16 sm:mt-20">
         <div className="border-b border-white/10 pb-5">
-          <p className="eyebrow">05 / Technology Architecture</p>
+          <p className="eyebrow">09 / Technology Architecture</p>
           <h2 className="display mt-2 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
             Full-Stack Technology Decisions
           </h2>
@@ -408,7 +726,7 @@ export default async function ProjectPage({ params }: Props) {
               <p className="text-xs font-semibold uppercase tracking-wider">Backend &amp; APIs</p>
             </div>
             <ul className="mt-4 space-y-2">
-              {(caseStudy?.techStackGrouped.backend ?? project.technologies.filter(t => t.includes('Laravel') || t.includes('PHP'))).map((t) => (
+              {(caseStudy?.techStackGrouped.backend ?? project.technologies.filter((t: string) => t.includes('Laravel') || t.includes('PHP'))).map((t: string) => (
                 <li key={t} className="rounded-lg border border-white/[0.08] bg-black/40 px-3 py-1.5 text-xs font-medium text-[#f2f3f7]">
                   {t}
                 </li>
@@ -422,7 +740,7 @@ export default async function ProjectPage({ params }: Props) {
               <p className="text-xs font-semibold uppercase tracking-wider">Frontend &amp; UI</p>
             </div>
             <ul className="mt-4 space-y-2">
-              {(caseStudy?.techStackGrouped.frontend ?? project.technologies.filter(t => t.includes('React') || t.includes('Next') || t.includes('Blade'))).map((t) => (
+              {(caseStudy?.techStackGrouped.frontend ?? project.technologies.filter((t: string) => t.includes('React') || t.includes('Next') || t.includes('Blade'))).map((t: string) => (
                 <li key={t} className="rounded-lg border border-white/[0.08] bg-black/40 px-3 py-1.5 text-xs font-medium text-[#f2f3f7]">
                   {t}
                 </li>
@@ -436,7 +754,7 @@ export default async function ProjectPage({ params }: Props) {
               <p className="text-xs font-semibold uppercase tracking-wider">Database Layer</p>
             </div>
             <ul className="mt-4 space-y-2">
-              {(caseStudy?.techStackGrouped.database ?? ['MySQL', 'Eloquent ORM', 'Relational Schema']).map((t) => (
+              {(caseStudy?.techStackGrouped.database ?? ['MySQL', 'Eloquent ORM', 'Relational Schema']).map((t: string) => (
                 <li key={t} className="rounded-lg border border-white/[0.08] bg-black/40 px-3 py-1.5 text-xs font-medium text-[#f2f3f7]">
                   {t}
                 </li>
@@ -450,7 +768,7 @@ export default async function ProjectPage({ params }: Props) {
               <p className="text-xs font-semibold uppercase tracking-wider">Integrations &amp; Tools</p>
             </div>
             <ul className="mt-4 space-y-2">
-              {(caseStudy?.techStackGrouped.integrations ?? ['Git & GitHub', 'Postman', 'SMTP / OAuth']).map((t) => (
+              {(caseStudy?.techStackGrouped.integrations ?? ['Git & GitHub', 'Postman', 'SMTP / OAuth']).map((t: string) => (
                 <li key={t} className="rounded-lg border border-white/[0.08] bg-black/40 px-3 py-1.5 text-xs font-medium text-[#f2f3f7]">
                   {t}
                 </li>
@@ -460,15 +778,15 @@ export default async function ProjectPage({ params }: Props) {
         </div>
       </section>
 
-      {/* 7. Database Architecture & Schema Design */}
+      {/* 11. Technical Section: Database Architecture & Relational Schema */}
       <section className="shell mt-16 sm:mt-20">
-        <div className="rounded-[24px] border border-white/10 bg-[rgba(15,18,25,0.75)] p-6 sm:p-8 lg:p-10 backdrop-blur-md">
+        <div className="rounded-[24px] border border-white/10 bg-[#0b0e15] p-6 sm:p-8 lg:p-10">
           <div className="flex items-center gap-3">
             <span className="flex size-10 items-center justify-center rounded-xl border border-[rgba(43,217,181,0.25)] bg-[rgba(43,217,181,0.08)] text-[#69e6cd]">
               <Database size={20} />
             </span>
             <div>
-              <p className="eyebrow text-[#69e6cd]">06 / Data Layer</p>
+              <p className="eyebrow text-[#69e6cd]">10 / Data Layer</p>
               <h2 className="display mt-1 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
                 Database Architecture &amp; Relational Schema
               </h2>
@@ -519,18 +837,55 @@ export default async function ProjectPage({ params }: Props) {
               </ul>
             </div>
           </div>
+
+          {/* Database Screenshot Display */}
+          {screenshots?.technicalArchitecture && (
+            <div className="mt-8 overflow-hidden rounded-[20px] border border-white/[0.09] bg-[#080b11]">
+              <div className="flex h-10 items-center justify-between border-b border-white/[0.08] bg-white/[0.02] px-4">
+                <div className="flex items-center gap-2">
+                  <span className="size-2.5 rounded-full bg-[#ff5f56]/80" />
+                  <span className="size-2.5 rounded-full bg-[#ffbd2e]/80" />
+                  <span className="size-2.5 rounded-full bg-[#27c93f]/80" />
+                </div>
+                <div className="flex max-w-[280px] sm:max-w-md items-center justify-center truncate rounded-md border border-white/[0.08] bg-black/40 px-3 py-0.5 font-mono text-[10px] text-[#747b8b]">
+                  {screenshots.technicalArchitecture.route ?? 'localhost/phpmyadmin'}
+                </div>
+                <span className="rounded-md border border-[rgba(43,217,181,0.25)] bg-[rgba(43,217,181,0.08)] px-2 py-0.5 text-[10px] font-semibold text-[#69e6cd]">
+                  {screenshots.technicalArchitecture.badge ?? 'MySQL InnoDB'}
+                </span>
+              </div>
+
+              <div className="relative w-full bg-[#05070b]">
+                <Image
+                  src={screenshots.technicalArchitecture.src}
+                  alt={screenshots.technicalArchitecture.alt}
+                  width={1440}
+                  height={674}
+                  loading="lazy"
+                  decoding="async"
+                  sizes="(max-width: 1200px) 100vw, 1100px"
+                  className="h-auto w-full object-contain"
+                />
+              </div>
+
+              <div className="border-t border-white/[0.08] bg-white/[0.02] p-4 text-xs text-[#aeb6c3]">
+                <span className="font-semibold text-[#f2f3f7]">{screenshots.technicalArchitecture.title}: </span>
+                <span>{screenshots.technicalArchitecture.description}</span>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
-      {/* 8. API Architecture & Data Flow */}
+      {/* 12. API Architecture & Data Flow */}
       <section className="shell mt-16 sm:mt-20">
-        <div className="rounded-[24px] border border-white/10 bg-[rgba(15,18,25,0.75)] p-6 sm:p-8 lg:p-10 backdrop-blur-md">
+        <div className="rounded-[24px] border border-white/10 bg-[#0b0e15] p-6 sm:p-8 lg:p-10">
           <div className="flex items-center gap-3">
             <span className="flex size-10 items-center justify-center rounded-xl border border-white/15 bg-white/[0.04] text-[#f2f3f7]">
               <Workflow size={20} />
             </span>
             <div>
-              <p className="eyebrow">07 / System Flow</p>
+              <p className="eyebrow">11 / System Flow</p>
               <h2 className="display mt-1 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
                 API Architecture &amp; Data Flow Lifecycle
               </h2>
@@ -569,10 +924,10 @@ export default async function ProjectPage({ params }: Props) {
         </div>
       </section>
 
-      {/* 9. Engineering Challenges & Problem Solving */}
+      {/* 13. Engineering Challenges & Problem Solving */}
       <section className="shell mt-16 sm:mt-20">
         <div className="border-b border-white/10 pb-5">
-          <p className="eyebrow">08 / Problem Solving</p>
+          <p className="eyebrow">12 / Problem Solving</p>
           <h2 className="display mt-2 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
             Engineering Challenges &amp; Technical Solutions
           </h2>
@@ -587,7 +942,7 @@ export default async function ProjectPage({ params }: Props) {
           ]).map((item, cIdx) => (
             <div
               key={item.challenge}
-              className="rounded-[22px] border border-white/10 bg-[rgba(15,18,25,0.72)] p-6 sm:p-8 backdrop-blur-md"
+              className="rounded-[22px] border border-white/10 bg-[#0b0e15] p-6 sm:p-8"
             >
               <div className="flex items-center gap-2">
                 <span className="size-2 rounded-full bg-[#aa96ff]" />
@@ -605,10 +960,10 @@ export default async function ProjectPage({ params }: Props) {
         </div>
       </section>
 
-      {/* 10. Publication / Zenodo Technical Report (if applicable) */}
+      {/* 14. Publication / Zenodo Technical Report (if applicable) */}
       {publication && (
         <section className="shell mt-16 sm:mt-20">
-          <aside className="overflow-hidden rounded-[24px] border border-[rgba(124,92,255,0.25)] bg-[rgba(17,15,27,0.75)] p-6 sm:p-8 backdrop-blur-md">
+          <aside className="overflow-hidden rounded-[24px] border border-[rgba(124,92,255,0.25)] bg-[#0d0c17] p-6 sm:p-8">
             <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
               <div className="flex min-w-0 gap-4">
                 <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl border border-[rgba(124,92,255,0.3)] bg-[rgba(124,92,255,0.1)] text-[#aa96ff]">
@@ -649,10 +1004,10 @@ export default async function ProjectPage({ params }: Props) {
         </section>
       )}
 
-      {/* 11. Final Result & Verification Summary */}
+      {/* 15. Final Result & Verification Summary */}
       <section className="shell mt-16 sm:mt-20">
-        <div className="rounded-[24px] border border-white/10 bg-[rgba(15,18,25,0.7)] p-6 sm:p-8 backdrop-blur-md">
-          <p className="eyebrow">09 / Result &amp; Verification</p>
+        <div className="rounded-[24px] border border-white/10 bg-[#0b0e15] p-6 sm:p-8">
+          <p className="eyebrow">13 / Result &amp; Verification</p>
           <h2 className="display mt-2 text-2xl font-semibold text-[#f2f3f7]">
             Project Delivery &amp; Technical Achievements
           </h2>
@@ -679,14 +1034,14 @@ export default async function ProjectPage({ params }: Props) {
         </div>
       </section>
 
-      {/* 12. Bottom Prev / Next Case Study Navigation */}
+      {/* 16. Bottom Prev / Next Case Study Navigation */}
       <nav className="shell mt-16 grid gap-4 sm:grid-cols-2" aria-label="Project case study navigation">
         <Link
           href={`/projects/${projectSlug(previous.title)}`}
-          className="group rounded-[20px] border border-white/10 bg-[rgba(15,18,25,0.7)] p-6 transition duration-200 hover:-translate-y-0.5 hover:border-[rgba(124,92,255,0.4)]"
+          className="group rounded-[20px] border border-white/10 bg-[#0b0e15] p-6 transition-colors duration-150 hover:border-[rgba(124,92,255,0.4)]"
         >
           <div className="flex items-center gap-2 text-xs text-[#747b8b]">
-            <ArrowLeft size={13} className="transition group-hover:-translate-x-1" />
+            <ArrowLeft size={13} className="transition-transform group-hover:-translate-x-1" />
             <span>Previous Case Study</span>
           </div>
           <p className="display mt-3 text-lg sm:text-xl font-semibold text-[#f2f3f7] group-hover:text-[#c4b5fd]">
@@ -696,11 +1051,11 @@ export default async function ProjectPage({ params }: Props) {
 
         <Link
           href={`/projects/${projectSlug(next.title)}`}
-          className="group rounded-[20px] border border-white/10 bg-[rgba(15,18,25,0.7)] p-6 transition duration-200 hover:-translate-y-0.5 hover:border-[rgba(124,92,255,0.4)] sm:text-right"
+          className="group rounded-[20px] border border-white/10 bg-[#0b0e15] p-6 transition-colors duration-150 hover:border-[rgba(124,92,255,0.4)] sm:text-right"
         >
           <div className="flex items-center justify-end gap-2 text-xs text-[#747b8b]">
             <span>Next Case Study</span>
-            <ArrowRight size={13} className="transition group-hover:translate-x-1" />
+            <ArrowRight size={13} className="transition-transform group-hover:translate-x-1" />
           </div>
           <p className="display mt-3 text-lg sm:text-xl font-semibold text-[#f2f3f7] group-hover:text-[#c4b5fd]">
             {next.title}
@@ -710,3 +1065,4 @@ export default async function ProjectPage({ params }: Props) {
     </main>
   )
 }
+

@@ -10,6 +10,17 @@ export interface CaseStudyTechStack {
   integrations: string[]
 }
 
+export interface CaseStudyScreenshot {
+  id: string
+  title: string
+  subtitle?: string
+  description: string
+  src: string
+  alt: string
+  badge?: string
+  route?: string
+}
+
 export interface CaseStudyDetail {
   slug: string
   shortTitle: string
@@ -19,6 +30,15 @@ export interface CaseStudyDetail {
   myRoleDescription: string
   myContributions: string[]
   techStackGrouped: CaseStudyTechStack
+  screenshots?: {
+    platformShowcase?: CaseStudyScreenshot
+    dashboards?: CaseStudyScreenshot[]
+    aiIntelligence?: CaseStudyScreenshot[]
+    mobileExperience?: CaseStudyScreenshot
+    technicalArchitecture?: CaseStudyScreenshot
+    authShowcase?: CaseStudyScreenshot
+    workflowShowcase?: CaseStudyScreenshot
+  }
   databaseArchitecture: {
     overview: string
     keyEntities: string[]
@@ -59,6 +79,43 @@ export const projectCaseStudies: Record<string, CaseStudyDetail> = {
       frontend: ['Blade Templates', 'Tailwind CSS', 'JavaScript', 'HTML5'],
       database: ['MySQL', 'Eloquent ORM', 'Relational Schema (3NF)'],
       integrations: ['Google OAuth 2.0', 'SMTP Mailer', 'PDF Generation', 'Git & GitHub'],
+    },
+    screenshots: {
+      platformShowcase: {
+        id: 'securex-landing',
+        title: 'Securex CCTV & Security Platform Showcase',
+        subtitle: 'Centralized Client Booking & Service Catalog Gateway',
+        description:
+          'Public-facing product showcase offering direct access to security services, booking consultations, and customer quote requests.',
+        src: '/projects/securex/landing-showcase.webp',
+        alt: 'Securex CCTV and Security Platform Landing Page and Product Showcase',
+        badge: 'Product Showcase',
+        route: '127.0.0.1:8000',
+      },
+      dashboards: [
+        {
+          id: 'securex-admin-control-room',
+          title: 'Securex Control Room & Service Admin Panel',
+          subtitle: 'Central Administrative Workspace & Real-Time Booking Oversight',
+          description:
+            'Comprehensive administrator control center displaying live booking review queues (8 pending reviews), active service metrics (16 active services), and customer inbox communications.',
+          src: '/projects/securex/admin-dashboard.webp',
+          alt: 'Securex Admin Control Room Dashboard and Security Service Management Panel',
+          badge: 'Admin Control Room',
+          route: '127.0.0.1:8000/admin/dashboard',
+        },
+      ],
+      workflowShowcase: {
+        id: 'securex-service-workflow',
+        title: 'Security Service Management & Operational Workflow',
+        subtitle: 'Service Catalog Administration & Inventory Lifecycle',
+        description:
+          'Administrative operations interface for configuring security service offerings (CC Camera, Video Surveillance, Fingerprint Access Control, Fire Alarm), updating pricing, and managing lifecycle statuses.',
+        src: '/projects/securex/service-workflow.webp',
+        alt: 'Securex Service Management Workflow and Admin Operations Interface',
+        badge: 'Service Operations',
+        route: '127.0.0.1:8000/admin/services',
+      },
     },
     databaseArchitecture: {
       overview:
@@ -135,6 +192,89 @@ export const projectCaseStudies: Record<string, CaseStudyDetail> = {
       frontend: ['React 19', 'Next.js / Vite', 'TypeScript', 'Tailwind CSS'],
       database: ['MySQL', 'Relational Schema Design', 'Query Optimization'],
       integrations: ['OpenAI API', 'Gemini API', 'Render Cloud', 'Postman'],
+    },
+    screenshots: {
+      platformShowcase: {
+        id: 'platform-showcase',
+        title: 'Northern University of Business & Technology Khulna Portal',
+        subtitle: 'Unified Public Landing & Institutional Gateway',
+        description:
+          'Institutional landing page for NUBTK featuring integrated navigation, student indicators (8,400+ active students), and 24/7 AI-assisted academic support.',
+        src: '/projects/ai-smart-campus/landing-showcase.webp',
+        alt: 'Northern University of Business and Technology Khulna Smart Campus Portal Landing Page',
+        badge: 'Platform Showcase',
+        route: 'http://localhost:5173/',
+      },
+      dashboards: [
+        {
+          id: 'faculty-dashboard',
+          title: 'Faculty & Admin Teaching Workspace',
+          subtitle: 'Academic Oversight & Live Class Analytics',
+          description:
+            'Instructor dashboard offering high-level academic tracking across enrolled students, class schedules, weekly agendas, attendance benchmarks (69% average), and at-risk student alerts.',
+          src: '/projects/ai-smart-campus/faculty-dashboard.webp',
+          alt: 'Faculty and Admin Teaching Workspace Dashboard Interface',
+          badge: 'Faculty Workspace',
+          route: 'localhost:5173/faculty-dashboard',
+        },
+        {
+          id: 'student-dashboard',
+          title: 'Student Learning & Course Progress Hub',
+          subtitle: 'Personalized Academic Schedule & CGPA History',
+          description:
+            'Comprehensive student portal displaying registered courses (Mobile Computing, Introduction to Computers, Structured Programming), upcoming lecture schedules, and historical CGPA tracking across semesters (3.51 - 3.61).',
+          src: '/projects/ai-smart-campus/student-dashboard.webp',
+          alt: 'Student Learning and Course Progress Dashboard with CGPA History',
+          badge: 'Student Portal',
+          route: 'localhost:5173/dashboard',
+        },
+      ],
+      aiIntelligence: [
+        {
+          id: 'risk-alerts',
+          title: 'AI Risk Alert & Early Warning System',
+          subtitle: 'Automated Academic Diagnostics & Advisory',
+          description:
+            'Database-backed academic diagnostic engine calculating attendance thresholds and CGPA trajectories to categorize student risks (Critical, Medium, On Track) with tailored recovery recommendations.',
+          src: '/projects/ai-smart-campus/risk-alerts.webp',
+          alt: 'Database-backed academic early warnings and AI risk analysis interface',
+          badge: 'Risk Diagnostics',
+          route: 'localhost:5173/risk-alerts',
+        },
+        {
+          id: 'ai-assistant',
+          title: 'AI Assistant Conversational Workspace',
+          subtitle: 'Contextual Academic Inquiries & Lesson Planning',
+          description:
+            'Interactive AI chat workspace powered by Gemini and OpenAI models, enabling instructors and students to generate lesson plans, analyze student performance, and query campus schedules with authenticated account context.',
+          src: '/projects/ai-smart-campus/ai-assistant.webp',
+          alt: 'AI Assistant Interactive Workspace for lesson planning and queries',
+          badge: 'Gemini / OpenAI API',
+          route: 'localhost:5173/ai-assistant',
+        },
+      ],
+      mobileExperience: {
+        id: 'mobile-showcase',
+        title: 'Responsive Mobile-First Experience',
+        subtitle: 'Touch-Optimized Adaptive Interface',
+        description:
+          'Fully responsive mobile application interface running on Render cloud (system-ce9i.onrender.com), providing instantaneous access to campus tools, authentication, and academic status across mobile viewports.',
+        src: '/projects/ai-smart-campus/mobile-experience.webp',
+        alt: 'AI Smart Campus System Responsive Mobile Interface on Render Cloud',
+        badge: 'Mobile Viewport',
+        route: 'system-ce9i.onrender.com',
+      },
+      technicalArchitecture: {
+        id: 'database-architecture',
+        title: 'MySQL Relational Schema & Storage Engine',
+        subtitle: 'Normalized Database Tables & Performance Indices',
+        description:
+          'Production InnoDB relational database schema tracking academic events, attendance records, users, AI conversation history, and course enrollments with foreign key referential integrity.',
+        src: '/projects/ai-smart-campus/database-architecture.webp',
+        alt: 'phpMyAdmin Relational Database Schema Structure and Tables',
+        badge: 'MySQL InnoDB',
+        route: 'localhost/phpmyadmin',
+      },
     },
     databaseArchitecture: {
       overview:
@@ -285,6 +425,32 @@ export const projectCaseStudies: Record<string, CaseStudyDetail> = {
       frontend: ['Blade', 'CSS3', 'JavaScript'],
       database: ['MySQL', 'Database Integrity Checks', 'Schema Migrations'],
       integrations: ['Git', 'GitHub Team Workflow', 'Postman'],
+    },
+    screenshots: {
+      platformShowcase: {
+        id: 'logistica-home-hero',
+        title: 'Logistica Transport & Logistics Platform Showcase',
+        subtitle: 'Public Freight & Courier Solution Gateway',
+        description:
+          'Public hero interface introducing transport services, freight solutions, direct quote actions, and online consignment booking.',
+        src: '/projects/logistica/logistica-home-hero.webp',
+        alt: 'Logistica Transport and Logistics Solution Home Page and Hero Section',
+        badge: 'Platform Showcase',
+        route: 'localhost:8000',
+      },
+      dashboards: [
+        {
+          id: 'logistica-admin-control-center',
+          title: 'Operations Control Center & Admin Dashboard',
+          subtitle: 'Consignment Management & Real-Time Operational Activity',
+          description:
+            'Administrative control panel displaying operational metrics across registered customer accounts (3 users), active services (6 services), pending bookings (2 bookings), and real-time activity logs.',
+          src: '/projects/logistica/logistica-admin-dashboard.webp',
+          alt: 'Logistica Operations Control Center and Admin Dashboard Interface',
+          badge: 'Operations Control Center',
+          route: 'localhost:8000/admin/dashboard',
+        },
+      ],
     },
     databaseArchitecture: {
       overview:
