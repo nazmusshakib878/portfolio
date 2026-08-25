@@ -48,7 +48,7 @@ export const portfolioData: PortfolioData = {
 
   navLinks: [
     {
-      label: 'Featured Projects',
+      label: 'Projects',
       href: '#projects',
     },
     {
@@ -56,11 +56,11 @@ export const portfolioData: PortfolioData = {
       href: '#experience',
     },
     {
-      label: 'Core Skills',
+      label: 'Skills',
       href: '#skills',
     },
     {
-      label: 'About Me',
+      label: 'About',
       href: '#about',
     },
     {
@@ -70,10 +70,6 @@ export const portfolioData: PortfolioData = {
     {
       label: 'Process',
       href: '#process',
-    },
-    {
-      label: 'Publications',
-      href: '#publications',
     },
     {
       label: 'Writing',

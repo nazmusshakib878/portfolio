@@ -117,13 +117,13 @@ export function SiteHeader() {
         </nav>
 
         {/* Right side CTA / Availability */}
-        <div className="hidden items-center gap-2.5 xl:flex">
-          <span className="availability-badge">
+        <div className="hidden items-center gap-2.5 xl:flex shrink-0">
+          <span className="availability-badge whitespace-nowrap">
             <i aria-hidden="true" />
             {portfolioData.availability}
           </span>
           <a
-            className="inline-flex h-8 items-center justify-center rounded-full border border-white/15 bg-white/[.04] px-3.5 text-xs font-semibold text-white transition hover:border-white/25 hover:bg-white/[.08] active:scale-95"
+            className="inline-flex h-8 items-center justify-center rounded-full border border-white/15 bg-white/[.04] px-3.5 text-xs font-semibold text-white transition hover:border-white/30 hover:bg-white/[.08] active:scale-95 whitespace-nowrap"
             href={portfolioData.resumeHref}
             target="_blank"
             rel="noopener noreferrer"
@@ -172,7 +172,14 @@ export function SiteHeader() {
             })}
           </div>
 
-          <div className="border-t border-white/10 pt-4 pb-2">
+          <div className="border-t border-white/10 pt-4 pb-3 flex flex-col gap-3">
+            <div className="flex items-center justify-between px-2 text-xs">
+              <span className="text-[#747b8b] font-medium">Status</span>
+              <span className="availability-badge">
+                <i aria-hidden="true" />
+                {portfolioData.availability}
+              </span>
+            </div>
             <a
               className="button primary w-full justify-center"
               href={portfolioData.resumeHref}

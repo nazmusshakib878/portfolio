@@ -71,10 +71,7 @@ export function Hero() {
 
           {/* Role Headline */}
           <h2 className="mt-3.5 max-w-[600px] text-lg font-medium leading-snug text-[#c4b8ff] sm:text-xl md:text-[22px]">
-            Full Stack Developer{' '}
-            <span className="block text-sm font-normal leading-relaxed text-[#94a3b8] sm:inline sm:text-base md:text-lg">
-              &mdash; building scalable web applications with Laravel, Next.js &amp; AI.
-            </span>
+            Laravel &amp; Next.js Full Stack Developer
           </h2>
 
           {/* Focused Value Proposition */}
