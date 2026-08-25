@@ -5,6 +5,7 @@ import { portfolioData } from '@/data/portfolio'
 import { CustomCursor } from '@/components/ui/custom-cursor'
 import { SocialRail } from '@/components/layout/social-rail'
 import { NazmusAiAssistant } from '@/components/ai/nazmus-ai-assistant'
+import { NavigationTracker } from '@/components/providers/navigation-tracker'
 import { getSiteUrl } from '@/lib/site-url'
 
 const body = Manrope({ subsets: ['latin'], variable: '--font-body', display: 'swap' })
@@ -97,6 +98,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(person).replace(/</g, '\\u003c') }}
         />
         <CustomCursor />
+        <NavigationTracker />
         <SocialRail />
         <NazmusAiAssistant />
         {children}

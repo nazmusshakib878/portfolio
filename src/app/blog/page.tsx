@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { ArrowLeft, BookOpen } from 'lucide-react'
 import { BlogListing } from '@/components/blog/blog-listing'
 import { LongFormReturnNavigation } from '@/components/ui/long-form-return-navigation'
@@ -68,7 +67,7 @@ export default function BlogIndexPage() {
       <header className="sticky top-0 z-40 border-b border-white/[0.08] bg-[#06070b]/85 backdrop-blur-md">
         <div className="shell flex h-20 items-center justify-between">
           <SmartBackLink
-            href="/"
+            href="/#writing"
             className="group inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.025] px-3.5 py-2 text-xs font-semibold text-[#d9dee7] transition hover:border-[#7c5cff] hover:text-white"
           >
             <ArrowLeft size={14} className="transition group-hover:-translate-x-0.5 text-[#2bd9b5]" />
@@ -103,7 +102,7 @@ export default function BlogIndexPage() {
 
         {/* Bottom Return Navigation */}
         <LongFormReturnNavigation
-          primaryHref="/"
+          primaryHref="/#writing"
           primaryLabel="Back to Portfolio"
         />
       </div>

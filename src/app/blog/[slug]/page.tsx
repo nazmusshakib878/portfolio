@@ -327,6 +327,8 @@ export default async function BlogPostPage({ params }: Props) {
         <LongFormReturnNavigation
           primaryHref="/blog"
           primaryLabel="Back to Technical Writing"
+          secondaryHref="/#writing"
+          secondaryLabel="Back to Portfolio"
         />
       </article>
 
