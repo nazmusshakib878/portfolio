@@ -721,6 +721,23 @@ export const portfolioData: PortfolioData = {
         'MySQL',
       ],
     },
+
+    {
+      title: 'Developer Portfolio',
+
+      description:
+        'A modern full-stack developer portfolio I built to showcase my projects, technical case studies, engineering skills, experience, technical writing, and professional work in a clean, responsive, and production-ready interface.',
+
+      href:
+        'https://github.com/nazmusshakib878/portfolio',
+
+      technologies: [
+        'Next.js',
+        'React',
+        'TypeScript',
+        'Tailwind CSS',
+      ],
+    },
   ],
 
   technologies: [

@@ -16,6 +16,7 @@ interface PinnedRepo {
   description: string
   href: string
   liveUrl?: string
+  liveLabel?: string
   caseStudySlug?: string
   badge: string
   badgeColor: string
@@ -43,6 +44,7 @@ const pinnedRepositories: PinnedRepo[] = [
       'Full-stack campus management and student assistance platform pairing a React/Vite frontend with a Laravel 12 Sanctum REST API and Gemini AI integration.',
     href: 'https://github.com/nazmusshakib878/CSE4204-8A-T07-ai-smart-campus-system',
     liveUrl: 'https://ai-smart-campus-system-ce9i.onrender.com/',
+    liveLabel: 'Live Demo',
     caseStudySlug: projectSlug('AI Smart Campus System'),
     badge: 'Live Demo on Render',
     badgeColor: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400',
@@ -75,11 +77,13 @@ const pinnedRepositories: PinnedRepo[] = [
     name: 'Developer Portfolio',
     fullName: 'nazmusshakib878/portfolio',
     description:
-      'Modern dark editorial developer portfolio built with Next.js 16 App Router, React 19, TypeScript, Tailwind CSS, and Google Antigravity agentic workflows.',
-    href: 'https://github.com/nazmusshakib878',
-    badge: 'Next.js 16 · Production',
+      'A modern full-stack developer portfolio I built to showcase my projects, technical case studies, engineering skills, experience, technical writing, and professional work in a clean, responsive, and production-ready interface.',
+    href: 'https://github.com/nazmusshakib878/portfolio',
+    liveUrl: 'https://mdnazmusshakib.me',
+    liveLabel: 'Live Site',
+    badge: 'PERSONAL PROJECT · PRODUCTION',
     badgeColor: 'border-white/20 bg-white/[0.05] text-white',
-    technologies: ['Next.js 16', 'React 19', 'TypeScript', 'Tailwind CSS'],
+    technologies: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS'],
   },
 ]
 
@@ -265,7 +269,8 @@ export function GitHubSection() {
                             rel="noopener noreferrer"
                           >
                             <ExternalLink size={12} />
-                            <span>Live Demo</span>
+                            <span>{repo.liveLabel ?? 'Live Demo'}</span>
+                            <ArrowUpRight size={12} />
                           </a>
                         )}
 
