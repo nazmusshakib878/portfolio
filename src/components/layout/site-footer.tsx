@@ -16,6 +16,7 @@ export function SiteFooter() {
     {
       heading: 'Engineering',
       links: [
+        { label: 'Technical Writing', href: '/blog' },
         { label: 'Education', href: '#education' },
         { label: 'Growth Roadmap', href: '#learning' },
         { label: 'Open Source', href: '#opensource' },

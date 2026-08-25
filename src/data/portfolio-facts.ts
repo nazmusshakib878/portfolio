@@ -76,6 +76,10 @@ export const portfolioData: PortfolioData = {
       href: '#publications',
     },
     {
+      label: 'Writing',
+      href: '#writing',
+    },
+    {
       label: 'Contact',
       href: '#contact',
     },

@@ -15,6 +15,7 @@ import { AvailabilitySection } from '@/components/sections/availability-section'
 import { ContactSection } from '@/components/sections/contact-section'
 import { ProjectSlider } from '@/components/sections/project-slider'
 import { SkillsExplorer } from '@/components/sections/skills-explorer'
+import { TechnicalWritingSection } from '@/components/sections/technical-writing'
 import { SiteHeader } from '@/components/layout/site-header'
 import { SiteFooter } from '@/components/layout/site-footer'
 import { IntroLoader } from '@/components/ui/intro-loader'
@@ -188,6 +189,8 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        <TechnicalWritingSection />
 
         <AvailabilitySection />
 
