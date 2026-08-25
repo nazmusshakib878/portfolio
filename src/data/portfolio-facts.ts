@@ -401,6 +401,47 @@ export const portfolioData: PortfolioData = {
     },
 
     {
+      title: 'Logistica',
+
+      category: 'Internship Project',
+
+      date: 'Internship Project',
+
+      summary:
+        'An enterprise transport, courier, and supply-shipment management system developed during my internship at Appstick, featuring robust Laravel backend logic, MySQL data integrity checks, and team Git workflows.',
+
+      description:
+        'A practical transport and courier management project for coordinating multi-stage shipments and supply workflows, completed collaboratively during my internship using Laravel, PHP, MySQL, and team Git workflows.',
+
+      keyFeatures: [
+        'Implemented reusable Laravel and PHP backend logic.',
+        'Performed relational database integrity and schema validation.',
+        'Built and tested server-side workflows for consignment tracking.',
+        'Assisted with debugging, troubleshooting, and code quality.',
+        'Collaborated in an Agile team with Git branching and code reviews.',
+      ],
+
+      technologies: [
+        'PHP',
+        'Laravel',
+        'MySQL',
+        'Database Integrity',
+        'Git',
+        'GitHub',
+      ],
+
+      githubUrl:
+        'https://github.com/nazmusshakib878/Logistica',
+
+      liveUrl: '',
+
+      featured: false,
+
+      accent:
+        'from-emerald-500/35 via-teal-500/20 to-cyan-500/20',
+    },
+
+    {
       title: 'Library Management Project',
 
       category: 'Laravel Academic Project',
@@ -441,47 +482,6 @@ export const portfolioData: PortfolioData = {
 
       accent:
         'from-amber-500/35 via-orange-500/20 to-rose-500/20',
-    },
-
-    {
-      title: 'Logistica',
-
-      category: 'Internship Project',
-
-      date: 'Internship Project',
-
-      summary:
-        'An enterprise transport, courier, and supply-shipment management system developed during my internship at Appstick, featuring robust Laravel backend logic, MySQL data integrity checks, and team Git workflows.',
-
-      description:
-        'A practical transport and courier management project for coordinating multi-stage shipments and supply workflows, completed collaboratively during my internship using Laravel, PHP, MySQL, and team Git workflows.',
-
-      keyFeatures: [
-        'Implemented reusable Laravel and PHP backend logic.',
-        'Performed relational database integrity and schema validation.',
-        'Built and tested server-side workflows for consignment tracking.',
-        'Assisted with debugging, troubleshooting, and code quality.',
-        'Collaborated in an Agile team with Git branching and code reviews.',
-      ],
-
-      technologies: [
-        'PHP',
-        'Laravel',
-        'MySQL',
-        'Database Integrity',
-        'Git',
-        'GitHub',
-      ],
-
-      githubUrl:
-        'https://github.com/nazmusshakib878/Logistica',
-
-      liveUrl: '',
-
-      featured: false,
-
-      accent:
-        'from-emerald-500/35 via-teal-500/20 to-cyan-500/20',
     },
   ],
 

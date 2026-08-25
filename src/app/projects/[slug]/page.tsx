@@ -24,6 +24,8 @@ import { SiGithub } from 'react-icons/si'
 import { portfolioData, projectSlug } from '@/data/portfolio'
 import { projectCovers } from '@/data/project-covers'
 import { projectCaseStudies } from '@/data/project-case-studies'
+import { LongFormReturnNavigation } from '@/components/ui/long-form-return-navigation'
+import { BackToTop } from '@/components/ui/back-to-top'
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -1062,6 +1064,17 @@ export default async function ProjectPage({ params }: Props) {
           </p>
         </Link>
       </nav>
+
+      {/* 17. Return Navigation */}
+      <div className="shell pb-8">
+        <LongFormReturnNavigation
+          primaryHref="/#projects"
+          primaryLabel="Back to Projects"
+        />
+      </div>
+
+      {/* Scroll Convenience */}
+      <BackToTop />
     </main>
   )
 }

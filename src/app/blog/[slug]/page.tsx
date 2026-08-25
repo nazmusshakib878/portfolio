@@ -19,6 +19,8 @@ import {
 } from '@/data/blog-posts'
 import { CopyCodeButton } from '@/components/ui/copy-code-button'
 import { MvcArchitectureDiagram } from '@/components/blog/mvc-diagram'
+import { LongFormReturnNavigation } from '@/components/ui/long-form-return-navigation'
+import { BackToTop } from '@/components/ui/back-to-top'
 import { portfolioData } from '@/data/portfolio'
 
 type Props = { params: Promise<{ slug: string }> }
@@ -321,17 +323,14 @@ export default async function BlogPostPage({ params }: Props) {
           )}
         </nav>
 
-        {/* Back to Blog CTA */}
-        <div className="mt-12 text-center">
-          <Link
-            href="/blog"
-            className="button rounded-xl border-white/15 bg-white/[0.03] px-6 text-xs font-semibold text-[#f2f3f7] hover:border-white/30"
-          >
-            <ArrowLeft size={14} />
-            <span>Back to All Technical Articles</span>
-          </Link>
-        </div>
+        {/* Return Navigation */}
+        <LongFormReturnNavigation
+          primaryHref="/blog"
+          primaryLabel="Back to Technical Writing"
+        />
       </article>
+
+      <BackToTop />
     </main>
   )
 }

@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import Image from 'next/image'
 import { Menu, X } from 'lucide-react'
+import { MonogramLogo } from '@/components/ui/monogram-logo'
 import { portfolioData } from '@/data/portfolio'
 
 export function SiteHeader() {
@@ -85,16 +85,13 @@ export function SiteHeader() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-3 pt-2.5 sm:px-4 sm:pt-3">
       <div className={`site-header-frame shell ${scrolled || open ? 'is-elevated' : ''}`}>
-        {/* Logo */}
-        <a href="#hero" className="site-logo group flex items-center" aria-label="Home">
-          <Image
-            src="/images/logo.avif"
-            alt="Nazmus Shakib Logo"
-            width={32}
-            height={32}
-            priority
-            className="h-7 w-7 object-contain md:h-8 md:w-8"
-          />
+        {/* Logo / Monogram */}
+        <a
+          href="#hero"
+          className="site-logo group flex items-center shrink-0"
+          aria-label="Md. Nazmus Shakib — Home"
+        >
+          <MonogramLogo />
         </a>
 
         {/* Desktop Navigation Links */}

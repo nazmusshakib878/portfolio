@@ -21,17 +21,18 @@ import { portfolioData } from '@/data/portfolio'
 import { socialLinks } from '@/constants/social-links'
 
 const projectTypeOptions = [
-  'Web Application',
-  'Backend Development',
-  'Full Stack Project',
-  'AI Integration',
-  'Other',
+  'Full-Time / Engineering Role',
+  'Laravel Backend Development',
+  'Full Stack Web Application',
+  'Next.js & React Frontend',
+  'AI API Integration',
+  'Technical Consultation / Other',
 ] as const
 
 const schema = z.object({
   name: z.string().trim().min(2, 'Please enter your name.'),
   email: z.string().trim().email('Enter a valid email address.'),
-  projectType: z.string().min(1, 'Please select a project type.'),
+  projectType: z.string().min(1, 'Please select an inquiry topic.'),
   message: z.string().trim().min(10, 'Please write at least 10 characters.').max(1000, 'Maximum 1000 characters.'),
   company: z.string().max(0).optional(),
 })
@@ -48,7 +49,7 @@ export function ContactSection() {
             <div>
               <p className="eyebrow">13 / Contact &amp; Inquiries</p>
               <p className="muted mt-4 max-w-[14rem] text-sm leading-6">
-                Let&apos;s discuss your idea, project requirements, or potential collaboration.
+                Let&apos;s discuss your engineering needs, open roles, or project requirements.
               </p>
             </div>
             <div>
@@ -57,7 +58,7 @@ export function ContactSection() {
                 <span>Start a Conversation</span>
               </div>
               <h2 className="display max-w-[900px] text-[clamp(2.6rem,4.8vw,4.8rem)] font-semibold text-[#f2f3f7]">
-                Have a project <span className="text-[#9aa6b7]">in mind?</span>
+                Have an opportunity <span className="text-[#9aa6b7]">or project in mind?</span>
               </h2>
             </div>
           </div>
@@ -73,7 +74,7 @@ export function ContactSection() {
                   Let&apos;s connect
                 </h3>
                 <p className="muted mt-2 text-xs sm:text-sm leading-relaxed">
-                  Whether you have an upcoming project, a full-time role, or an engineering inquiry, reach out through any of these verified channels.
+                  Whether you have an open engineering role, an upcoming project, or a technical inquiry, reach out through any of these verified channels.
                 </p>
 
                 <div className="mt-7 space-y-3">
@@ -192,7 +193,7 @@ export function ContactSection() {
               <div className="mb-7">
                 <p className="eyebrow text-[#c4b8ff]">Send a Message</p>
                 <h3 className="display mt-1 text-xl sm:text-2xl font-bold text-[#f2f3f7]">
-                  Project inquiry
+                  Get in touch
                 </h3>
                 <p className="muted mt-1.5 text-xs sm:text-sm">
                   Fill in your details below and I will get back to you promptly.
@@ -219,7 +220,7 @@ function ContactFormDetailed() {
     defaultValues: {
       name: '',
       email: '',
-      projectType: 'Web Application',
+      projectType: 'Full-Time / Engineering Role',
       message: '',
       company: '',
     },
@@ -240,7 +241,7 @@ function ContactFormDetailed() {
           name: values.name,
           email: values.email,
           projectType: values.projectType,
-          subject: `Project Inquiry: ${values.projectType}`,
+          subject: `Inquiry: ${values.projectType}`,
           message: values.message,
           company: values.company,
         }),
@@ -272,7 +273,7 @@ function ContactFormDetailed() {
             name: values.name,
             email: values.email,
             subject: `Portfolio Contact: ${values.projectType}`,
-            message: `[Project Type: ${values.projectType}]\n\n${values.message}`,
+            message: `[Inquiry Topic: ${values.projectType}]\n\n${values.message}`,
             access_key: body.key,
             from_name: 'Md. Nazmus Shakib Portfolio',
           }),
@@ -317,8 +318,8 @@ function ContactFormDetailed() {
             {...register('name')}
             id="contact-name"
             autoComplete="name"
-            placeholder="John Doe"
-            className="w-full rounded-xl border border-white/10 bg-white/[0.035] px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-[#7c5cff] focus:bg-white/[0.05] focus:outline-none transition"
+            placeholder="Your name or organization"
+            className="w-full rounded-xl border border-white/10 bg-white/[0.035] px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-[#2bd9b5]/70 focus:bg-white/[0.05] focus:ring-1 focus:ring-[#2bd9b5]/30 focus:outline-none transition"
           />
         </FormField>
 
@@ -328,19 +329,19 @@ function ContactFormDetailed() {
             id="contact-email"
             type="email"
             autoComplete="email"
-            placeholder="john@example.com"
-            className="w-full rounded-xl border border-white/10 bg-white/[0.035] px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-[#7c5cff] focus:bg-white/[0.05] focus:outline-none transition"
+            placeholder="your.email@example.com"
+            className="w-full rounded-xl border border-white/10 bg-white/[0.035] px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-[#2bd9b5]/70 focus:bg-white/[0.05] focus:ring-1 focus:ring-[#2bd9b5]/30 focus:outline-none transition"
           />
         </FormField>
       </div>
 
-      {/* 2. Project Type Dropdown */}
-      <FormField id="contact-project-type" label="Project Type" error={errors.projectType?.message}>
+      {/* 2. Inquiry Type Dropdown */}
+      <FormField id="contact-project-type" label="Inquiry Topic" error={errors.projectType?.message}>
         <div className="relative">
           <select
             {...register('projectType')}
             id="contact-project-type"
-            className="w-full appearance-none rounded-xl border border-white/10 bg-[#0f1219] px-4 py-3 text-sm text-[#f2f3f7] focus:border-[#7c5cff] focus:outline-none transition pr-10"
+            className="w-full appearance-none rounded-xl border border-white/10 bg-[#0f1219] px-4 py-3 text-sm text-[#f2f3f7] focus:border-[#2bd9b5]/70 focus:ring-1 focus:ring-[#2bd9b5]/30 focus:outline-none transition pr-10"
           >
             {projectTypeOptions.map((opt) => (
               <option key={opt} value={opt} className="bg-[#0f1219] text-[#f2f3f7]">
@@ -355,13 +356,13 @@ function ContactFormDetailed() {
       </FormField>
 
       {/* 3. Message Area */}
-      <FormField id="contact-message" label="Project Description / Message" error={errors.message?.message}>
+      <FormField id="contact-message" label="Your Message" error={errors.message?.message}>
         <textarea
           {...register('message')}
           id="contact-message"
           rows={5}
-          placeholder="Tell me about your project scope, timeline, goals, or role details..."
-          className="w-full resize-y rounded-xl border border-white/10 bg-white/[0.035] px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-[#7c5cff] focus:bg-white/[0.05] focus:outline-none transition"
+          placeholder="Share details about the role, project goals, timeline, or engineering inquiry..."
+          className="w-full resize-y rounded-xl border border-white/10 bg-white/[0.035] px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-[#2bd9b5]/70 focus:bg-white/[0.05] focus:ring-1 focus:ring-[#2bd9b5]/30 focus:outline-none transition"
         />
       </FormField>
 
