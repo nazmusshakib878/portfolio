@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
         ...data,
         access_key: key,
         from_name: 'Md. Nazmus Shakib Portfolio',
-        subject: `Portfolio Contact: ${data.subject}`,
+        subject: `Portfolio Contact: ${data.subject || data.projectType || 'General Inquiry'}`,
       }),
       cache: 'no-store',
       signal: AbortSignal.timeout(4_000),
