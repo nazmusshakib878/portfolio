@@ -38,7 +38,7 @@ export const portfolioData: PortfolioData = {
 
   initials: 'MS',
 
-  resumeHref: '/Md_Nazmus_Shakib_Resume.pdf',
+  resumeHref: '/resume.pdf',
 
   githubUrl: 'https://github.com/nazmusshakib878',
 

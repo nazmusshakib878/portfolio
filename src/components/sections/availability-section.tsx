@@ -196,7 +196,7 @@ export function AvailabilitySection() {
               <a
                 className="button secondary min-h-11 rounded-xl px-4 text-xs font-semibold"
                 href={portfolioData.resumeHref}
-                download
+                download="Md_Nazmus_Shakib_Resume.pdf"
               >
                 <FileDown size={14} />
                 <span>Download Resume</span>

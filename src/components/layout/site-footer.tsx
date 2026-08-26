@@ -134,7 +134,7 @@ export function SiteFooter() {
               href={portfolioData.resumeHref}
               target="_blank"
               rel="noopener noreferrer"
-              download
+              download="Md_Nazmus_Shakib_Resume.pdf"
               className="button secondary min-h-9 justify-center rounded-xl text-xs font-semibold"
             >
               Download Resume

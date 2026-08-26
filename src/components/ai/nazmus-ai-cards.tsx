@@ -246,7 +246,7 @@ export function ResumeSummaryCard({ resume }: { resume: ResumeCardData }) {
           href={resume.resumeHref}
           target="_blank"
           rel="noopener noreferrer"
-          download
+          download="Md_Nazmus_Shakib_Resume.pdf"
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#8b72ff] to-[#aa96ff] py-2 text-xs font-bold text-[#090914] shadow-md transition hover:opacity-95 active:scale-98"
         >
           <Download size={14} /> Download Official Resume (PDF)
