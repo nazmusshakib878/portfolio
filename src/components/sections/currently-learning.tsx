@@ -166,13 +166,17 @@ export function CurrentlyLearning() {
           </div>
         </Reveal>
 
-        {/* 7 Learning Cards Grid */}
-        <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 lg:mt-16">
-          {learningAreas.map((area) => {
+        {/* 7 Learning Cards Grid (3-column balanced desktop layout) */}
+        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:mt-16">
+          {learningAreas.map((area, idx) => {
             const Icon = area.icon
+            const isLast = idx === learningAreas.length - 1
 
             return (
-              <Reveal key={area.id}>
+              <Reveal
+                key={area.id}
+                className={isLast ? 'sm:col-span-2 sm:max-w-md sm:mx-auto lg:max-w-none lg:mx-0 lg:col-span-1 lg:col-start-2 w-full' : ''}
+              >
                 <article
                   className={`group flex h-full flex-col justify-between rounded-[22px] border border-white/10 bg-[rgba(15,18,25,0.74)] p-6 backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:bg-[rgba(17,22,30,0.88)] ${area.accent.border}`}
                 >

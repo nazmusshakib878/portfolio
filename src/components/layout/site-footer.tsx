@@ -26,8 +26,8 @@ export function SiteFooter() {
   ]
 
   return (
-    <footer className="border-t border-white/10 bg-[#090b10] pt-16 pb-10">
-      <div className="shell grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_0.9fr_0.9fr_1.1fr] lg:gap-8">
+    <footer className="border-t border-white/10 bg-[#090b10] pt-12 pb-8 sm:pt-16 sm:pb-10">
+      <div className="shell grid gap-8 sm:gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_0.9fr_0.9fr_1.1fr] lg:gap-8">
         {/* 1. Personal Identity & Bio */}
         <div className="sm:col-span-2 lg:col-span-1">
           <div className="flex items-center gap-2">
@@ -89,26 +89,28 @@ export function SiteFooter() {
           </div>
         </div>
 
-        {/* 2. Navigation Sections */}
-        {navSections.map((group) => (
-          <div key={group.heading}>
-            <p className="eyebrow text-xs uppercase tracking-wider text-[#747b8b] mb-4">
-              {group.heading}
-            </p>
-            <ul className="space-y-2.5">
-              {group.links.map((link) => (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
-                    className="text-xs sm:text-sm text-[#8e95a5] transition hover:text-[#f2f3f7]"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+        {/* 2. Navigation Sections (2-column subgrid on mobile, native inline columns on tablet/desktop) */}
+        <div className="grid grid-cols-2 gap-6 sm:contents">
+          {navSections.map((group) => (
+            <div key={group.heading}>
+              <p className="eyebrow text-xs uppercase tracking-wider text-[#747b8b] mb-3 sm:mb-4">
+                {group.heading}
+              </p>
+              <ul className="space-y-2 sm:space-y-2.5">
+                {group.links.map((link) => (
+                  <li key={link.href}>
+                    <a
+                      href={link.href}
+                      className="text-xs sm:text-sm text-[#8e95a5] transition hover:text-[#f2f3f7]"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
 
         {/* 3. Availability CTA Card */}
         <div className="rounded-2xl border border-white/10 bg-[rgba(15,18,25,0.7)] p-5 backdrop-blur-md">
@@ -142,7 +144,7 @@ export function SiteFooter() {
       </div>
 
       {/* 4. Bottom Copyright & Technology Credit Bar */}
-      <div className="shell mt-12 border-t border-white/[0.08] pt-6">
+      <div className="shell mt-8 sm:mt-12 border-t border-white/[0.08] pt-6">
         <div className="flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
           {/* Copyright */}
           <p className="text-xs text-[#747b8b]">

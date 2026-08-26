@@ -33,7 +33,7 @@ export function BackToTop() {
       type="button"
       onClick={scrollToTop}
       aria-label="Scroll back to top of page"
-      className="fixed bottom-24 right-6 sm:bottom-24 sm:right-7 z-30 grid size-10 place-items-center rounded-full border border-white/15 bg-[#0b0e15]/90 text-[#aeb6c3] shadow-[0_8px_24px_rgba(0,0,0,0.4)] backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:border-[rgba(43,217,181,0.5)] hover:bg-white/[0.08] hover:text-[#2bd9b5] active:scale-95 focus-visible:outline-2 focus-visible:outline-[#2bd9b5]"
+      className="fixed bottom-[calc(82px+env(safe-area-inset-bottom,0px))] right-4 sm:bottom-24 sm:right-7 z-30 grid size-10 place-items-center rounded-full border border-white/15 bg-[#0b0e15]/90 text-[#aeb6c3] shadow-[0_8px_24px_rgba(0,0,0,0.4)] backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:border-[rgba(43,217,181,0.5)] hover:bg-white/[0.08] hover:text-[#2bd9b5] active:scale-95 focus-visible:outline-2 focus-visible:outline-[#2bd9b5]"
     >
       <ArrowUp size={16} />
     </button>

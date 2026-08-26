@@ -357,30 +357,33 @@ export function ExperienceSection() {
               return (
                 <article
                   key={strength.title}
-                  className={`group flex h-full flex-col justify-between rounded-[22px] border border-white/[0.08] bg-[rgba(15,18,25,0.72)] p-6 backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:bg-[rgba(17,22,30,0.88)] ${strength.accent.hoverBorder}`}
+                  className={`group flex h-full flex-col justify-between rounded-[22px] border border-white/[0.08] bg-[rgba(15,18,25,0.72)] p-5 sm:p-6 backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:bg-[rgba(17,22,30,0.88)] ${strength.accent.hoverBorder}`}
                 >
                   <div>
-                    <div className="flex items-center justify-between gap-4">
-                      <span
-                        className={`flex size-10 items-center justify-center rounded-xl border ${strength.accent.iconBorder} ${strength.accent.iconBg} ${strength.accent.iconColor} transition duration-300 group-hover:scale-105`}
-                      >
-                        <Icon aria-hidden="true" size={18} />
-                      </span>
-                      <span className="display text-lg font-semibold text-white/20 transition group-hover:text-white/35">
-                        {strength.number}
-                      </span>
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <span
+                          className={`flex size-10 shrink-0 items-center justify-center rounded-xl border ${strength.accent.iconBorder} ${strength.accent.iconBg} ${strength.accent.iconColor} transition duration-300 group-hover:scale-105`}
+                        >
+                          <Icon aria-hidden="true" size={18} />
+                        </span>
+                        <div>
+                          <span className="font-mono text-[10px] font-bold text-[#747b8b]">
+                            {strength.number}
+                          </span>
+                          <h4 className="display text-base font-semibold leading-snug text-[#f2f3f7] group-hover:text-white transition">
+                            {strength.title}
+                          </h4>
+                        </div>
+                      </div>
                     </div>
 
-                    <h4 className="display mt-5 text-lg font-semibold text-[#f2f3f7] group-hover:text-white transition">
-                      {strength.title}
-                    </h4>
-
-                    <p className="muted mt-2.5 text-xs leading-relaxed">
+                    <p className="muted mt-3.5 text-xs leading-relaxed">
                       {strength.description}
                     </p>
                   </div>
 
-                  <div className="mt-6 border-t border-white/[0.07] pt-4">
+                  <div className="mt-5 border-t border-white/[0.07] pt-3.5">
                     <ul aria-label={`${strength.title} skills`} className="flex flex-wrap gap-1.5">
                       {strength.skills.map((skill) => (
                         <li

@@ -300,8 +300,8 @@ p, h1, h2, h3, li, dd { overflow-wrap: anywhere }
   height: 0.4rem;
   border-radius: 9999px;
   background: #2bd9b5;
-  box-shadow: 0 0 0 0 rgba(43, 217, 181, 0.4);
-  animation: availability-pulse 2.4s ease-out infinite;
+  box-shadow: 0 0 0 0 rgba(43, 217, 181, 0.25);
+  animation: availability-pulse 3.8s ease-out infinite;
 }
 
 .header-menu-button {
@@ -339,7 +339,7 @@ p, h1, h2, h3, li, dd { overflow-wrap: anywhere }
 }
 
 @keyframes availability-pulse {
-  70% { box-shadow: 0 0 0 0.35rem rgba(43, 217, 181, 0); }
+  70% { box-shadow: 0 0 0 0.22rem rgba(43, 217, 181, 0); }
   100% { box-shadow: 0 0 0 0 rgba(43, 217, 181, 0); }
 }
 

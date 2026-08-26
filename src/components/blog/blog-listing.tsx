@@ -41,9 +41,9 @@ export function BlogListing({ initialPosts, categories }: BlogListingProps) {
     <div>
       {/* Search & Category Filter Controls */}
       <div className="mt-10 flex flex-col gap-5 rounded-[22px] border border-white/10 bg-[rgba(15,18,25,0.7)] p-5 backdrop-blur-md sm:flex-row sm:items-center sm:justify-between">
-        {/* Category Pills */}
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="mr-1 text-[11px] font-semibold uppercase tracking-wider text-[#747b8b] flex items-center gap-1.5">
+        {/* Category Pills (horizontally scrollable on mobile, wrapped on desktop) */}
+        <div className="flex max-w-full items-center gap-2 overflow-x-auto py-0.5 no-scrollbar flex-nowrap sm:flex-wrap">
+          <span className="mr-1 flex shrink-0 items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-[#747b8b]">
             <Filter size={12} />
             <span>Category:</span>
           </span>
@@ -54,7 +54,7 @@ export function BlogListing({ initialPosts, categories }: BlogListingProps) {
                 key={cat}
                 type="button"
                 onClick={() => setSelectedCategory(cat)}
-                className={`rounded-xl px-3 py-1.5 text-xs font-semibold transition ${
+                className={`shrink-0 rounded-xl px-3 py-1.5 text-xs font-semibold transition ${
                   active
                     ? 'border border-[rgba(124,92,255,0.45)] bg-[rgba(124,92,255,0.18)] text-white shadow-[0_0_15px_rgba(124,92,255,0.2)]'
                     : 'border border-white/10 bg-white/[0.025] text-[#aeb6c3] hover:border-white/20 hover:text-white'
