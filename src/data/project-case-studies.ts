@@ -351,6 +351,32 @@ export const projectCaseStudies: Record<string, CaseStudyDetail> = {
       database: ['MySQL', 'Relational Normalization (1NF–3NF)', 'SQL Indexing'],
       integrations: ['Git', 'GitHub', 'MySQL Workbench'],
     },
+    screenshots: {
+      platformShowcase: {
+        id: 'library-catalog-showcase',
+        title: 'Library Management Public Catalog & Book Search Portal',
+        subtitle: 'Multi-Category Filtered Book Discovery & Instant Borrowing Interface',
+        description:
+          'Public catalog interface featuring instant category filtering, keyword and ISBN search, real-time availability counters, and direct student borrowing interactions.',
+        src: '/projects/library-management/catalog-showcase.webp',
+        alt: 'Library Management System Public Catalog, Search, and Book Borrowing Portal',
+        badge: 'Public Catalog & Borrowing',
+        route: '127.0.0.1:8000/books',
+      },
+      dashboards: [
+        {
+          id: 'library-admin-book-list',
+          title: 'Librarian Administrative Control & Book Inventory Management',
+          subtitle: 'Centralized Book Catalog CRUD & Stock Status Ledger',
+          description:
+            'Comprehensive administrative book ledger showcasing relational data records with cover thumbnails, ISBN codes, author mappings, categorization, publication years, real-time availability statuses, and full CRUD control actions (View, Edit, Delete).',
+          src: '/projects/library-management/admin-book-list.webp',
+          alt: 'Library Management System Admin Book List and Inventory Management CRUD Table',
+          badge: 'Admin Book Inventory',
+          route: '127.0.0.1:8000/admin/books',
+        },
+      ],
+    },
     databaseArchitecture: {
       overview:
         'Strictly normalized relational schema eliminating redundancy and anomalies across multi-table book, author, category, and borrowing records.',

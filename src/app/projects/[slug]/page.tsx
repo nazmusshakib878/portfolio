@@ -1070,8 +1070,6 @@ export default async function ProjectPage({ params }: Props) {
         <LongFormReturnNavigation
           primaryHref="/#projects"
           primaryLabel="Back to Projects"
-          secondaryHref="/"
-          secondaryLabel="Back to Portfolio"
         />
       </div>
 
