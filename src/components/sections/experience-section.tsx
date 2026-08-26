@@ -5,6 +5,7 @@ import {
   Check,
   Code2,
   Database,
+  FileCheck2,
   GitBranch,
   MapPin,
   Server,
@@ -208,6 +209,24 @@ export function ExperienceSection() {
                           <p className="mt-0.5 text-xs text-[#d9dee7]">{exp.location}</p>
                         </div>
                       </div>
+
+                      {exp.certificateUrl && (
+                        <div className="flex items-start gap-3">
+                          <FileCheck2 className="mt-0.5 shrink-0 text-[#fbbf24]" size={16} aria-hidden="true" />
+                          <div>
+                            <p className="text-[10px] font-semibold uppercase tracking-wider text-[#7f8b98]">Certification</p>
+                            <a
+                              href={exp.certificateUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="mt-0.5 inline-flex items-center gap-1 text-xs font-semibold text-[#fde68a] hover:underline"
+                            >
+                              <span>Verified Certificate</span>
+                              <ArrowUpRight size={11} />
+                            </a>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -312,6 +331,16 @@ export function ExperienceSection() {
                     </div>
 
                     <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+                      {exp.certificateUrl && (
+                        <a
+                          className="button min-h-10 rounded-xl border-[rgba(251,191,36,0.3)] bg-[rgba(251,191,36,0.06)] px-4 text-xs font-semibold text-[#fde68a] transition hover:border-[rgba(251,191,36,0.5)] hover:bg-[rgba(251,191,36,0.12)] hover:text-white"
+                          href={exp.certificateUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <FileCheck2 size={13} className="text-[#fbbf24]" /> View Certificate <ArrowUpRight size={13} />
+                        </a>
+                      )}
                       {exp.repositoryUrl && (
                         <a
                           className="button min-h-10 rounded-xl border-white/15 bg-white/[0.03] px-4 text-xs font-semibold text-[#f2f3f7] hover:border-white/30"

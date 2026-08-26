@@ -463,8 +463,11 @@ export function generateLocalResponse(query: string, mode: AiMode = 'all'): Chat
     q.includes('career')
   ) {
     const exp = portfolioData.experience[0]
+    const certText = exp.certificateUrl
+      ? `\n\n📜 **Verified Industrial Certificate**: [View Appstick Certificate](${exp.certificateUrl})`
+      : ''
     return {
-      reply: `### **Professional Experience**\n\n**${exp.role}** at **${exp.company}**\n*Period: ${exp.period} | Location: ${exp.location}*\n\n**Summary:**\n${exp.summary}\n\n**Key Responsibilities:**\n${exp.responsibilities.map((r) => `- ${r}`).join('\n')}\n\n**Technologies Used:**\n${exp.technologies.join(', ')}\n\nRepository: [GitHub Logistica](${exp.repositoryUrl})`,
+      reply: `### **Professional Experience**\n\n**${exp.role}** at **${exp.company}**\n*Period: ${exp.period} | Location: ${exp.location}*\n\n**Summary:**\n${exp.summary}\n\n**Key Responsibilities:**\n${exp.responsibilities.map((r) => `- ${r}`).join('\n')}\n\n**Technologies Used:**\n${exp.technologies.join(', ')}\n\nRepository: [GitHub Logistica](${exp.repositoryUrl})${certText}`,
       cards: [{ type: 'resume-card', data: resume }],
       suggestedQueries: [
         'Show his best projects',
@@ -516,13 +519,15 @@ export function generateLocalResponse(query: string, mode: AiMode = 'all'): Chat
     q.includes('80 hour') ||
     q.includes('bangladesh computer council')
   ) {
-    const cert = portfolioData.certifications[0]
-    const secondaryCert = portfolioData.certifications[1]
-    const secondaryText = secondaryCert
-      ? `\n\n📜 **${secondaryCert.title}**\n- **Provider**: ${secondaryCert.provider}\n- **Program**: ${secondaryCert.program || 'Web Development Training'}\n- **Year**: ${secondaryCert.duration || secondaryCert.issued}\n- **Verification**: [View Certificate](${secondaryCert.verifyUrl})`
-      : ''
+    const certList = portfolioData.certifications
+      .map(
+        (c) =>
+          `📜 **${c.title}**\n- **Provider / Organization**: ${c.provider}\n- **Program**: ${c.program || 'Technical Training'}\n- **Duration / Date**: ${c.duration || c.issued}${c.certificateId ? `\n- **Credential ID**: \`${c.certificateId}\`` : ''}\n- **Verification**: [View Official Certificate](${c.verifyUrl})`
+      )
+      .join('\n\n')
+
     return {
-      reply: `### **Professional Certifications & Training**\n\n📜 **${cert.title}**\n- **Provider**: ${cert.provider}\n- **Program**: ${cert.program}\n- **Duration**: ${cert.duration} (Issued: ${cert.issued})\n- **Certificate ID**: \`${cert.certificateId}\`\n- **Core Topics Covered**: ${cert.topics?.join(', ') ?? 'Laravel, MySQL, REST APIs'}\n- **Verification**: [Official Certificate PDF](${cert.verifyUrl})${secondaryText}`,
+      reply: `### **Professional Certifications & Training**\n\n${certList}`,
       cards: [{ type: 'resume-card', data: resume }],
       suggestedQueries: ['Tell me about his Laravel projects', 'Explain his education', 'Why should I hire him?'],
       provider: 'local-brain',

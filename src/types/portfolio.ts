@@ -43,6 +43,7 @@ export interface ExperienceItem {
   responsibilities: string[]
   technologies: string[]
   repositoryUrl?: string
+  certificateUrl?: string
 }
 
 export interface ProfessionalStrength {

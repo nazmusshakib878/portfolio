@@ -297,6 +297,9 @@ export const portfolioData: PortfolioData = {
 
       repositoryUrl:
         'https://github.com/nazmusshakib878/Logistica',
+
+      certificateUrl:
+        'https://drive.google.com/file/d/1190IYxcJgWVaQj4yg4Z6Pr6Qg96uwr3T/view',
     },
   ],
 
@@ -647,6 +650,29 @@ export const portfolioData: PortfolioData = {
         'Web Development',
         'Frontend Fundamentals',
         'Modern JavaScript',
+      ],
+    },
+
+    {
+      title: 'Laravel 1-Month Industrial Training Program',
+
+      provider: 'Appstick Tech Firm',
+
+      program: 'Industrial Training Program',
+
+      duration: 'Feb 1, 2026 – Mar 4, 2026',
+
+      issued: '4 March 2026',
+
+      verifyUrl:
+        'https://drive.google.com/file/d/1190IYxcJgWVaQj4yg4Z6Pr6Qg96uwr3T/view',
+
+      topics: [
+        'Laravel backend application logic',
+        'Database integrity & schema validation',
+        'Consignment tracking workflows',
+        'Debugging & troubleshooting',
+        'Git & GitHub team collaboration',
       ],
     },
   ],
