@@ -508,14 +508,21 @@ export function generateLocalResponse(query: string, mode: AiMode = 'all'): Chat
     q.includes('certificat') ||
     q.includes('edge') ||
     q.includes('training') ||
+    q.includes('programming hero') ||
+    q.includes('bootcamp') ||
+    q.includes('21 days') ||
     q.includes('khulna university') ||
     q.includes('ict division') ||
     q.includes('80 hour') ||
     q.includes('bangladesh computer council')
   ) {
     const cert = portfolioData.certifications[0]
+    const secondaryCert = portfolioData.certifications[1]
+    const secondaryText = secondaryCert
+      ? `\n\n📜 **${secondaryCert.title}**\n- **Provider**: ${secondaryCert.provider}\n- **Program**: ${secondaryCert.program || 'Web Development Training'}\n- **Year**: ${secondaryCert.duration || secondaryCert.issued}\n- **Verification**: [View Certificate](${secondaryCert.verifyUrl})`
+      : ''
     return {
-      reply: `### **Professional Certifications**\n\n📜 **${cert.title}**\n- **Provider**: ${cert.provider}\n- **Program**: ${cert.program}\n- **Duration**: ${cert.duration} (Issued: ${cert.issued})\n- **Certificate ID**: \`${cert.certificateId}\`\n- **Core Topics Covered**: ${cert.topics.join(', ')}\n- **Verification**: [Official Certificate PDF](${cert.verifyUrl})`,
+      reply: `### **Professional Certifications & Training**\n\n📜 **${cert.title}**\n- **Provider**: ${cert.provider}\n- **Program**: ${cert.program}\n- **Duration**: ${cert.duration} (Issued: ${cert.issued})\n- **Certificate ID**: \`${cert.certificateId}\`\n- **Core Topics Covered**: ${cert.topics?.join(', ') ?? 'Laravel, MySQL, REST APIs'}\n- **Verification**: [Official Certificate PDF](${cert.verifyUrl})${secondaryText}`,
       cards: [{ type: 'resume-card', data: resume }],
       suggestedQueries: ['Tell me about his Laravel projects', 'Explain his education', 'Why should I hire him?'],
       provider: 'local-brain',

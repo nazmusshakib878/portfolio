@@ -1,5 +1,6 @@
 import {
   ArrowUpRight,
+  Award,
   BookOpen,
   Check,
   Code2,
@@ -13,6 +14,7 @@ import { portfolioData } from '@/data/portfolio'
 
 export function AchievementsSection() {
   const cert = portfolioData.certifications[0]
+  const bootcampCert = portfolioData.certifications.find((c) => c.provider.includes('Programming Hero')) || portfolioData.certifications[1]
   const bsc = portfolioData.education.find((e) => e.type === 'degree')
   const hsc = portfolioData.education.find((e) => e.title.includes('Higher Secondary'))
   const ssc = portfolioData.education.find((e) => e.title.includes('Secondary School'))
@@ -38,7 +40,7 @@ export function AchievementsSection() {
           </div>
         </Reveal>
 
-        {/* 5 Achievement Cards Grid */}
+        {/* 6 Achievement Cards Grid */}
         <div className="mt-14 space-y-6 lg:mt-16">
           {/* Top Row: 2 Major Featured Pillars (Undergraduate BSc + 80h Laravel Training) */}
           <div className="grid gap-6 lg:grid-cols-2">
@@ -146,8 +148,8 @@ export function AchievementsSection() {
             </Reveal>
           </div>
 
-          {/* Bottom Row: 3 Milestone Cards (SSC + HSC + Technical Publications) */}
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {/* Bottom Row: 4 Milestone Cards (SSC + HSC + Technical Publications + PH Bootcamp) */}
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {/* 02: SSC Academic Achievement */}
             <Reveal>
               <article className="group flex h-full flex-col justify-between rounded-[22px] border border-white/10 bg-[rgba(15,18,25,0.72)] p-6 backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:border-[rgba(97,218,251,0.35)] hover:bg-[rgba(17,22,30,0.85)]">
@@ -162,9 +164,9 @@ export function AchievementsSection() {
                   <span className="mt-5 block text-[10px] font-bold uppercase tracking-wider text-[#7dd3fc]">
                     Secondary Education
                   </span>
-                  <h4 className="display text-lg font-semibold text-[#f2f3f7] group-hover:text-white transition">
+                  <h3 className="display text-lg font-semibold text-[#f2f3f7] group-hover:text-white transition">
                     SSC Academic Score
-                  </h4>
+                  </h3>
 
                   <div className="mt-3 flex items-baseline gap-2">
                     <span className="display text-2xl font-bold text-[#7dd3fc]">
@@ -200,9 +202,9 @@ export function AchievementsSection() {
                   <span className="mt-5 block text-[10px] font-bold uppercase tracking-wider text-[#c4b5fd]">
                     Higher Secondary
                   </span>
-                  <h4 className="display text-lg font-semibold text-[#f2f3f7] group-hover:text-white transition">
+                  <h3 className="display text-lg font-semibold text-[#f2f3f7] group-hover:text-white transition">
                     HSC Academic Score
-                  </h4>
+                  </h3>
 
                   <div className="mt-3 flex items-baseline gap-2">
                     <span className="display text-2xl font-bold text-[#c4b5fd]">
@@ -226,7 +228,7 @@ export function AchievementsSection() {
 
             {/* 05: Technical Publications & Research */}
             <Reveal>
-              <article className="group flex h-full flex-col justify-between rounded-[22px] border border-white/10 bg-[rgba(15,18,25,0.72)] p-6 backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:border-[rgba(168,130,255,0.35)] hover:bg-[rgba(17,22,30,0.85)] md:col-span-2 lg:col-span-1">
+              <article className="group flex h-full flex-col justify-between rounded-[22px] border border-white/10 bg-[rgba(15,18,25,0.72)] p-6 backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:border-[rgba(168,130,255,0.35)] hover:bg-[rgba(17,22,30,0.85)]">
                 <div>
                   <div className="flex items-center justify-between gap-4">
                     <span className="flex size-10 items-center justify-center rounded-xl border border-[rgba(168,130,255,0.25)] bg-[rgba(168,130,255,0.08)] text-[#c4b5fd] transition duration-300 group-hover:scale-105">
@@ -238,9 +240,9 @@ export function AchievementsSection() {
                   <span className="mt-5 block text-[10px] font-bold uppercase tracking-wider text-[#c4b5fd]">
                     Research &amp; Reports
                   </span>
-                  <h4 className="display text-lg font-semibold text-[#f2f3f7] group-hover:text-white transition">
+                  <h3 className="display text-lg font-semibold text-[#f2f3f7] group-hover:text-white transition">
                     Zenodo Publications
-                  </h4>
+                  </h3>
 
                   <div className="mt-3 flex items-baseline gap-2">
                     <span className="display text-2xl font-bold text-[#c4b5fd]">
@@ -264,6 +266,54 @@ export function AchievementsSection() {
                     className="inline-flex items-center gap-1 font-semibold text-[#c4b8ff] hover:underline"
                   >
                     <span>View Details</span>
+                    <ArrowUpRight size={12} />
+                  </a>
+                </div>
+              </article>
+            </Reveal>
+
+            {/* 06: Programming Hero Bootcamp Certificate */}
+            <Reveal>
+              <article className="group flex h-full flex-col justify-between rounded-[22px] border border-white/10 bg-[rgba(15,18,25,0.72)] p-6 backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:border-[rgba(251,191,36,0.35)] hover:bg-[rgba(17,22,30,0.85)]">
+                <div>
+                  <div className="flex items-center justify-between gap-4">
+                    <span className="flex size-10 items-center justify-center rounded-xl border border-[rgba(251,191,36,0.25)] bg-[rgba(251,191,36,0.08)] text-[#fbbf24] transition duration-300 group-hover:scale-105">
+                      <Award size={18} aria-hidden="true" />
+                    </span>
+                    <span className="display text-lg font-semibold text-white/20">06</span>
+                  </div>
+
+                  <span className="mt-5 block text-[10px] font-bold uppercase tracking-wider text-[#fbbf24]">
+                    Web Development Training
+                  </span>
+                  <h3 className="display text-lg font-semibold text-[#f2f3f7] group-hover:text-white transition">
+                    21 Days of Code &ndash; Web Development Bootcamp
+                  </h3>
+
+                  <div className="mt-3 flex items-baseline gap-2">
+                    <span className="display text-2xl font-bold text-[#fbbf24]">
+                      2024
+                    </span>
+                    <span className="text-[11px] font-mono text-[#747b8b]">Programming Hero</span>
+                  </div>
+
+                  <p className="muted mt-3 text-xs leading-relaxed">
+                    Programming Hero &middot; 2024. Completed structured web development bootcamp covering modern web technologies and project-driven development.
+                  </p>
+                </div>
+
+                <div className="mt-5 flex items-center justify-between border-t border-white/[0.07] pt-3 text-[11px] text-[#747b8b]">
+                  <span className="flex items-center gap-1.5">
+                    <Check size={13} className="text-[#69e6cd]" />
+                    <span>Verified Training</span>
+                  </span>
+                  <a
+                    href={bootcampCert?.verifyUrl ?? 'https://drive.google.com/file/d/1yyTe1et7fZJb8YXVrKGzSP06oBsM9EhQ/view'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 rounded-md border border-[rgba(251,191,36,0.3)] bg-[rgba(251,191,36,0.08)] px-2.5 py-1 text-[11px] font-semibold text-[#fde68a] transition hover:bg-[rgba(251,191,36,0.18)] hover:text-white"
+                  >
+                    <span>View Certificate</span>
                     <ArrowUpRight size={12} />
                   </a>
                 </div>

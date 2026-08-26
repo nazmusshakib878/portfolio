@@ -58,9 +58,9 @@ export function getSystemPrompt(): string {
 
   const certSummaries = certifications
     .map(
-      (c) => `- **${c.title}** from ${c.provider} (${c.program}, ${c.issued}):
-  * Topics: ${c.topics.join(', ')}
-  * Certificate ID: ${c.certificateId}`
+      (c) => `- **${c.title}** from ${c.provider} (${c.program ? `${c.program}, ` : ''}${c.issued || c.duration || ''}):
+  * Topics: ${c.topics && c.topics.length > 0 ? c.topics.join(', ') : 'Web Development'}
+  * Verification/Link: ${c.verifyUrl}${c.certificateId ? `\n  * Certificate ID: ${c.certificateId}` : ''}`
     )
     .join('\n')
 

@@ -589,6 +589,13 @@ export const portfolioData: PortfolioData = {
       description:
         'Completed structured Laravel training under the EDGE Project of the Bangladesh Computer Council and ICT Division.',
     },
+
+    {
+      title: '21 Days of Code Web Development Bootcamp',
+
+      description:
+        'Completed the 21 Days of Code web development training bootcamp with Programming Hero in 2024.',
+    },
   ],
 
   certifications: [
@@ -619,6 +626,27 @@ export const portfolioData: PortfolioData = {
         'MySQL',
         'SQL',
         'Backend application development',
+      ],
+    },
+
+    {
+      title: '21 Days of Code – Web Development Bootcamp',
+
+      provider: 'Programming Hero',
+
+      program: 'Web Development Training',
+
+      duration: '2024',
+
+      issued: '2024',
+
+      verifyUrl:
+        'https://drive.google.com/file/d/1yyTe1et7fZJb8YXVrKGzSP06oBsM9EhQ/view',
+
+      topics: [
+        'Web Development',
+        'Frontend Fundamentals',
+        'Modern JavaScript',
       ],
     },
   ],

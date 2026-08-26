@@ -1,4 +1,4 @@
-﻿export interface NavLink {
+export interface NavLink {
   label: string
   href: string
 }
@@ -96,12 +96,12 @@ export interface AchievementItem {
 export interface CertificationItem {
   title: string
   provider: string
-  program: string
-  duration: string
-  issued: string
-  certificateId: string
+  program?: string
+  duration?: string
+  issued?: string
+  certificateId?: string
   verifyUrl: string
-  topics: string[]
+  topics?: string[]
 }
 
 export interface GithubRepoLink {
