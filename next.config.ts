@@ -25,11 +25,24 @@ const securityHeaders=[
   ...(!isDevelopment?[{key:'Strict-Transport-Security',value:'max-age=63072000; includeSubDomains; preload'}]:[]),
 ]
 
-const nextConfig:NextConfig={
-  poweredByHeader:false,
-  reactStrictMode:true,
-  experimental:{optimizePackageImports:['lucide-react','motion']},
-  async headers(){return[{source:'/(.*)',headers:securityHeaders}]},
+const nextConfig: NextConfig = {
+  poweredByHeader: false,
+  reactStrictMode: true,
+  experimental: { optimizePackageImports: ['lucide-react', 'motion'] },
+  async headers() {
+    return [
+      { source: '/(.*)', headers: securityHeaders },
+      {
+        source: '/:file(.*\\.pdf)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=0, must-revalidate',
+          },
+        ],
+      },
+    ]
+  },
 }
 
 export default nextConfig
