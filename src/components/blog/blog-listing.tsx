@@ -68,7 +68,11 @@ export function BlogListing({ initialPosts, categories }: BlogListingProps) {
 
         {/* Quick Keyword Search */}
         <div className="w-full sm:max-w-xs">
+          <label htmlFor="blog-search" className="sr-only">
+            Search articles by topic, keyword, or tag
+          </label>
           <input
+            id="blog-search"
             type="text"
             placeholder="Search by topic, keyword, or tag..."
             value={searchQuery}

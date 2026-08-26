@@ -105,7 +105,7 @@ export function ProjectSlider() {
                 Target Architecture
               </p>
               <ul className="mt-2 flex flex-wrap gap-1.5">
-                <li className="rounded-md border border-[rgba(170,150,255,0.28)] bg-[rgba(170,150,255,0.07)] px-2.5 py-0.5 text-[11px] font-medium text-[#c4b5fd]">Next.js 16</li>
+                <li className="rounded-md border border-[rgba(170,150,255,0.28)] bg-[rgba(170,150,255,0.07)] px-2.5 py-0.5 text-[11px] font-medium text-[#c4b5fd]">Next.js 15</li>
                 <li className="rounded-md border border-[rgba(240,83,64,0.28)] bg-[rgba(240,83,64,0.07)] px-2.5 py-0.5 text-[11px] font-medium text-[#ff9c90]">Laravel 12</li>
                 <li className="rounded-md border border-[rgba(170,150,255,0.28)] bg-[rgba(170,150,255,0.07)] px-2.5 py-0.5 text-[11px] font-medium text-[#c4b5fd]">AI APIs</li>
                 <li className="rounded-md border border-white/10 bg-white/[0.03] px-2.5 py-0.5 text-[11px] font-medium text-[#d9dee7]">TypeScript</li>

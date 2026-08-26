@@ -13,6 +13,7 @@ import {
   MapPin,
   Send,
   Sparkles,
+  XCircle,
 } from 'lucide-react'
 import { FaGithub, FaLinkedinIn, FaWhatsapp } from 'react-icons/fa6'
 import { Reveal } from '@/components/ui/reveal'
@@ -319,6 +320,8 @@ function ContactFormDetailed() {
             id="contact-name"
             autoComplete="name"
             placeholder="Your name or organization"
+            aria-describedby={errors.name?.message ? 'contact-name-error' : undefined}
+            aria-invalid={!!errors.name?.message}
             className="w-full rounded-xl border border-white/10 bg-white/[0.035] px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-[#2bd9b5]/70 focus:bg-white/[0.05] focus:ring-1 focus:ring-[#2bd9b5]/30 focus:outline-none transition"
           />
         </FormField>
@@ -330,6 +333,8 @@ function ContactFormDetailed() {
             type="email"
             autoComplete="email"
             placeholder="your.email@example.com"
+            aria-describedby={errors.email?.message ? 'contact-email-error' : undefined}
+            aria-invalid={!!errors.email?.message}
             className="w-full rounded-xl border border-white/10 bg-white/[0.035] px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-[#2bd9b5]/70 focus:bg-white/[0.05] focus:ring-1 focus:ring-[#2bd9b5]/30 focus:outline-none transition"
           />
         </FormField>
@@ -341,6 +346,8 @@ function ContactFormDetailed() {
           <select
             {...register('projectType')}
             id="contact-project-type"
+            aria-describedby={errors.projectType?.message ? 'contact-project-type-error' : undefined}
+            aria-invalid={!!errors.projectType?.message}
             className="w-full appearance-none rounded-xl border border-white/10 bg-[#0f1219] px-4 py-3 text-sm text-[#f2f3f7] focus:border-[#2bd9b5]/70 focus:ring-1 focus:ring-[#2bd9b5]/30 focus:outline-none transition pr-10"
           >
             {projectTypeOptions.map((opt) => (
@@ -362,6 +369,8 @@ function ContactFormDetailed() {
           id="contact-message"
           rows={5}
           placeholder="Share details about the role, project goals, timeline, or engineering inquiry..."
+          aria-describedby={errors.message?.message ? 'contact-message-error' : undefined}
+          aria-invalid={!!errors.message?.message}
           className="w-full resize-y rounded-xl border border-white/10 bg-white/[0.035] px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-[#2bd9b5]/70 focus:bg-white/[0.05] focus:ring-1 focus:ring-[#2bd9b5]/30 focus:outline-none transition"
         />
       </FormField>
@@ -377,7 +386,9 @@ function ContactFormDetailed() {
               : 'border-red-500/30 bg-red-500/10 text-red-300'
           }`}
         >
-          {status.kind === 'ok' && <CheckCircle2 size={16} className="shrink-0 mt-0.5" />}
+          {status.kind === 'ok'
+            ? <CheckCircle2 size={16} className="shrink-0 mt-0.5" />
+            : <XCircle size={16} className="shrink-0 mt-0.5" />}
           <span>{status.message}</span>
         </div>
       )}

@@ -75,10 +75,10 @@ export function SiteHeader() {
         first.focus()
       }
     }
-    addEventListener('keydown', key)
+    window.addEventListener('keydown', key)
     return () => {
       document.body.style.overflow = ''
-      removeEventListener('keydown', key)
+      window.removeEventListener('keydown', key)
     }
   }, [open])
 
@@ -148,7 +148,7 @@ export function SiteHeader() {
           ref={mobileNav}
           id="mobile-nav"
           className="site-mobile-panel shell flex min-h-[calc(100dvh-5.5rem)] flex-col justify-between overflow-y-auto"
-          aria-label="Mobile"
+          aria-label="Mobile navigation"
         >
           <div className="flex flex-col gap-1 py-2">
             {portfolioData.navLinks.map((link, index) => {

@@ -23,6 +23,7 @@ export function SocialRail() {
       <div className="mt-auto flex flex-col items-center gap-1 pb-7">
         {activeLinks.map((link) => {
           const Icon = icons[link.icon as keyof typeof icons] ?? FaGithub
+          const tooltipId = `social-tooltip-${link.label.toLowerCase().replace(/\s+/g, '-')}`
           return (
             <a
               key={`${link.label}-${link.href}`}
@@ -30,10 +31,15 @@ export function SocialRail() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={link.label}
+              aria-describedby={tooltipId}
               className="group relative grid size-11 place-items-center text-[#aeb6c3] transition hover:bg-white/[.055] hover:text-white focus-visible:text-white"
             >
               <Icon aria-hidden="true" focusable="false" size={19} />
-              <span className="pointer-events-none absolute left-[52px] whitespace-nowrap border border-white/10 bg-[#0b0b10] px-3 py-2 text-[10px] uppercase tracking-[.18em] opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100">
+              <span
+                id={tooltipId}
+                role="tooltip"
+                className="pointer-events-none absolute left-[52px] whitespace-nowrap border border-white/10 bg-[#0b0b10] px-3 py-2 text-[10px] uppercase tracking-[.18em] opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100"
+              >
                 {link.label}
               </span>
             </a>
