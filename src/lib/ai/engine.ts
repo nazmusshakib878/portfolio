@@ -217,7 +217,11 @@ function enrichReplyWithCards(
 
   const projects = getProjectCardDataList()
 
-  if (q.includes('securex') || r.includes('securex')) {
+  if (q.includes('resumate') || q.includes('resume builder') || q.includes('cv builder') || q.includes('ai cv') || r.includes('resumate')) {
+    const resumate = projects.find((p) => p.title.toLowerCase().includes('resumate'))
+    if (resumate) cards.push({ type: 'project-detail', data: resumate })
+    suggested = ['Tell me about Resumate AI', 'Show all projects', 'How to hire Nazmus?']
+  } else if (q.includes('securex') || r.includes('securex')) {
     const securex = projects.find((p) => p.title.toLowerCase().includes('securex'))
     if (securex) cards.push({ type: 'project-detail', data: securex })
     suggested = ['Tell me about AI Smart Campus System', 'What backend skills does he have?', 'How to hire him?']
@@ -302,6 +306,16 @@ export function generateLocalResponse(query: string, mode: AiMode = 'all'): Chat
   const contact = getContactDirectData()
 
   // 1. Specific Project Deep Dives
+  if (q.includes('resumate') || q.includes('resume builder') || q.includes('cv builder') || q.includes('ai cv')) {
+    const project = projects.find((p) => p.title.toLowerCase().includes('resumate'))!
+    return {
+      reply: `### **Resumate AI — Conversational Resume Platform & ATS Optimizer**\n\n**Resumate AI** is a full-stack AI SaaS platform built with **Next.js 16**, **Google Gemini AI**, **Supabase PostgreSQL**, and **Playwright** that transforms natural-language conversations and existing CV documents into recruiter-ready resumes.\n\n**Key Engineering Highlights:**\n- **Trilingual AI Dialogue**: Multi-turn conversational editing in Bengali, Banglish, and English with live diff previews.\n- **Multimodal Document Parsing**: Ingests PDF, DOCX, TXT, and scanned image resumes via Gemini Multimodal Vision.\n- **8 Regional CV Formats**: Tailored templates for Bangladesh, Global ATS, International, Germany (Lebenslauf), Nordic, Australia/NZ, Europass, and MNCs.\n- **Containerized Playwright PDF**: Server-side zero-margin A4 PDF rendering via headless Chromium on Render.\n- **Security & Data Layer**: Supabase PostgreSQL with Row Level Security (RLS), HMAC-signed guest sessions, and verified payment authorization.\n\n*Live Demo: [ai-cv-builder-sli4.onrender.com](https://ai-cv-builder-sli4.onrender.com)*\n*GitHub: [github.com/nazmusshakib878/ai-cv-builder](https://github.com/nazmusshakib878/ai-cv-builder)*`,
+      cards: [{ type: 'project-detail', data: project }],
+      suggestedQueries: ['Tell me about Securex', 'Show all projects', 'How to hire Nazmus?'],
+      provider: 'local-brain',
+    }
+  }
+
   if (q.includes('securex') || q.includes('cctv') || q.includes('security service')) {
     const project = projects.find((p) => p.title.toLowerCase().includes('securex'))!
     return {

@@ -30,7 +30,7 @@ export const portfolioData: PortfolioData = {
 
   currentCgpa: '3.60 / 4.00',
 
-  featuredProjectsCount: '4',
+  featuredProjectsCount: '5',
 
   laravelTrainingHours: '80 Hours',
 
@@ -96,7 +96,7 @@ export const portfolioData: PortfolioData = {
     },
     {
       label: 'Selected Projects',
-      value: '4',
+      value: '5',
     },
     {
       label: 'Laravel Training',
@@ -486,6 +486,50 @@ export const portfolioData: PortfolioData = {
       accent:
         'from-amber-500/35 via-orange-500/20 to-rose-500/20',
     },
+    {
+      title: 'Resumate AI — Conversational AI Resume Builder & ATS Optimization Platform',
+
+      category: 'Full-Stack AI SaaS',
+
+      date: '2026',
+
+      role: 'Full-Stack Developer & AI Systems Engineer',
+
+      summary:
+        'A full-stack AI-powered resume platform that turns natural-language conversations and existing CV files into professional, ATS-friendly resumes with real-time A4 preview and secure server-side PDF export.',
+
+      description:
+        'Resumate AI is a full-stack AI-powered resume platform that turns natural-language conversations and existing CV files into professional, ATS-friendly resumes. Users can upload PDF, DOCX, TXT or scanned image CVs, then edit and redesign them conversationally in Bangla, Banglish or English with real-time A4 preview and secure server-side PDF export.',
+
+      keyFeatures: [
+        'Conversational multi-turn CV creation and editing in Bangla, Banglish and English.',
+        'Resume ingestion from PDF, DOCX, TXT and scanned image files using document parsing and Gemini Vision.',
+        '8 professional regional CV templates for Bangladesh, Global ATS, International, MNC, Germany/DACH, Nordic Europe, Australia/New Zealand and Europass-style applications.',
+        'Real-time A4 CV preview with natural-language styling, section reordering, photo control and one-page optimization.',
+        'Atomic Undo/Redo, version history, multiple CV management and quiet database auto-save.',
+        'Secure server-side Playwright/Chromium PDF generation with Supabase PostgreSQL persistence and protected download authorization.',
+      ],
+
+      technologies: [
+        'Next.js 16',
+        'React 18',
+        'TypeScript',
+        'Tailwind CSS',
+        'Google Gemini AI',
+        'Supabase',
+        'PostgreSQL',
+        'Playwright',
+        'Docker',
+      ],
+
+      githubUrl: 'https://github.com/nazmusshakib878/ai-cv-builder',
+
+      liveUrl: 'https://ai-cv-builder-sli4.onrender.com',
+
+      featured: true,
+
+      accent: 'from-blue-500/35 via-indigo-500/20 to-cyan-500/25',
+    },
   ],
 
   publications: [
@@ -697,18 +741,34 @@ export const portfolioData: PortfolioData = {
       title: 'Real Project Repositories',
 
       description:
-        'Securex, AI Smart Campus System, Library Management Project, and Logistica are available with direct GitHub repository access.',
+        'Resumate AI, Securex, AI Smart Campus System, Library Management Project, and Logistica are available with direct GitHub repository access.',
     },
 
     {
-      title: 'Live Project Available',
+      title: 'Live Projects Available',
 
       description:
-        'The AI Smart Campus System includes a working live demonstration hosted online.',
+        'Resumate AI and the AI Smart Campus System include working live demonstrations hosted online.',
     },
   ],
 
   githubRepos: [
+    {
+      title: 'Resumate AI',
+
+      description:
+        'Full-stack conversational resume platform with trilingual AI editing, 8 regional templates, Supabase RLS, and Playwright PDF export.',
+
+      href: 'https://github.com/nazmusshakib878/ai-cv-builder',
+
+      technologies: [
+        'Next.js 16',
+        'Gemini AI',
+        'Supabase',
+        'Playwright',
+      ],
+    },
+
     {
       title: 'Securex',
 

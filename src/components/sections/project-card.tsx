@@ -11,13 +11,19 @@ function getTechBadgeStyle(tech: string) {
   if (tech.includes('Laravel')) {
     return 'border-[rgba(240,83,64,0.28)] text-[#ff9c90] bg-[rgba(240,83,64,0.06)]'
   }
-  if (tech.includes('React') || tech.includes('Next.js') || tech.includes('Vite')) {
+  if (tech.includes('React') || tech.includes('Next.js') || tech.includes('Vite') || tech.includes('TypeScript')) {
     return 'border-[rgba(97,218,251,0.28)] text-[#7dd3fc] bg-[rgba(97,218,251,0.06)]'
   }
   if (tech.includes('OpenAI') || tech.includes('Gemini') || tech.includes('AI')) {
     return 'border-[rgba(168,130,255,0.3)] text-[#c4b5fd] bg-[rgba(168,130,255,0.08)]'
   }
-  if (tech.includes('MySQL') || tech.includes('Relational') || tech.includes('Database')) {
+  if (
+    tech.includes('MySQL') ||
+    tech.includes('PostgreSQL') ||
+    tech.includes('Supabase') ||
+    tech.includes('Relational') ||
+    tech.includes('Database')
+  ) {
     return 'border-[rgba(43,217,181,0.28)] text-[#69e6cd] bg-[rgba(43,217,181,0.06)]'
   }
   return 'border-white/10 text-[#d9dee7] bg-white/[0.025]'

@@ -57,6 +57,158 @@ export interface CaseStudyDetail {
 }
 
 export const projectCaseStudies: Record<string, CaseStudyDetail> = {
+  'resumate-ai-conversational-ai-resume-builder-and-ats-optimization-platform': {
+    slug: 'resumate-ai-conversational-ai-resume-builder-and-ats-optimization-platform',
+    shortTitle: 'Resumate AI',
+    subtitle: 'Conversational AI resume builder, document ingestion, and ATS optimization platform with real-time A4 preview and server-side PDF export.',
+    problemStatement:
+      'Traditional form-based resume builders overwhelm job seekers by requiring manual formatting, complex section organization, manual ATS keyword adjustment, and regional convention knowledge. Non-technical candidates struggle to translate their career history into modern, recruiter-ready formats, while static editors fail to provide instant feedback or context-aware rewriting.',
+    solutionStatement:
+      'Engineered Resumate AI, a conversational full-stack SaaS platform built with Next.js 16, Google Gemini AI, Supabase PostgreSQL, and Playwright. Users can converse in Bangla, Banglish, or English or upload existing resumes (PDF, DOCX, TXT, scanned images), and the system extracts, rewrites, and renders the data across 8 regional templates in real time, backed by server-side headless Chromium A4 PDF export.',
+    myRoleDescription:
+      'Full-Stack Developer and AI Systems Engineer responsible for the complete application architecture, multi-model Google Gemini integration, real-time React state synchronization, Supabase PostgreSQL schema with Row Level Security (RLS), Playwright server-side PDF rendering, and production Docker deployment on Render.',
+    myContributions: [
+      'Engineered a trilingual conversational AI pipeline powered by Google Gemini supporting natural-language CV editing in Bengali, Banglish, and English.',
+      'Built a multimodal resume ingestion engine parsing PDF, DOCX, TXT, and scanned image documents into normalized, type-safe JSON schema.',
+      'Designed and implemented 8 market-specific CV templates tailored for Bangladesh, Global ATS, International, MNC, DACH, Nordic, Australia/NZ, and Europass markets.',
+      'Developed real-time A4 preview with algorithmic vertical whitespace balancing, dynamic typography scaling, and atomic undo/redo history.',
+      'Architected Supabase PostgreSQL database models with Row Level Security (RLS), HMAC-SHA256 signed guest sessions, and seamless account migration.',
+      'Configured a production-grade Dockerized Chromium runner using Playwright for server-side, zero-margin A4 PDF generation gated by server-verified payments.',
+    ],
+    techStackGrouped: {
+      backend: ['Next.js 16 API Routes', 'Node.js', 'Playwright Chromium', 'JWT Auth'],
+      frontend: ['React 18', 'TypeScript', 'Tailwind CSS', 'Lucide Icons'],
+      database: ['Supabase', 'PostgreSQL', 'Row Level Security (RLS)', 'Schema Migrations'],
+      integrations: ['Google Gemini API', 'Gemini Multimodal Vision', 'OpenAI API (Fallback)', 'bKash Gateway Architecture', 'Docker / Render'],
+    },
+    screenshots: {
+      dashboards: [
+        {
+          id: 'resumate-multimodal-ingestion',
+          title: 'Multimodal Ingestion & Modern Layout',
+          subtitle: 'Instant AI Document Parsing into Two-Column National Pro Layout',
+          description:
+            'Initial AI conversion gateway formatting candidate career history, contact details, and core skills into a structured two-column layout.',
+          src: '/projects/resumate-ai/01-multimodal-ingestion-v2.webp',
+          alt: 'Resumate AI Multimodal Ingestion and National Pro Two-Column Layout',
+          badge: 'Onboarding & Parsing',
+          route: 'https://ai-cv-builder-sli4.onrender.com',
+        },
+        {
+          id: 'resumate-conversational-editing',
+          title: 'Conversational Experience Tuning in Banglish',
+          subtitle: 'Natural Language Prompt: "Experience ta aro strong koro"',
+          description:
+            'Interactive split-screen interface where users converse in Banglish or Bengali to enhance bullet points with action-driven metrics and impact.',
+          src: '/projects/resumate-ai/02-conversational-editing-v2.webp',
+          alt: 'Resumate AI Conversational AI Editing in Banglish with Live Preview',
+          badge: 'Trilingual AI Chat',
+          route: 'https://ai-cv-builder-sli4.onrender.com/workspace',
+        },
+        {
+          id: 'resumate-ats-optimizer',
+          title: 'Global ATS Layout Optimization',
+          subtitle: 'Natural Language Prompt: "Make it ATS friendly"',
+          description:
+            'Deterministic conversion into an ATS-compliant single-column layout engineered for applicant tracking system parseability and typography clarity.',
+          src: '/projects/resumate-ai/03-ats-optimization-v2.webp',
+          alt: 'Resumate AI Global ATS Single-Column Layout and Polished Resume Output',
+          badge: 'ATS Optimizer',
+          route: 'https://ai-cv-builder-sli4.onrender.com/templates',
+        },
+        {
+          id: 'resumate-one-page-fit',
+          title: '1-Page Fit Active & Polished A4 Output',
+          subtitle: 'Natural Language Prompt: "EDUCATION ay section ta r ektu sundor kore like dao"',
+          description:
+            'Algorithmic vertical whitespace balancing maintaining strict 1-page fit alongside server-side Playwright PDF download authorization.',
+          src: '/projects/resumate-ai/04-one-page-fit-export-v2.webp',
+          alt: 'Resumate AI 1-Page Fit Active and Polished A4 Resume Output',
+          badge: '1-Page Fit & Export',
+          route: 'https://ai-cv-builder-sli4.onrender.com/render-cv',
+        },
+      ],
+    },
+    databaseArchitecture: {
+      overview:
+        'Engineered on Supabase PostgreSQL with strict Row Level Security (RLS) policies, providing secure multi-tenant resume isolation, atomic version snapshots, and guest-to-user account migration.',
+      keyEntities: [
+        'users: Registered user credentials, profile metadata, and password hashes',
+        'resumes: Master CV documents storing JSONB resume data, design configs, and payment states',
+        'resume_versions: Historical state snapshots for rollback, undo/redo, and change tracking',
+        'conversations & chat_messages: Multi-turn AI interaction logs and diff previews per CV',
+        'payments: Server-verified transaction records strictly tied to verified resume IDs',
+      ],
+      schemaPrinciples: [
+        'PostgreSQL Row Level Security (RLS) isolating user records and HMAC-signed guest sessions',
+        'JSONB document columns enabling agile schema evolution without breaking data integrity',
+        'Automated foreign key cascading ensuring clean lifecycle management on CV deletion',
+      ],
+    },
+    apiArchitecture: {
+      overview:
+        'A robust 8-stage data pipeline transforming raw inputs into validated JSON resume data, dynamic React views, and pixel-perfect server-side PDF streams.',
+      dataFlowSteps: [
+        'User submits prompt or uploads document (PDF, DOCX, TXT, scanned image)',
+        'Document / Vision parser extracts text streams or processes image base64 via Gemini Vision',
+        'Google Gemini AI parses and restructures career facts against strict JSON schema',
+        'Runtime Normalizer validates schema, strips hallucinations, and sanitizes fields',
+        'ResumeContext dispatches atomic update and saves version snapshot to database',
+        'Regional Template Engine renders dynamic A4 layout with selected fonts and colors',
+        'WYSIWYG preview updates in real time with interactive zoom and balancing',
+        'Playwright Headless Chromium generates zero-margin A4 PDF stream on authorized request',
+      ],
+      authMethod: 'HMAC-SHA256 Signed Guest Sessions (HttpOnly) & 30-Day User JWTs',
+    },
+    challenges: [
+      {
+        challenge:
+          'Preventing LLM hallucination and schema drift during multi-turn conversational edits.',
+        solution:
+          'Enforced structured JSON MIME outputs with Google Gemini, backed by an automated 2-stage retry validator and custom runtime normalizers that discard invalid fields.',
+      },
+      {
+        challenge:
+          'Processing mixed-script and colloquial Bengali/Banglish commands for resume modifications.',
+        solution:
+          'Designed a dual-layer prompt architecture paired with regex-assisted NLP heuristics to accurately interpret requests like "CV ta one page koro" or "photo bad dao".',
+      },
+      {
+        challenge:
+          'Unifying multi-format resume ingestion across PDFs, Word documents, and scanned physical CVs.',
+        solution:
+          'Built a unified parsing pipeline combining pdf-parse, mammoth, and Gemini Multimodal Vision to extract up to 25,000 characters without losing career milestones.',
+      },
+      {
+        challenge:
+          'Eliminating awkward whitespace and pagination overflow on standard A4 outputs.',
+        solution:
+          'Engineered a smart vertical balancing algorithm that dynamically modulates section margins, line heights, and font scaling without altering candidate facts.',
+      },
+      {
+        challenge:
+          'Preserving guest progress and enabling friction-free migration upon account registration.',
+        solution:
+          'Implemented HMAC-SHA256 signed guest sessions and an atomic database claim procedure (claimGuestResumes) that transfers all draft CVs and version history to the newly registered account.',
+      },
+      {
+        challenge:
+          'Rendering consistent, pixel-perfect A4 PDFs on Linux production containers without layout shifts.',
+        solution:
+          'Configured headless Chromium with Playwright inside a Debian Docker container with pre-installed typography libraries and zero-margin print stylesheets.',
+      },
+    ],
+    finalResult: {
+      summary:
+        'Successfully engineered and deployed Resumate AI to production on Render, delivering a high-performance conversational resume builder tested across multi-turn multilingual scenarios.',
+      achievements: [
+        'Live production deployment on Render Cloud',
+        '8 verified regional CV templates with A4 PDF export',
+        'Open-source codebase maintained on GitHub',
+      ],
+    },
+  },
+
   'securex-cctv-and-security-service-management-system': {
     slug: 'securex-cctv-and-security-service-management-system',
     shortTitle: 'SecureX',

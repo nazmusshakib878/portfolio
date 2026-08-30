@@ -3,4 +3,5 @@ export const projectCovers = [
   '/projects/ai-smart-campus-cover-v2.webp',
   '/projects/logistica-cover-v3.webp',
   '/projects/library-management-cover-v2.webp',
+  '/projects/resumate-ai-cover.webp',
 ] as const

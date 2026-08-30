@@ -32,6 +32,9 @@ type Props = { params: Promise<{ slug: string }> }
 export function generateStaticParams() {
   const longSlugs = portfolioData.projects.map((project) => ({ slug: projectSlug(project.title) }))
   const shortSlugs = [
+    { slug: 'resumate-ai' },
+    { slug: 'resumate' },
+    { slug: 'ai-cv-builder' },
     { slug: 'securex' },
     { slug: 'ai-smart-campus' },
     { slug: 'library-management' },
@@ -45,6 +48,12 @@ function findProjectIndex(slug: string): number {
   return portfolioData.projects.findIndex((item) => {
     const fullSlug = projectSlug(item.title)
     if (fullSlug === normalized) return true
+    if (
+      (normalized === 'resumate-ai' || normalized === 'resumate' || normalized === 'ai-cv-builder') &&
+      fullSlug.includes('resumate')
+    ) {
+      return true
+    }
     if (normalized === 'securex' && fullSlug.includes('securex')) return true
     if (normalized === 'ai-smart-campus' && fullSlug.includes('ai-smart-campus')) return true
     if (normalized === 'library-management' && fullSlug.includes('library-management')) return true
@@ -422,18 +431,26 @@ export default async function ProjectPage({ params }: Props) {
             <div className="flex items-center gap-2 text-[#aa96ff]">
               <LayoutDashboard size={18} />
               <p className="eyebrow text-[#aa96ff]">
-                {screenshots.dashboards.length > 1 ? '05 / User Experience & Dashboards' : '05 / System Overview & Dashboard'}
+                {caseStudy?.slug.includes('resumate')
+                  ? '05 / Conversational AI & Design Suite'
+                  : screenshots.dashboards.length > 1
+                    ? '05 / User Experience & Dashboards'
+                    : '05 / System Overview & Dashboard'}
               </p>
             </div>
             <h2 className="display mt-2 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
-              {screenshots.dashboards.length > 1
-                ? 'Role-Based Portals: Faculty & Student Workspaces'
-                : screenshots.dashboards[0].title}
+              {caseStudy?.slug.includes('resumate')
+                ? 'Conversational AI Workspaces & Template Suite'
+                : screenshots.dashboards.length > 1
+                  ? 'Role-Based Portals: Faculty & Student Workspaces'
+                  : screenshots.dashboards[0].title}
             </h2>
             <p className="muted mt-2 max-w-3xl text-sm sm:text-base leading-relaxed">
-              {screenshots.dashboards.length > 1
-                ? 'Purpose-built interfaces tailored to institutional personas, streamlining teaching oversight and student degree tracking.'
-                : screenshots.dashboards[0].description}
+              {caseStudy?.slug.includes('resumate')
+                ? 'Purpose-built interfaces demonstrating multimodal document ingestion, real-time conversational editing in Banglish, global ATS layout conversion, and 1-page fit A4 document export.'
+                : screenshots.dashboards.length > 1
+                  ? 'Purpose-built interfaces tailored to institutional personas, streamlining teaching oversight and student degree tracking.'
+                  : screenshots.dashboards[0].description}
             </p>
           </div>
 
@@ -499,13 +516,17 @@ export default async function ProjectPage({ params }: Props) {
         </section>
       )}
 
-      {/* Service Management Workflow Section */}
+      {/* Service Management / A4 Output Workflow Section */}
       {screenshots?.workflowShowcase && (
         <section className="shell mt-16 sm:mt-20">
           <div className="border-b border-white/10 pb-5">
             <div className="flex items-center gap-2 text-[#aa96ff]">
               <Workflow size={18} />
-              <p className="eyebrow text-[#aa96ff]">06 / Service Management Workflow</p>
+              <p className="eyebrow text-[#aa96ff]">
+                {caseStudy?.slug.includes('resumate')
+                  ? '06 / A4 Resume Output & Document Rendering'
+                  : '06 / Service Management Workflow'}
+              </p>
             </div>
             <h2 className="display mt-2 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
               {screenshots.workflowShowcase.title}
