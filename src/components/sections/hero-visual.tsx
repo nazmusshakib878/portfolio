@@ -49,7 +49,7 @@ export function HeroVisual() {
           fill
           priority
           sizes="(max-width:1024px) 94vw, 540px"
-          className="object-cover object-center [filter:saturate(.82)_contrast(1.06)_drop-shadow(0_32px_55px_rgba(0,0,0,.6))] [mask-image:linear-gradient(to_bottom,#000_76%,transparent_100%)]"
+          className="object-cover object-center [filter:saturate(.82)_contrast(1.06)_drop-shadow(0_32px_55px_rgba(0,0,0,.6))] [-webkit-mask-image:linear-gradient(to_bottom,#000_76%,transparent_100%)] [mask-image:linear-gradient(to_bottom,#000_76%,transparent_100%)]"
         />
       </motion.div>
       <div

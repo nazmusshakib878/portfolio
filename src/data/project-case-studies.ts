@@ -82,6 +82,17 @@ export const projectCaseStudies: Record<string, CaseStudyDetail> = {
       integrations: ['Google Gemini API', 'Gemini Multimodal Vision', 'OpenAI API (Fallback)', 'bKash Gateway Architecture', 'Docker / Render'],
     },
     screenshots: {
+      platformShowcase: {
+        id: 'resumate-landing-showcase',
+        title: 'Conversational Resume Platform Gateway & Onboarding',
+        subtitle: 'Fast Multilingual Document Creation & AI Transformation Flow',
+        description:
+          'Modern full-stack web application landing interface welcoming job seekers with options to upload existing CV documents (PDF, DOCX, TXT, images) or start interactive conversational creation with trilingual AI assistance.',
+        src: '/projects/resumate-ai/landing-showcase.webp',
+        alt: 'Resumate AI Conversational AI Resume Platform Desktop Showcase',
+        badge: 'Platform Showcase',
+        route: 'https://ai-cv-builder-sli4.onrender.com',
+      },
       dashboards: [
         {
           id: 'resumate-multimodal-ingestion',
