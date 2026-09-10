@@ -21,7 +21,8 @@ export function IntroLoader() {
       // Graceful fallback for strict environments
     }
 
-    setShow(true)
+    // eslint-disable-next-line react/set-state-in-effect
+    setTimeout(() => setShow(true), 0)
 
     // 3. Fast duration: ~950ms before initiating clean 250ms opacity fade-out (~1.2s total)
     const timer = setTimeout(() => {

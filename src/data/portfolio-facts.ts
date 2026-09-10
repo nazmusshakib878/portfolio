@@ -30,7 +30,7 @@ export const portfolioData: PortfolioData = {
 
   currentCgpa: '3.60 / 4.00',
 
-  featuredProjectsCount: '5',
+  featuredProjectsCount: '6',
 
   laravelTrainingHours: '80 Hours',
 
@@ -96,7 +96,7 @@ export const portfolioData: PortfolioData = {
     },
     {
       label: 'Selected Projects',
-      value: '5',
+      value: '6',
     },
     {
       label: 'Laravel Training',
@@ -445,6 +445,48 @@ export const portfolioData: PortfolioData = {
     },
 
     {
+      title: 'Nur Foodes — Restaurant POS & Store ERP System',
+
+      category: 'Restaurant POS / Business Application',
+
+      date: '2026',
+
+      role: 'Application Developer & System Designer',
+
+      summary: 'A touch-optimized restaurant POS and store operations application combining cashier workflows, kitchen processing, menu and inventory controls, multiple payment methods, Saudi VAT invoicing, order management and shift reporting in one unified interface.',
+
+      description: 'Nur Foodes is a browser-based restaurant POS and operational management system engineered with modular JavaScript, HTML and CSS. It provides cashier ordering, kitchen workflows, menu and inventory management, payment handling, Saudi VAT/ZATCA-oriented invoice generation, reporting, bilingual Arabic/English support and responsive touch-focused interfaces.',
+
+      keyFeatures: [
+        'Touch-optimized restaurant POS terminal with dual catalog interaction modes.',
+        'Modular JavaScript operational architecture separating POS, payment, receipt, reporting, and administration.',
+        'Bilingual Arabic (RTL) and English (LTR) interface localization.',
+        'Multiple restaurant order types (Dine-In, Takeaway, Delivery, Drive-Thru).',
+        'Centralized payment calculation, cash change workflow, and split tender handling.',
+        'Saudi 15% VAT calculation and ZATCA Phase-2 invoice implementation with TLV QR.',
+        'Restaurant shift reporting and Z-Report functionality.',
+        'Responsive POS interface for desktop, tablet, and mobile environments.',
+      ],
+
+      technologies: [
+        'JavaScript ES6+',
+        'HTML5',
+        'CSS3',
+        'Vite',
+        'PWA',
+        'Browser Local Persistence',
+        'Vercel',
+      ],
+
+      githubUrl: 'https://github.com/nazmusshakib878/food_software',
+
+      liveUrl: 'https://food-software-sigma.vercel.app/',
+
+      featured: true,
+
+      accent: 'from-teal-500/35 via-emerald-500/20 to-green-500/25',
+    },
+    {
       title: 'Library Management Project',
 
       category: 'Laravel Academic Project',
@@ -741,14 +783,14 @@ export const portfolioData: PortfolioData = {
       title: 'Real Project Repositories',
 
       description:
-        'Resumate AI, Securex, AI Smart Campus System, Library Management Project, and Logistica are available with direct GitHub repository access.',
+        'Resumate AI, Securex, AI Smart Campus System, Library Management Project, Logistica, and Nur Foodes POS are available with direct GitHub repository access.',
     },
 
     {
       title: 'Live Projects Available',
 
       description:
-        'Resumate AI and the AI Smart Campus System include working live demonstrations hosted online.',
+        'Resumate AI, AI Smart Campus System, and Nur Foodes POS include working live demonstrations hosted online.',
     },
   ],
 
@@ -766,6 +808,22 @@ export const portfolioData: PortfolioData = {
         'Gemini AI',
         'Supabase',
         'Playwright',
+      ],
+    },
+
+    {
+      title: 'Nur Foodes POS',
+
+      description:
+        'Restaurant POS and operational management system with cashier workflows, payments, Saudi VAT invoicing, bilingual UI and reporting.',
+
+      href: 'https://github.com/nazmusshakib878/food_software',
+
+      technologies: [
+        'JavaScript',
+        'Vite',
+        'HTML/CSS',
+        'PWA',
       ],
     },
 

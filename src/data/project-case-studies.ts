@@ -692,4 +692,135 @@ export const projectCaseStudies: Record<string, CaseStudyDetail> = {
       ],
     },
   },
+
+  'nur-foodes-restaurant-pos-and-store-erp-system': {
+    slug: 'nur-foodes-restaurant-pos-and-store-erp-system',
+    shortTitle: 'Nur Foodes POS',
+    subtitle: 'A touch-optimized restaurant POS and operations platform connecting cashier ordering, kitchen workflows, inventory controls, payments, Saudi VAT invoicing and shift reporting.',
+    problemStatement: 'Restaurant operations can become fragmented when cashier ordering, kitchen communication, product availability, payments, invoice generation, returns and shift reporting are handled independently. The system needed to provide a fast interface suitable for counter staff while also maintaining structured order lifecycle management, bilingual operation, tax calculations and administrative control.',
+    solutionStatement: 'Engineered Nur Foodes, a modular browser-based POS application. The POS, payment, receipt, reports, administration, and printer logic are separated into dedicated modules. The system integrates the complete workflow from Catalog to Cart, Order to Kitchen, and Payment to VAT Invoice and Reports, providing a unified operational platform.',
+    myRoleDescription: 'Application Developer & System Designer responsible for the POS interaction model, modular JavaScript application structure, cashier workflows, payment logic, tax invoice generation, reporting interfaces, bilingual UI behavior, responsive design and operational workflow integration.',
+    myContributions: [
+      'Designed the touch-oriented POS product discovery and ordering workflow.',
+      'Implemented modular JavaScript architecture separating POS, payment, receipt, reporting, administration and printing responsibilities.',
+      'Built Arabic/English localization behavior including RTL/LTR presentation.',
+      'Implemented payment totals, VAT calculations and cash change workflows.',
+      'Developed tax receipt generation and ZATCA TLV QR logic.',
+      'Built responsive layouts for commercial desktop POS, tablet and mobile use.',
+      'Implemented restaurant order lifecycle and operational reporting.',
+      'Added test/verification utilities for important POS calculations and workflows.',
+    ],
+    techStackGrouped: {
+      backend: [
+        'Modular JavaScript Application Logic',
+        'Vite Build System',
+        'POS / Payment / Receipt Modules',
+      ],
+      frontend: [
+        'HTML5',
+        'CSS3',
+        'JavaScript ES6+',
+        'Responsive UI',
+        'RTL / LTR Localization',
+      ],
+      database: [
+        'Browser Local Persistence',
+        'Client-Side State Store',
+        'Inventory / Order State',
+      ],
+      integrations: [
+        'PWA Manifest',
+        'ZATCA TLV QR Logic',
+        'Thermal Print Workflow',
+        'Vercel',
+        'Puppeteer / jsdom Testing',
+      ],
+    },
+    screenshots: {
+      platformShowcase: {
+        id: 'nur-foodes-pos-terminal',
+        title: 'Nur Foodes Restaurant POS Terminal',
+        subtitle: 'Touch-Optimized Counter Ordering & Product Catalog',
+        description: 'A high-density commercial POS interface combining visual item discovery, category filtering, search, pricing and fast order entry while keeping the main restaurant actions immediately accessible.',
+        src: '/projects/nur-foodes/pos-terminal-v3.png',
+        alt: 'Nur Foodes Restaurant POS Terminal Interface',
+        badge: 'POS Terminal',
+        route: 'https://food-software-sigma.vercel.app/',
+      },
+      mobileExperience: {
+        id: 'nur-foodes-mobile-pos',
+        title: 'Responsive Mobile-First POS Experience',
+        subtitle: 'Touch-Optimized Adaptive Interface for Tablets and Phones',
+        description: 'Fully responsive mobile application interface for ordering, catalog browsing, and receipt generation optimized for smaller viewports.',
+        src: '/projects/nur-foodes/mobile-pos-v3.png',
+        alt: 'Nur Foodes Responsive Mobile POS Interface',
+        badge: 'Mobile Viewport',
+        route: 'https://food-software-sigma.vercel.app/',
+      },
+    },
+    databaseArchitecture: {
+      overview: 'Engineered as a highly responsive client-side application utilizing persistent browser storage to maintain restaurant operational state across sessions without a remote server dependency.',
+      keyEntities: [
+        'menu items: Product catalog with prices, categories, and bilingual descriptions',
+        'categories: Menu categorization for filtering and UI structure',
+        'orders: Transactional records encompassing order items, notes, and payment status',
+        'payments: Financial ledger tracking subtotal, discounts, VAT, and tendered cash',
+        'inventory: Product availability states synchronizing across the POS interface',
+        'settings: Application configuration including active language, currency, and tax rates',
+      ],
+      schemaPrinciples: [
+        'Centralized application state (store.js) for POS operational consistency',
+        'Persistent browser storage ensuring reload resilience and offline capability',
+        'Separate application modules consuming shared state for UI synchronization',
+      ],
+    },
+    apiArchitecture: {
+      overview: 'A modular browser application where a shared store coordinates POS, payment, receipt, reporting, and administrative modules, allowing each workflow to remain separated while sharing consistent restaurant operational state.',
+      dataFlowSteps: [
+        'Cashier searches or selects menu item from the visual catalog',
+        'POS module updates active cart/order state in the central store',
+        'Payment module calculates payable amount, applying discount and VAT rules',
+        'Receipt module creates invoice and generates ZATCA TLV QR data',
+        'Completed transaction is recorded in persistent browser state',
+        'Reporting modules aggregate saved transaction records for shift analysis',
+      ],
+      authMethod: 'PIN-Based Local Authorization',
+    },
+    challenges: [
+      {
+        challenge: 'High-speed product discovery in a large touch interface.',
+        solution: 'Implemented a visual catalog with category filters, live search, product codes, and compact quick-add interactions to accelerate order entry.',
+      },
+      {
+        challenge: 'Keeping cashier and kitchen workflows synchronized conceptually.',
+        solution: 'Designed a structured order lifecycle and dedicated operational views, ensuring order states are cleanly managed.',
+      },
+      {
+        challenge: 'Reliable monetary calculation.',
+        solution: 'Centralized subtotal calculation, discount application, 15% VAT computation, tendered amount, and cash change logic into a dedicated payment module.',
+      },
+      {
+        challenge: 'Supporting Arabic and English without mixed-language interface pollution.',
+        solution: 'Built comprehensive localization dictionaries with dynamic RTL/LTR layout handling and localized numeral formatting where implemented.',
+      },
+      {
+        challenge: 'Printing tax/customer receipts across varying hardware environments.',
+        solution: 'Developed dedicated receipt and printer modules featuring thermal-optimized formatting and reliable browser print fallbacks.',
+      },
+      {
+        challenge: 'Keeping a commercial POS usable on different display sizes.',
+        solution: 'Applied dedicated responsive CSS and adaptive layouts ensuring the POS terminal, tablet, and mobile navigation remain functional and legible.',
+      },
+    ],
+    finalResult: {
+      summary: 'Built and deployed a comprehensive restaurant operations application that demonstrates practical POS engineering across cashier ordering, client-side operational state, payment calculation, Saudi VAT invoice generation, bilingual interfaces and restaurant reporting.',
+      achievements: [
+        'Live POS application deployed publicly',
+        'Modular JavaScript operational architecture',
+        'Arabic (RTL) and English (LTR) UI support',
+        'Saudi 15% VAT invoice workflow & ZATCA TLV QR implementation',
+        'Responsive POS interface across devices',
+      ],
+    },
+  },
 }

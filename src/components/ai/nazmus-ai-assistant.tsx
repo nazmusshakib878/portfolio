@@ -141,7 +141,8 @@ export function NazmusAiAssistant() {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
       if (SpeechRecognition) {
-        setIsSpeechSupported(true)
+        // eslint-disable-next-line react/set-state-in-effect
+        setTimeout(() => setIsSpeechSupported(true), 0)
         const recognition = new SpeechRecognition()
         recognition.continuous = false
         recognition.interimResults = false
