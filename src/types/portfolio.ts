@@ -102,6 +102,7 @@ export interface CertificationItem {
   issued?: string
   certificateId?: string
   verifyUrl: string
+  certificateUrl?: string
   topics?: string[]
 }
 

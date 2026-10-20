@@ -147,8 +147,9 @@ export function AchievementsSection() {
                         program: cert.program,
                         issued: cert.issued,
                         certificateId: cert.certificateId,
-                        imageUrl: cert.verifyUrl,
-                        downloadName: 'appstick-laravel-training-certificate.png',
+                        imageUrl: cert.certificateUrl || '/certificates/edge-laravel-training-certificate.png',
+                        verifyUrl: cert.verifyUrl,
+                        downloadName: 'edge-laravel-training-certificate.png',
                       })
                     }
                     className="inline-flex items-center gap-1.5 rounded-lg border border-[rgba(240,83,64,0.3)] bg-[rgba(240,83,64,0.08)] px-3 py-1.5 text-xs font-semibold text-[#ffb5ac] transition hover:bg-[rgba(240,83,64,0.15)] hover:text-white cursor-pointer active:scale-95"

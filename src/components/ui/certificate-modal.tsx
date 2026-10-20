@@ -12,6 +12,7 @@ export interface CertificateModalData {
   issued?: string
   certificateId?: string
   imageUrl: string
+  verifyUrl?: string
   downloadName?: string
 }
 
@@ -122,6 +123,7 @@ export function CertificateModal({ isOpen, onClose, certificate }: CertificateMo
                   width={1400}
                   height={990}
                   priority
+                  unoptimized
                   className="h-auto w-full object-contain"
                 />
               </div>
@@ -141,13 +143,13 @@ export function CertificateModal({ isOpen, onClose, certificate }: CertificateMo
 
               <div className="flex items-center gap-2.5">
                 <a
-                  href={certificate.imageUrl}
+                  href={certificate.verifyUrl || certificate.imageUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex min-h-9 items-center gap-1.5 rounded-xl border border-white/15 bg-white/5 px-3.5 text-xs font-semibold text-[#f2f3f7] transition hover:border-white/30 hover:bg-white/10"
                 >
                   <ExternalLink size={13} />
-                  <span>Open Full View</span>
+                  <span>{certificate.verifyUrl ? 'Verify Credential' : 'Open Full View'}</span>
                 </a>
 
                 <a

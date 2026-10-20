@@ -749,6 +749,9 @@ export const portfolioData: PortfolioData = {
       verifyUrl:
         'https://training.edge.gov.bd/storage/certificate/student-training/certificate_683812fc857433.88555020.pdf',
 
+      certificateUrl:
+        '/certificates/edge-laravel-training-certificate.png',
+
       topics: [
         'Laravel MVC architecture',
         'Authentication',
