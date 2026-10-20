@@ -18,12 +18,14 @@ import {
   Wrench,
 } from 'lucide-react'
 import {
+  SiDocker,
   SiGit,
   SiGithub,
   SiGooglegemini,
   SiJavascript,
   SiLaravel,
   SiMysql,
+  SiN8N,
   SiNextdotjs,
   SiPhp,
   SiPostman,
@@ -147,6 +149,8 @@ const skillCategories: SkillCategory[] = [
       glow: 'rgba(43,217,181,0.15)',
     },
     skills: [
+      { name: 'n8n', subtitle: 'Workflow Automation', icon: SiN8N, iconColor: 'text-[#ea4b71]' },
+      { name: 'Docker', subtitle: 'Containerized Development', icon: SiDocker, iconColor: 'text-[#2496ed]' },
       { name: 'Git', subtitle: 'Version Control & Branching', icon: SiGit, iconColor: 'text-[#f05032]' },
       { name: 'GitHub', subtitle: 'Code Collaboration & CI/CD', icon: SiGithub, iconColor: 'text-white' },
       { name: 'Postman', subtitle: 'REST API Testing & Verification', icon: SiPostman, iconColor: 'text-[#ff6c37]' },

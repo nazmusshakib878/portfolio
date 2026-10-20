@@ -139,6 +139,7 @@ export interface PortfolioData {
   expectedGraduation: string
   initials: string
   resumeHref: string
+  resumeDownloadHref?: string
   githubUrl: string
   linkedinUrl: string
   githubUsername: string

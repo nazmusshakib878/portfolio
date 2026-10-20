@@ -1,8 +1,10 @@
-﻿import { socialLinks } from '@/constants/social-links'
+import { socialLinks } from '@/constants/social-links'
 import { portfolioData as facts } from './portfolio-facts'
 
 export const portfolioData = {
   ...facts,
+  resumeHref: '/resume.pdf?v=2',
+  resumeDownloadHref: '/Nazmus_Shakib_CV.pdf',
   linkedinUrl: socialLinks.linkedin,
   socialLinks: [
     ...facts.socialLinks,

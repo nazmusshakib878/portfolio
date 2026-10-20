@@ -18,3 +18,7 @@ public/references
 !.vscode/extensions.json
 .vercel
 .env*
+scratch/
+crop-script.js
+test.webp
+*-backup.*

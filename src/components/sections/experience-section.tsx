@@ -1,3 +1,6 @@
+'use client'
+
+import { useState } from 'react'
 import {
   ArrowUpRight,
   BriefcaseBusiness,
@@ -16,6 +19,7 @@ import { SiGithub } from 'react-icons/si'
 import Link from 'next/link'
 import { Reveal } from '@/components/ui/reveal'
 import { portfolioData, projectSlug } from '@/data/portfolio'
+import { CertificateModal, type CertificateModalData } from '@/components/ui/certificate-modal'
 
 const responsibilityDomains = [
   {
@@ -143,6 +147,7 @@ const engineeringStrengths: EngineeringStrength[] = [
 ]
 
 export function ExperienceSection() {
+  const [activeCert, setActiveCert] = useState<CertificateModalData | null>(null)
   const exp = portfolioData.experience[0]
   const logisticaSlug = projectSlug('Logistica')
 
@@ -332,14 +337,22 @@ export function ExperienceSection() {
 
                     <div className="flex flex-wrap items-center gap-2.5 shrink-0">
                       {exp.certificateUrl && (
-                        <a
-                          className="button min-h-10 rounded-xl border-[rgba(251,191,36,0.3)] bg-[rgba(251,191,36,0.06)] px-4 text-xs font-semibold text-[#fde68a] transition hover:border-[rgba(251,191,36,0.5)] hover:bg-[rgba(251,191,36,0.12)] hover:text-white"
-                          href={exp.certificateUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setActiveCert({
+                              title: 'Laravel 1-Month Industrial Training Program',
+                              provider: exp.company || 'Appstick Tech Firm',
+                              program: 'Industrial Training Program',
+                              issued: '4 March 2026',
+                              imageUrl: exp.certificateUrl || '/certificates/appstick-laravel-training-certificate.png',
+                              downloadName: 'appstick-laravel-training-certificate.png',
+                            })
+                          }
+                          className="button min-h-10 rounded-xl border-[rgba(251,191,36,0.3)] bg-[rgba(251,191,36,0.06)] px-4 text-xs font-semibold text-[#fde68a] transition hover:border-[rgba(251,191,36,0.5)] hover:bg-[rgba(251,191,36,0.12)] hover:text-white cursor-pointer active:scale-95"
                         >
                           <FileCheck2 size={13} className="text-[#fbbf24]" /> View Certificate <ArrowUpRight size={13} />
-                        </a>
+                        </button>
                       )}
                       {exp.repositoryUrl && (
                         <a
@@ -430,6 +443,12 @@ export function ExperienceSection() {
           </div>
         </Reveal>
       </div>
+
+      <CertificateModal
+        isOpen={!!activeCert}
+        onClose={() => setActiveCert(null)}
+        certificate={activeCert}
+      />
     </section>
   )
 }

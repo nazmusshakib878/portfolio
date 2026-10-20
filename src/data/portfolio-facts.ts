@@ -30,7 +30,7 @@ export const portfolioData: PortfolioData = {
 
   currentCgpa: '3.60 / 4.00',
 
-  featuredProjectsCount: '6',
+  featuredProjectsCount: '7',
 
   laravelTrainingHours: '80 Hours',
 
@@ -96,7 +96,7 @@ export const portfolioData: PortfolioData = {
     },
     {
       label: 'Selected Projects',
-      value: '6',
+      value: '7',
     },
     {
       label: 'Laravel Training',
@@ -140,6 +140,8 @@ export const portfolioData: PortfolioData = {
     { name: 'REST APIs' },
     { name: 'Laravel Sanctum' },
     { name: 'OpenAI & Gemini API', featured: true },
+    { name: 'n8n', featured: true },
+    { name: 'Docker', featured: true },
     { name: 'Tailwind CSS' },
     { name: 'Vite' },
     { name: 'Bootstrap' },
@@ -241,6 +243,8 @@ export const portfolioData: PortfolioData = {
         'Database Integrity',
         'Git & GitHub',
         'Postman',
+        'n8n — Workflow Automation',
+        'Docker — Containerized Development',
         'Oxlint',
         'SDLC & Agile',
         'Technical Documentation',
@@ -299,7 +303,7 @@ export const portfolioData: PortfolioData = {
         'https://github.com/nazmusshakib878/Logistica',
 
       certificateUrl:
-        'https://drive.google.com/file/d/1190IYxcJgWVaQj4yg4Z6Pr6Qg96uwr3T/view',
+        '/certificates/appstick-laravel-training-certificate.png',
     },
   ],
 
@@ -572,6 +576,45 @@ export const portfolioData: PortfolioData = {
 
       accent: 'from-blue-500/35 via-indigo-500/20 to-cyan-500/25',
     },
+    {
+      title: 'CV Payment Reminder Automation',
+
+      category: 'Workflow Automation',
+
+      date: '2026',
+
+      role: 'Workflow Automation Developer',
+
+      summary:
+        'Designed a scheduled payment reminder automation using n8n, Google Sheets, and Telegram Bot API. The workflow reads client payment records, checks conditions, sends Telegram reminders, and updates spreadsheet records.',
+
+      description:
+        'An automated scheduled payment reminder and client billing lifecycle workflow built with n8n running in a containerized Docker environment. It automatically reads client payment records from Google Sheets, evaluates payment and reminder conditions with conditional IF logic, dispatches personalized reminders via Telegram Bot API, and updates spreadsheet records with confirmation timestamps to prevent duplicate alerts.',
+
+      keyFeatures: [
+        'Automated Schedule Trigger initiating periodic payment audit cycles.',
+        'Google Sheets node securely querying pending client invoice records via Google Cloud API.',
+        'Conditional IF routing logic filtering overdue and unnotified clients.',
+        'Telegram Bot API integration dispatching formatted payment reminder messages.',
+        'Automated spreadsheet row updates writing confirmation timestamps to ensure idempotency.',
+        'Containerized Docker architecture ensuring lightweight, reproducible local execution.',
+      ],
+
+      technologies: [
+        'n8n',
+        'Google Sheets',
+        'Telegram Bot API',
+        'Docker',
+      ],
+
+      githubUrl: 'https://github.com/nazmusshakib878',
+
+      liveUrl: '',
+
+      featured: true,
+
+      accent: 'from-rose-500/35 via-pink-500/20 to-orange-500/25',
+    },
   ],
 
   publications: [
@@ -730,7 +773,7 @@ export const portfolioData: PortfolioData = {
       issued: '2024',
 
       verifyUrl:
-        'https://drive.google.com/file/d/1yyTe1et7fZJb8YXVrKGzSP06oBsM9EhQ/view',
+        '/certificates/programming-hero-bootcamp-certificate.png',
 
       topics: [
         'Web Development',
@@ -751,7 +794,7 @@ export const portfolioData: PortfolioData = {
       issued: '4 March 2026',
 
       verifyUrl:
-        'https://drive.google.com/file/d/1190IYxcJgWVaQj4yg4Z6Pr6Qg96uwr3T/view',
+        '/certificates/appstick-laravel-training-certificate.png',
 
       topics: [
         'Laravel backend application logic',

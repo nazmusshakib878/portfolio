@@ -21,6 +21,16 @@ export const metadata: Metadata = {
   description:
     'Portfolio of Md. Nazmus Shakib, a Full Stack Developer with a strong Laravel & MySQL backend foundation, building modern Next.js, React, and AI-integrated web applications.',
   alternates: { canonical: '/' },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon.png', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-icon.png', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+  },
   openGraph: {
     type: 'website',
     url: siteUrl,
@@ -85,7 +95,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   }
 
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <body className={`${body.variable} ${display.variable}`}>
         <a
           href="#main-content"

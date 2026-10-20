@@ -44,12 +44,12 @@ export function HeroVisual() {
       />
       <motion.div style={{ x: imageX, y: imageY }} className="absolute inset-0">
         <Image
-          src="/images/profile.webp"
+          src="/images/nazmusshakib.png"
           alt="Md. Nazmus Shakib"
           fill
           priority
-          sizes="(max-width:1024px) 94vw, 540px"
-          className="object-cover object-center [filter:saturate(.82)_contrast(1.06)_drop-shadow(0_32px_55px_rgba(0,0,0,.6))] [-webkit-mask-image:linear-gradient(to_bottom,#000_76%,transparent_100%)] [mask-image:linear-gradient(to_bottom,#000_76%,transparent_100%)]"
+          sizes="(max-width: 640px) 90vw, (max-width: 1024px) 440px, 460px"
+          className="object-cover object-[center_10%] [filter:saturate(.94)_contrast(1.04)_drop-shadow(0_24px_50px_rgba(0,0,0,.6))] [-webkit-mask-image:linear-gradient(to_bottom,#000_82%,transparent_100%)] [mask-image:linear-gradient(to_bottom,#000_82%,transparent_100%)]"
         />
       </motion.div>
       <div

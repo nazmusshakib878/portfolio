@@ -15,7 +15,7 @@ import {
   Send,
   Sparkles,
 } from 'lucide-react'
-import { SiGithub } from 'react-icons/si'
+import { FaFacebookF, FaGithub, FaLinkedinIn, FaWhatsapp } from 'react-icons/fa6'
 import type {
   AiActionCard,
   ProjectCardData,
@@ -106,7 +106,7 @@ export function ProjectDetailCard({ project }: { project: ProjectCardData }) {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 bg-white/[0.05] px-3 py-1.5 text-xs font-medium text-[#e2e6ed] transition hover:bg-white/10 hover:text-white"
           >
-            <SiGithub size={13} /> GitHub Repo
+            <FaGithub size={13} /> GitHub Repo
           </a>
         )}
         {project.liveUrl && (
@@ -243,10 +243,8 @@ export function ResumeSummaryCard({ resume }: { resume: ResumeCardData }) {
 
       <div className="mt-4 border-t border-white/10 pt-3">
         <a
-          href={resume.resumeHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          download="Md_Nazmus_Shakib_Resume.pdf"
+          href={resume.resumeDownloadHref || '/Nazmus_Shakib_CV.pdf'}
+          download="Nazmus_Shakib_CV.pdf"
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#8b72ff] to-[#aa96ff] py-2 text-xs font-bold text-[#090914] shadow-md transition hover:opacity-95 active:scale-98"
         >
           <Download size={14} /> Download Official Resume (PDF)
@@ -395,45 +393,126 @@ export function HireInquiryInteractiveCard({
 
 export function ContactDirectCard({ contact }: { contact: ContactDirectData }) {
   return (
-    <div className="mt-3 rounded-2xl border border-white/10 bg-[#0e111d] p-3.5">
-      <div className="flex items-center gap-2 border-b border-white/10 pb-2">
-        <MessageSquare size={15} className="text-[#aa96ff]" />
-        <span className="text-xs font-bold uppercase tracking-wider text-white">Direct Contacts</span>
+    <div className="mt-3 rounded-2xl border border-white/10 bg-[#0e111d] p-3.5 shadow-xl">
+      <div className="flex items-center justify-between border-b border-white/10 pb-2">
+        <div className="flex items-center gap-2">
+          <MessageSquare size={15} className="text-[#aa96ff]" />
+          <span className="text-xs font-bold uppercase tracking-wider text-white">Direct Contacts & Socials</span>
+        </div>
+        <span className="text-[10px] text-[#2bd9b5]">● {contact.availability}</span>
       </div>
 
-      <div className="mt-3 space-y-2">
+      <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
+        {/* Email */}
         <a
           href={`mailto:${contact.email}`}
           className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.02] p-2.5 transition hover:border-[#2bd9b5]/40 hover:bg-white/[0.05]"
         >
-          <div className="flex items-center gap-2.5">
-            <Mail size={15} className="text-[#2bd9b5]" />
-            <div className="text-left">
-              <p className="text-[10px] uppercase text-[#747b8b]">Email</p>
-              <p className="text-xs font-medium text-white">{contact.email}</p>
+          <div className="flex items-center gap-2.5 min-w-0">
+            <Mail size={15} className="shrink-0 text-[#2bd9b5]" />
+            <div className="text-left truncate">
+              <p className="text-[9px] uppercase tracking-wider text-[#747b8b]">Email</p>
+              <p className="text-[11px] font-medium text-white truncate">{contact.email}</p>
             </div>
           </div>
-          <ArrowUpRight size={14} className="text-[#a4a9b6]" />
+          <ArrowUpRight size={13} className="shrink-0 text-[#a4a9b6]" />
         </a>
 
+        {/* Phone */}
         <a
           href={`tel:${contact.phone}`}
           className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.02] p-2.5 transition hover:border-[#2bd9b5]/40 hover:bg-white/[0.05]"
         >
-          <div className="flex items-center gap-2.5">
-            <Phone size={15} className="text-[#2bd9b5]" />
-            <div className="text-left">
-              <p className="text-[10px] uppercase text-[#747b8b]">Phone</p>
-              <p className="text-xs font-medium text-white">{contact.phone}</p>
+          <div className="flex items-center gap-2.5 min-w-0">
+            <Phone size={15} className="shrink-0 text-[#2bd9b5]" />
+            <div className="text-left truncate">
+              <p className="text-[9px] uppercase tracking-wider text-[#747b8b]">Phone</p>
+              <p className="text-[11px] font-medium text-white truncate">{contact.phone}</p>
             </div>
           </div>
-          <ArrowUpRight size={14} className="text-[#a4a9b6]" />
+          <ArrowUpRight size={13} className="shrink-0 text-[#a4a9b6]" />
         </a>
 
-        <div className="flex items-center justify-between pt-1 text-[11px] text-[#8e95a5]">
-          <span>📍 {contact.location}</span>
-          <span className="text-[#2bd9b5]">● {contact.availability}</span>
-        </div>
+        {/* WhatsApp */}
+        {contact.whatsappUrl && (
+          <a
+            href={contact.whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-between rounded-xl border border-[rgba(37,211,102,0.2)] bg-[rgba(37,211,102,0.03)] p-2.5 transition hover:border-[rgba(37,211,102,0.5)] hover:bg-[rgba(37,211,102,0.08)]"
+          >
+            <div className="flex items-center gap-2.5 min-w-0">
+              <FaWhatsapp size={15} className="shrink-0 text-[#25d366]" />
+              <div className="text-left truncate">
+                <p className="text-[9px] uppercase tracking-wider text-[#25d366]">WhatsApp</p>
+                <p className="text-[11px] font-medium text-white truncate">Direct Message</p>
+              </div>
+            </div>
+            <ArrowUpRight size={13} className="shrink-0 text-[#25d366]" />
+          </a>
+        )}
+
+        {/* Facebook */}
+        {contact.facebookUrl && (
+          <a
+            href={contact.facebookUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-between rounded-xl border border-[rgba(24,119,242,0.25)] bg-[rgba(24,119,242,0.03)] p-2.5 transition hover:border-[rgba(24,119,242,0.5)] hover:bg-[rgba(24,119,242,0.08)]"
+          >
+            <div className="flex items-center gap-2.5 min-w-0">
+              <FaFacebookF size={14} className="shrink-0 text-[#1877f2]" />
+              <div className="text-left truncate">
+                <p className="text-[9px] uppercase tracking-wider text-[#1877f2]">Facebook</p>
+                <p className="text-[11px] font-medium text-white truncate">Official Profile</p>
+              </div>
+            </div>
+            <ArrowUpRight size={13} className="shrink-0 text-[#1877f2]" />
+          </a>
+        )}
+
+        {/* LinkedIn */}
+        {contact.linkedinUrl && (
+          <a
+            href={contact.linkedinUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-between rounded-xl border border-[rgba(10,102,194,0.25)] bg-[rgba(10,102,194,0.03)] p-2.5 transition hover:border-[rgba(10,102,194,0.5)] hover:bg-[rgba(10,102,194,0.08)]"
+          >
+            <div className="flex items-center gap-2.5 min-w-0">
+              <FaLinkedinIn size={14} className="shrink-0 text-[#0a66c2]" />
+              <div className="text-left truncate">
+                <p className="text-[9px] uppercase tracking-wider text-[#0a66c2]">LinkedIn</p>
+                <p className="text-[11px] font-medium text-white truncate">Professional Network</p>
+              </div>
+            </div>
+            <ArrowUpRight size={13} className="shrink-0 text-[#0a66c2]" />
+          </a>
+        )}
+
+        {/* GitHub */}
+        {contact.githubUrl && (
+          <a
+            href={contact.githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.02] p-2.5 transition hover:border-white/30 hover:bg-white/[0.05]"
+          >
+            <div className="flex items-center gap-2.5 min-w-0">
+              <FaGithub size={15} className="shrink-0 text-white" />
+              <div className="text-left truncate">
+                <p className="text-[9px] uppercase tracking-wider text-[#8e95a5]">GitHub</p>
+                <p className="text-[11px] font-medium text-white truncate">nazmusshakib878</p>
+              </div>
+            </div>
+            <ArrowUpRight size={13} className="shrink-0 text-[#a4a9b6]" />
+          </a>
+        )}
+      </div>
+
+      <div className="mt-3 flex items-center justify-between border-t border-white/10 pt-2 text-[11px] text-[#8e95a5]">
+        <span>📍 {contact.location}</span>
+        <span className="text-[#a4a9b6]">Open to discussions & hiring</span>
       </div>
     </div>
   )

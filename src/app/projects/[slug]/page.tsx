@@ -6,11 +6,15 @@ import {
   ArrowLeft,
   ArrowRight,
   ArrowUpRight,
+  Bell,
   Check,
+  CheckCircle2,
+  Clock,
   Code2,
   Database,
   ExternalLink,
   FileText,
+  Filter,
   Layers,
   LayoutDashboard,
   Monitor,
@@ -20,12 +24,19 @@ import {
   Sparkles,
   Workflow,
 } from 'lucide-react'
-import { SiGithub } from 'react-icons/si'
+import {
+  SiGithub,
+  SiDocker,
+  SiN8N,
+  SiTelegram,
+  SiGooglesheets,
+} from 'react-icons/si'
 import { portfolioData, projectSlug } from '@/data/portfolio'
 import { projectCovers } from '@/data/project-covers'
 import { projectCaseStudies } from '@/data/project-case-studies'
 import { LongFormReturnNavigation } from '@/components/ui/long-form-return-navigation'
 import { BackToTop } from '@/components/ui/back-to-top'
+import { WorkflowViewer } from '@/components/projects/workflow-viewer'
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -39,6 +50,9 @@ export function generateStaticParams() {
     { slug: 'ai-smart-campus' },
     { slug: 'library-management' },
     { slug: 'logistica' },
+    { slug: 'cv-payment-reminder-automation' },
+    { slug: 'cv-payment-reminder' },
+    { slug: 'n8n-payment-reminder' },
   ]
   return [...longSlugs, ...shortSlugs]
 }
@@ -58,6 +72,14 @@ function findProjectIndex(slug: string): number {
     if (normalized === 'ai-smart-campus' && fullSlug.includes('ai-smart-campus')) return true
     if (normalized === 'library-management' && fullSlug.includes('library-management')) return true
     if (normalized === 'logistica' && fullSlug.includes('logistica')) return true
+    if (
+      (normalized === 'cv-payment-reminder-automation' ||
+        normalized === 'cv-payment-reminder' ||
+        normalized === 'n8n-payment-reminder') &&
+      fullSlug.includes('cv-payment-reminder')
+    ) {
+      return true
+    }
     return false
   })
 }
@@ -116,6 +138,7 @@ export default async function ProjectPage({ params }: Props) {
   const publication = portfolioData.publications.find(
     (item) => item.projectTitle === project.title
   )
+  const isWorkflow = project.category === 'Workflow Automation' || canonicalSlug.includes('cv-payment-reminder')
   const previous =
     portfolioData.projects[
       (index - 1 + portfolioData.projects.length) % portfolioData.projects.length
@@ -126,7 +149,7 @@ export default async function ProjectPage({ params }: Props) {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
     name: project.title,
-    applicationCategory: 'WebApplication',
+    applicationCategory: isWorkflow ? 'BusinessApplication' : 'WebApplication',
     operatingSystem: 'Any',
     description: caseStudy?.subtitle ?? project.description,
     author: {
@@ -174,7 +197,7 @@ export default async function ProjectPage({ params }: Props) {
                 <span>Source</span>
               </a>
             )}
-            {project.liveUrl && (
+            {project.liveUrl ? (
               <a
                 href={project.liveUrl}
                 target="_blank"
@@ -184,7 +207,12 @@ export default async function ProjectPage({ params }: Props) {
                 <ExternalLink size={13} />
                 <span>Live Demo</span>
               </a>
-            )}
+            ) : isWorkflow ? (
+              <span className="inline-flex items-center gap-1.5 rounded-xl border border-[rgba(234,75,113,0.35)] bg-[rgba(234,75,113,0.1)] px-3 py-1.5 text-xs font-semibold text-[#ff7597]">
+                <SiDocker size={13} className="text-[#2496ed]" />
+                <span>Docker: Local Instance</span>
+              </span>
+            ) : null}
           </div>
         </div>
       </header>
@@ -192,12 +220,21 @@ export default async function ProjectPage({ params }: Props) {
       {/* 1. Project Overview & Hero Header */}
       <section className="shell pt-12 pb-10 sm:pt-16 sm:pb-14">
         <div className="flex flex-wrap items-center gap-2.5">
-          <span className="rounded-full border border-[rgba(43,217,181,0.25)] bg-[rgba(43,217,181,0.08)] px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#69e6cd]">
+          <span className={`rounded-full border px-3 py-1 text-[10px] font-semibold uppercase tracking-wider ${
+            isWorkflow
+              ? 'border-[rgba(234,75,113,0.35)] bg-[rgba(234,75,113,0.08)] text-[#ff7597]'
+              : 'border-[rgba(43,217,181,0.25)] bg-[rgba(43,217,181,0.08)] text-[#69e6cd]'
+          }`}>
             {project.category}
           </span>
           <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[10px] font-medium text-[#aeb6c3]">
             {project.date}
           </span>
+          {isWorkflow && (
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[rgba(36,150,237,0.35)] bg-[rgba(36,150,237,0.08)] px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#7dd3fc]">
+              <SiDocker size={11} className="text-[#2496ed]" /> Containerized Pipeline
+            </span>
+          )}
           {publication && (
             <span className="inline-flex items-center gap-1 rounded-full border border-[rgba(168,130,255,0.3)] bg-[rgba(168,130,255,0.08)] px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#c4b5fd]">
               <FileText size={11} /> Zenodo Publication
@@ -232,10 +269,12 @@ export default async function ProjectPage({ params }: Props) {
 
           <div className="rounded-2xl border border-white/[0.08] bg-white/[0.025] p-4 backdrop-blur-sm">
             <p className="text-[10px] font-semibold uppercase tracking-wider text-[#747b8b]">
-              {project.supervisor ? 'Supervisor' : 'Primary Stack'}
+              {isWorkflow ? 'Runtime Environment' : project.supervisor ? 'Supervisor' : 'Primary Stack'}
             </p>
             <p className="mt-1.5 text-sm font-semibold text-[#f2f3f7]">
-              {project.supervisor ?? `${project.technologies[0]} & ${project.technologies[1] || 'MySQL'}`}
+              {isWorkflow
+                ? 'Docker (Local Container)'
+                : project.supervisor ?? `${project.technologies[0]} & ${project.technologies[1] || 'MySQL'}`}
             </p>
           </div>
         </div>
@@ -253,6 +292,13 @@ export default async function ProjectPage({ params }: Props) {
             </a>
           )}
 
+          {isWorkflow && (
+            <div className="inline-flex items-center gap-2 rounded-xl border border-[rgba(234,75,113,0.3)] bg-[rgba(234,75,113,0.08)] px-4 py-2.5 text-xs font-semibold text-[#ff7597]">
+              <SiN8N size={15} />
+              <span>Self-Hosted n8n Instance (Docker: localhost:5678)</span>
+            </div>
+          )}
+
           {project.githubUrl && (
             <a
               className="button min-h-11 rounded-xl border-white/15 bg-white/[0.03] px-5 text-xs font-semibold text-[#f2f3f7] hover:border-white/30"
@@ -260,7 +306,7 @@ export default async function ProjectPage({ params }: Props) {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <SiGithub size={14} /> GitHub Repository <ArrowUpRight size={14} />
+              <SiGithub size={14} /> GitHub {isWorkflow ? 'Profile' : 'Repository'} <ArrowUpRight size={14} />
             </a>
           )}
 
@@ -281,17 +327,23 @@ export default async function ProjectPage({ params }: Props) {
       <section className="shell">
         <div className="overflow-hidden rounded-[24px] border border-white/10 bg-[#090d15] shadow-[0_24px_60px_rgba(0,0,0,0.5)]">
           {/* Browser Chrome Header */}
-          <div className="flex h-11 items-center justify-between border-b border-white/10 bg-white/[0.03] px-4">
-            <div className="flex items-center gap-2">
-              <span className="size-3 rounded-full bg-[#ff5f56]/80" />
-              <span className="size-3 rounded-full bg-[#ffbd2e]/80" />
-              <span className="size-3 rounded-full bg-[#27c93f]/80" />
+          <div className="flex h-10 sm:h-11 items-center justify-between border-b border-white/10 bg-white/[0.03] px-3 sm:px-4 gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+              <span className="size-2.5 sm:size-3 rounded-full bg-[#ff5f56]/80" />
+              <span className="size-2.5 sm:size-3 rounded-full bg-[#ffbd2e]/80" />
+              <span className="size-2.5 sm:size-3 rounded-full bg-[#27c93f]/80" />
             </div>
-            <div className="flex max-w-[280px] sm:max-w-md items-center justify-center truncate rounded-md border border-white/[0.08] bg-black/40 px-3 py-1 font-mono text-[11px] text-[#747b8b]">
-              {project.liveUrl ? project.liveUrl : `github.com/nazmusshakib878/${canonicalSlug}`}
+            <div className="flex max-w-[170px] xs:max-w-[240px] sm:max-w-md items-center justify-center truncate rounded-md border border-white/[0.08] bg-black/40 px-2 sm:px-3 py-0.5 sm:py-1 font-mono text-[10px] sm:text-[11px] text-[#747b8b]">
+              <span className="truncate">
+                {project.liveUrl
+                  ? project.liveUrl
+                  : isWorkflow
+                    ? 'localhost:5678/workflow/cv-payment-reminder'
+                    : `github.com/nazmusshakib878/${canonicalSlug}`}
+              </span>
             </div>
-            <div className="w-12 text-right">
-              <span className="size-2 inline-block rounded-full bg-[#2bd9b5]" />
+            <div className="w-8 sm:w-12 text-right shrink-0">
+              <span className={`size-2 inline-block rounded-full ${isWorkflow ? 'bg-[#ff7597]' : 'bg-[#2bd9b5]'}`} />
             </div>
           </div>
 
@@ -309,8 +361,14 @@ export default async function ProjectPage({ params }: Props) {
           </div>
 
           <div className="flex items-center justify-between border-t border-white/[0.08] bg-white/[0.02] px-5 py-3 text-xs text-[#747b8b]">
-            <span>Verified visual representation &middot; Authentic project architecture</span>
-            <span className="font-mono text-[11px] text-[#aeb6c3]">Source Code Verified</span>
+            <span>
+              {isWorkflow
+                ? 'Verified n8n workflow architecture · Google Sheets & Telegram integration'
+                : 'Verified visual representation · Authentic project architecture'}
+            </span>
+            <span className="font-mono text-[11px] text-[#aeb6c3]">
+              {isWorkflow ? 'n8n Editor Verified' : 'Source Code Verified'}
+            </span>
           </div>
         </div>
       </section>
@@ -325,7 +383,7 @@ export default async function ProjectPage({ params }: Props) {
               <p className="eyebrow text-rose-400">01 / The Problem</p>
             </div>
             <h2 className="display mt-4 text-2xl font-semibold text-[#f2f3f7]">
-              The Operational &amp; Engineering Challenge
+              {isWorkflow ? 'Manual Payment Tracking & Follow-up Friction' : 'The Operational & Engineering Challenge'}
             </h2>
             <p className="muted mt-4 text-sm leading-7">
               {caseStudy?.problemStatement ?? project.summary}
@@ -339,7 +397,7 @@ export default async function ProjectPage({ params }: Props) {
               <p className="eyebrow text-emerald-400">02 / The Solution</p>
             </div>
             <h2 className="display mt-4 text-2xl font-semibold text-[#f2f3f7]">
-              Architecture &amp; System Implementation
+              {isWorkflow ? 'Scheduled n8n Orchestrator & API Integration' : 'Architecture & System Implementation'}
             </h2>
             <p className="muted mt-4 text-sm leading-7">
               {caseStudy?.solutionStatement ?? project.description}
@@ -348,8 +406,324 @@ export default async function ProjectPage({ params }: Props) {
         </div>
       </section>
 
-      {/* 4. Platform Showcase Section (Home / Landing Page Screenshot) */}
-      {screenshots?.platformShowcase && (
+      {/* 4. Workflow-Specific Showcase (n8n Editor Screenshot + Click to Enlarge) */}
+      {isWorkflow && (
+        <section className="shell mt-16 sm:mt-20">
+          <div className="border-b border-white/10 pb-5">
+            <div className="flex items-center gap-2 text-[#ff7597]">
+              <SiN8N size={18} />
+              <p className="eyebrow text-[#ff7597]">03 / Workflow Architecture &amp; Evidence</p>
+            </div>
+            <h2 className="display mt-2 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
+              Actual n8n Workflow Architecture &amp; Editor Canvas
+            </h2>
+            <p className="muted mt-2 max-w-3xl text-sm sm:text-base leading-relaxed">
+              Genuine visual workflow canvas captured directly from the local n8n editor interface running in Docker. Demonstrates the complete 5-node pipeline with execution connectors, schedule triggers, conditional decision branching, and bidirectional spreadsheet sync. Click the canvas to enlarge.
+            </p>
+          </div>
+
+          <div className="mt-8">
+            <WorkflowViewer
+              src="/images/n8n-workflow-architecture.png"
+              alt="CV Payment Reminder Automation Genuine n8n Workflow Editor Canvas Screenshot"
+              title="CV Payment Reminder — n8n Canvas Architecture"
+              subtitle="5-Node Sequential Execution Pipeline"
+              badge="n8n Canvas Editor"
+              route="localhost:5678/workflow/cv-payment-reminder"
+            />
+          </div>
+        </section>
+      )}
+
+      {/* 5. Five Sequential Workflow Steps */}
+      {isWorkflow && (
+        <section className="shell mt-16 sm:mt-20">
+          <div className="border-b border-white/10 pb-5">
+            <div className="flex items-center gap-2 text-[#69e6cd]">
+              <Workflow size={18} />
+              <p className="eyebrow text-[#69e6cd]">04 / Pipeline Execution</p>
+            </div>
+            <h2 className="display mt-2 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
+              Five Sequential Workflow Steps
+            </h2>
+            <p className="muted mt-2 max-w-3xl text-sm sm:text-base leading-relaxed">
+              Step-by-step data lifecycle: from scheduled automated trigger execution through spreadsheet row reading, conditional evaluation, instant Telegram dispatch, and final row update.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+            {/* Step 1 */}
+            <div className="relative flex flex-col justify-between rounded-2xl border border-[rgba(234,75,113,0.25)] bg-[rgba(234,75,113,0.03)] p-5 transition duration-200 hover:border-[rgba(234,75,113,0.45)]">
+              <div>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="flex size-8 items-center justify-center rounded-lg border border-[rgba(234,75,113,0.3)] bg-[rgba(234,75,113,0.1)] font-mono text-xs font-bold text-[#ff7597]">
+                    01
+                  </span>
+                  <span className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-[#aeb6c3]">
+                    Trigger
+                  </span>
+                </div>
+                <div className="mt-4 flex items-center gap-2 text-white">
+                  <Clock size={16} className="text-[#ff7597]" />
+                  <h3 className="text-sm font-semibold">Schedule Trigger</h3>
+                </div>
+                <p className="mt-2 text-xs leading-5 text-[#aeb6c3]">
+                  Fires automatically on a configured cron schedule (e.g., daily at 09:00 AM) to initiate the billing audit cycle without manual effort.
+                </p>
+              </div>
+              <div className="mt-4 border-t border-white/[0.08] pt-3 text-[10px] font-mono text-[#747b8b]">
+                Input: Cron Timer · Output: Pulse
+              </div>
+            </div>
+
+            {/* Step 2 */}
+            <div className="relative flex flex-col justify-between rounded-2xl border border-[rgba(15,157,88,0.3)] bg-[rgba(15,157,88,0.04)] p-5 transition duration-200 hover:border-[rgba(15,157,88,0.5)]">
+              <div>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="flex size-8 items-center justify-center rounded-lg border border-[rgba(15,157,88,0.35)] bg-[rgba(15,157,88,0.12)] font-mono text-xs font-bold text-[#34a853]">
+                    02
+                  </span>
+                  <span className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-[#aeb6c3]">
+                    Read Rows
+                  </span>
+                </div>
+                <div className="mt-4 flex items-center gap-2 text-white">
+                  <SiGooglesheets size={16} className="text-[#34a853]" />
+                  <h3 className="text-sm font-semibold">Google Sheets</h3>
+                </div>
+                <p className="mt-2 text-xs leading-5 text-[#aeb6c3]">
+                  Connects via Google Cloud OAuth2 to read client payment ledgers, fetching client names, amounts, due dates, and Telegram Chat IDs.
+                </p>
+              </div>
+              <div className="mt-4 border-t border-white/[0.08] pt-3 text-[10px] font-mono text-[#747b8b]">
+                Node: Get row(s) in sheet
+              </div>
+            </div>
+
+            {/* Step 3 */}
+            <div className="relative flex flex-col justify-between rounded-2xl border border-[rgba(43,217,181,0.25)] bg-[rgba(43,217,181,0.03)] p-5 transition duration-200 hover:border-[rgba(43,217,181,0.45)]">
+              <div>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="flex size-8 items-center justify-center rounded-lg border border-[rgba(43,217,181,0.3)] bg-[rgba(43,217,181,0.1)] font-mono text-xs font-bold text-[#69e6cd]">
+                    03
+                  </span>
+                  <span className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-[#aeb6c3]">
+                    Decision
+                  </span>
+                </div>
+                <div className="mt-4 flex items-center gap-2 text-white">
+                  <Filter size={16} className="text-[#2bd9b5]" />
+                  <h3 className="text-sm font-semibold">IF Condition</h3>
+                </div>
+                <p className="mt-2 text-xs leading-5 text-[#aeb6c3]">
+                  Evaluates business logic: checks if status is &quot;Pending&quot; and due date is reached. Only &quot;true&quot; records route to notification; &quot;false&quot; branches terminate.
+                </p>
+              </div>
+              <div className="mt-4 border-t border-white/[0.08] pt-3 text-[10px] font-mono text-[#747b8b]">
+                Logic: Status == &quot;Pending&quot;
+              </div>
+            </div>
+
+            {/* Step 4 */}
+            <div className="relative flex flex-col justify-between rounded-2xl border border-[rgba(34,158,217,0.3)] bg-[rgba(34,158,217,0.04)] p-5 transition duration-200 hover:border-[rgba(34,158,217,0.5)]">
+              <div>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="flex size-8 items-center justify-center rounded-lg border border-[rgba(34,158,217,0.35)] bg-[rgba(34,158,217,0.12)] font-mono text-xs font-bold text-[#29b6f6]">
+                    04
+                  </span>
+                  <span className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-[#aeb6c3]">
+                    Dispatch
+                  </span>
+                </div>
+                <div className="mt-4 flex items-center gap-2 text-white">
+                  <SiTelegram size={16} className="text-[#29b6f6]" />
+                  <h3 className="text-sm font-semibold">Telegram Bot</h3>
+                </div>
+                <p className="mt-2 text-xs leading-5 text-[#aeb6c3]">
+                  Calls Telegram Bot API to dispatch a formatted Markdown reminder alert with client name, invoice number, due balance, and payment instructions.
+                </p>
+              </div>
+              <div className="mt-4 border-t border-white/[0.08] pt-3 text-[10px] font-mono text-[#747b8b]">
+                Node: Send a text message
+              </div>
+            </div>
+
+            {/* Step 5 */}
+            <div className="relative flex flex-col justify-between rounded-2xl border border-[rgba(168,130,255,0.25)] bg-[rgba(168,130,255,0.03)] p-5 transition duration-200 hover:border-[rgba(168,130,255,0.45)]">
+              <div>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="flex size-8 items-center justify-center rounded-lg border border-[rgba(168,130,255,0.3)] bg-[rgba(168,130,255,0.1)] font-mono text-xs font-bold text-[#c4b5fd]">
+                    05
+                  </span>
+                  <span className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-[#aeb6c3]">
+                    Idempotency
+                  </span>
+                </div>
+                <div className="mt-4 flex items-center gap-2 text-white">
+                  <CheckCircle2 size={16} className="text-[#a78bfa]" />
+                  <h3 className="text-sm font-semibold">Update Row</h3>
+                </div>
+                <p className="mt-2 text-xs leading-5 text-[#aeb6c3]">
+                  Writes confirmation back to Google Sheets, setting status to &quot;Sent&quot; with an ISO timestamp. Guarantees idempotency and prevents duplicate alerts.
+                </p>
+              </div>
+              <div className="mt-4 border-t border-white/[0.08] pt-3 text-[10px] font-mono text-[#747b8b]">
+                Node: Update row in sheet
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* 6. Telegram Notification Evidence Section */}
+      {isWorkflow && (
+        <section className="shell mt-16 sm:mt-20">
+          <div className="border-b border-white/10 pb-5">
+            <div className="flex items-center gap-2 text-[#29b6f6]">
+              <SiTelegram size={18} />
+              <p className="eyebrow text-[#29b6f6]">05 / Notification Evidence</p>
+            </div>
+            <h2 className="display mt-2 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
+              Telegram Notification Evidence &amp; Payload Structure
+            </h2>
+            <p className="muted mt-2 max-w-3xl text-sm sm:text-base leading-relaxed">
+              Automated message output generated by the Telegram node and dispatched directly to client chat recipients via the Telegram Bot API.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-6 lg:grid-cols-12">
+            {/* Left: Realistic Telegram Chat Window */}
+            <div className="lg:col-span-7 overflow-hidden rounded-[24px] border border-white/[0.12] bg-[#0e1621] shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+              {/* Telegram App Header */}
+              <div className="flex h-14 items-center justify-between border-b border-white/[0.08] bg-[#17212b] px-4">
+                <div className="flex items-center gap-3">
+                  <div className="grid size-9 place-items-center rounded-full bg-gradient-to-tr from-[#2481cc] to-[#29b6f6] text-white shadow-md">
+                    <SiTelegram size={18} />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-sm font-semibold text-[#f2f3f7]">CV Payment Bot</span>
+                      <span className="rounded bg-[#2481cc]/25 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-[#64b5f6]">
+                        bot
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-[#747b8b]">@cv_payment_reminder_bot · automated</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-emerald-400">
+                  <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="font-mono text-[11px]">active</span>
+                </div>
+              </div>
+
+              {/* Chat Message Bubble Canvas */}
+              <div className="relative min-h-[300px] bg-[#0e1621] p-5 sm:p-6 bg-[radial-gradient(#17212b_1px,transparent_1px)] [background-size:16px_16px]">
+                {/* Date separator */}
+                <div className="my-2 flex justify-center">
+                  <span className="rounded-full bg-[#17212b]/90 px-3 py-1 font-mono text-[10px] text-[#747b8b]">
+                    Scheduled Audit Dispatch · 09:00 AM
+                  </span>
+                </div>
+
+                {/* Message Bubble */}
+                <div className="mt-4 max-w-lg rounded-2xl rounded-tl-sm border border-white/[0.08] bg-[#182533] p-4 sm:p-5 text-[#e4ecf2] shadow-lg">
+                  <div className="flex items-center gap-2 border-b border-white/[0.08] pb-2.5">
+                    <Bell size={15} className="text-[#29b6f6]" />
+                    <span className="text-xs font-bold uppercase tracking-wider text-[#64b5f6]">
+                      Invoice Payment Reminder
+                    </span>
+                  </div>
+
+                  <p className="mt-3 text-xs sm:text-sm leading-relaxed text-[#c9d7e3]">
+                    Dear client, this is a scheduled payment reminder regarding your pending invoice for professional CV/Resume services.
+                  </p>
+
+                  <div className="mt-3 space-y-1.5 rounded-xl border border-white/[0.06] bg-[#121c27] p-3 font-mono text-[11px] sm:text-xs">
+                    <div className="flex justify-between">
+                      <span className="text-[#747b8b]">Invoice Number:</span>
+                      <span className="font-semibold text-white">#INV-2026-084</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-[#747b8b]">Amount Due:</span>
+                      <span className="font-semibold text-emerald-400">$150.00 USD</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-[#747b8b]">Due Date:</span>
+                      <span className="text-[#ff9c90]">October 20, 2026</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-[#747b8b]">Payment Status:</span>
+                      <span className="text-[#ffbd2e]">Pending Verification</span>
+                    </div>
+                  </div>
+
+                  <p className="mt-3 text-[11px] sm:text-xs text-[#8e9ca8]">
+                    Please remit payment at your earliest convenience or reply if payment has already been sent. Thank you!
+                  </p>
+
+                  <div className="mt-2.5 flex items-center justify-end gap-1 font-mono text-[10px] text-[#64b5f6]/80">
+                    <span>09:00 AM</span>
+                    <CheckCircle2 size={12} className="text-[#29b6f6]" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Chat Input Placeholder */}
+              <div className="flex h-12 items-center justify-between border-t border-white/[0.08] bg-[#17212b] px-4 text-xs text-[#747b8b]">
+                <span>Automated bot notification feed</span>
+                <span className="font-mono text-[10px] text-[#64b5f6]">Delivered via Telegram Bot API</span>
+              </div>
+            </div>
+
+            {/* Right: Technical Endpoint & Payload Spec */}
+            <div className="lg:col-span-5 flex flex-col justify-between rounded-[24px] border border-white/[0.1] bg-[#0a0d15] p-5 sm:p-6">
+              <div>
+                <p className="eyebrow text-[#29b6f6]">API Specification</p>
+                <h3 className="display mt-1 text-lg font-semibold text-[#f2f3f7]">
+                  Telegram Bot API Integration
+                </h3>
+                <p className="muted mt-2 text-xs leading-5">
+                  The n8n Telegram node communicates directly with the official Telegram Bot API endpoint using secure encrypted credentials.
+                </p>
+
+                <div className="mt-4 space-y-2.5">
+                  <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-3 text-xs">
+                    <span className="font-mono text-[#69e6cd]">Method &amp; Endpoint:</span>
+                    <p className="mt-1 font-mono text-[11px] text-[#ff7597] break-all">
+                      POST https://api.telegram.org/bot&lt;TOKEN&gt;/sendMessage
+                    </p>
+                  </div>
+
+                  <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-3 text-xs">
+                    <span className="font-mono text-[#69e6cd]">Parameters Dispatched:</span>
+                    <ul className="mt-1 space-y-1 font-mono text-[11px] text-[#aeb6c3]">
+                      <li>• chat_id: &quot;847291038&quot;</li>
+                      <li>• parse_mode: &quot;Markdown&quot;</li>
+                      <li>• disable_web_page_preview: true</li>
+                    </ul>
+                  </div>
+
+                  <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.04] p-3 text-xs text-[#d9dee7]">
+                    <span className="font-semibold text-emerald-400">Response Verification:</span>
+                    <p className="mt-1 font-mono text-[11px] text-emerald-300">
+                      HTTP 200 OK · ok: true, message_id: 10482
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-5 border-t border-white/[0.08] pt-4 text-xs text-[#747b8b]">
+                <p>
+                  <span className="font-semibold text-[#f2f3f7]">Confidentiality:</span> Real API tokens and sensitive customer identities are safely masked in accordance with production security standards.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* 7. Platform Showcase Section (Home / Landing Page Screenshot for Non-Workflow Projects) */}
+      {!isWorkflow && screenshots?.platformShowcase && (
         <section className="shell mt-16 sm:mt-20">
           <div className="border-b border-white/10 pb-5">
             <div className="flex items-center gap-2 text-[#69e6cd]">
@@ -517,7 +891,7 @@ export default async function ProjectPage({ params }: Props) {
       )}
 
       {/* Service Management / A4 Output Workflow Section */}
-      {screenshots?.workflowShowcase && (
+      {!isWorkflow && screenshots?.workflowShowcase && (
         <section className="shell mt-16 sm:mt-20">
           <div className="border-b border-white/10 pb-5">
             <div className="flex items-center gap-2 text-[#aa96ff]">
@@ -809,9 +1183,9 @@ export default async function ProjectPage({ params }: Props) {
               <Database size={20} />
             </span>
             <div>
-              <p className="eyebrow text-[#69e6cd]">10 / Data Layer</p>
+              <p className="eyebrow text-[#69e6cd]">{isWorkflow ? '07 / Data Layer' : '10 / Data Layer'}</p>
               <h2 className="display mt-1 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
-                Database Architecture &amp; Relational Schema
+                {isWorkflow ? 'Google Sheets Ledger Schema & Data Layer' : 'Database Architecture & Relational Schema'}
               </h2>
             </div>
           </div>
@@ -823,7 +1197,9 @@ export default async function ProjectPage({ params }: Props) {
 
           <div className="mt-8 grid gap-6 lg:grid-cols-2">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-[#aeb6c3]">Key Relational Entities</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-[#aeb6c3]">
+                {isWorkflow ? 'Tabular Ledger Columns' : 'Key Relational Entities'}
+              </p>
               <ul className="mt-3 space-y-2.5">
                 {(caseStudy?.databaseArchitecture.keyEntities ?? [
                   'users: Core authentication model with role identification',
@@ -842,7 +1218,9 @@ export default async function ProjectPage({ params }: Props) {
             </div>
 
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-[#aeb6c3]">Schema Design Principles</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-[#aeb6c3]">
+                {isWorkflow ? 'Data Integrity Principles' : 'Schema Design Principles'}
+              </p>
               <ul className="mt-3 space-y-2.5">
                 {(caseStudy?.databaseArchitecture.schemaPrinciples ?? [
                   'Normalized schema (1NF–3NF) to eliminate data redundancy',
@@ -908,9 +1286,9 @@ export default async function ProjectPage({ params }: Props) {
               <Workflow size={20} />
             </span>
             <div>
-              <p className="eyebrow">11 / System Flow</p>
+              <p className="eyebrow">{isWorkflow ? '08 / Orchestration Flow' : '11 / System Flow'}</p>
               <h2 className="display mt-1 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
-                API Architecture &amp; Data Flow Lifecycle
+                {isWorkflow ? 'n8n Node Orchestration & API Data Flow' : 'API Architecture & Data Flow Lifecycle'}
               </h2>
             </div>
           </div>
@@ -950,7 +1328,7 @@ export default async function ProjectPage({ params }: Props) {
       {/* 13. Engineering Challenges & Problem Solving */}
       <section className="shell mt-16 sm:mt-20">
         <div className="border-b border-white/10 pb-5">
-          <p className="eyebrow">12 / Problem Solving</p>
+          <p className="eyebrow">{isWorkflow ? '09 / Problem Solving' : '12 / Problem Solving'}</p>
           <h2 className="display mt-2 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
             Engineering Challenges &amp; Technical Solutions
           </h2>
@@ -1030,9 +1408,9 @@ export default async function ProjectPage({ params }: Props) {
       {/* 15. Final Result & Verification Summary */}
       <section className="shell mt-16 sm:mt-20">
         <div className="rounded-[24px] border border-white/10 bg-[#0b0e15] p-6 sm:p-8">
-          <p className="eyebrow">13 / Result &amp; Verification</p>
+          <p className="eyebrow">{isWorkflow ? '10 / Results & Takeaways' : '13 / Result & Verification'}</p>
           <h2 className="display mt-2 text-2xl font-semibold text-[#f2f3f7]">
-            Project Delivery &amp; Technical Achievements
+            {isWorkflow ? 'Implementation Summary & Learning Outcomes' : 'Project Delivery & Technical Achievements'}
           </h2>
           <p className="muted mt-4 text-sm leading-7">
             {caseStudy?.finalResult.summary ??

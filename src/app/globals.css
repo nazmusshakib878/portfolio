@@ -26,9 +26,12 @@
 * { box-sizing: border-box }
 
 html {
-  scroll-behavior: smooth;
   background: var(--bg);
   overflow-x: clip;
+}
+
+html[data-scroll-behavior="smooth"] {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -358,12 +361,18 @@ p, h1, h2, h3, li, dd { overflow-wrap: anywhere }
   scrollbar-width: none;
 }
 
-/* User Shakib AI Custom Button Styles */
+/* ======================== */
+/*   Shakib AI Robot Button */
+/* ======================== */
+
 .shakib-ai-button {
   position: fixed;
   right: 24px;
   bottom: 24px;
-  z-index: 999;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @media (max-width: 640px) {
@@ -371,96 +380,65 @@ p, h1, h2, h3, li, dd { overflow-wrap: anywhere }
     right: 16px;
     bottom: calc(16px + env(safe-area-inset-bottom, 0px));
   }
-  .ai-orb {
-    width: 54px !important;
-    height: 54px !important;
-  }
-  .s-logo {
-    font-size: 23px !important;
-  }
-  .sparkle {
-    top: 10px !important;
-    right: 10px !important;
-  }
 }
 
-.ai-orb {
-  width: 62px;
-  height: 62px;
-  border-radius: 50%;
-  background: rgba(10, 15, 30, 0.75);
-  backdrop-filter: blur(15px);
-  border: 1px solid rgba(80, 180, 255, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* AI Robot Trigger Button */
+.ai-robot-trigger {
   position: relative;
-  box-shadow:
-    0 0 20px rgba(0, 234, 255, 0.8),
-    0 0 40px rgba(140, 0, 255, 0.45);
-  animation: shakib-ai-float 3s infinite ease-in-out;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.ai-orb:hover {
-  transform: scale(1.06);
-  box-shadow:
-    0 0 30px rgba(0, 234, 255, 0.95),
-    0 0 55px rgba(140, 0, 255, 0.7);
-}
-
-.s-logo {
-  font-size: 26px;
-  font-weight: 800;
-  line-height: 1;
-  background: linear-gradient(
-    135deg,
-    #00f5ff,
-    #7b5cff,
-    #ff4fd8
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow: 0 0 16px rgba(0, 234, 255, 0.85);
-  user-select: none;
-}
-
-.sparkle {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  pointer-events: none;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  animation: shakib-robot-float 3.6s ease-in-out infinite;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.online-dot {
-  position: absolute;
-  right: -2px;
-  top: 5px;
-  width: 12px;
-  height: 12px;
-  background: #00ff9d;
-  border-radius: 50%;
-  box-shadow: 0 0 12px #00ff9d;
+.ai-robot-img {
+  width: 90px;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 0 12px rgba(0, 245, 255, 0.42))
+          drop-shadow(0 6px 18px rgba(0, 0, 0, 0.6));
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), filter 0.25s ease;
 }
 
-@keyframes shakib-ai-float {
+.ai-robot-trigger:hover .ai-robot-img {
+  transform: scale(1.08);
+  filter: drop-shadow(0 0 20px rgba(0, 245, 255, 0.72))
+          drop-shadow(0 0 36px rgba(0, 245, 255, 0.35))
+          drop-shadow(0 8px 24px rgba(0, 0, 0, 0.7));
+}
+
+.ai-robot-trigger:active .ai-robot-img {
+  transform: scale(0.96);
+}
+
+@media (max-width: 640px) {
+  .ai-robot-img {
+    width: 76px;
+  }
+}
+
+@keyframes shakib-robot-float {
   0%, 100% {
     transform: translateY(0px);
   }
   50% {
-    transform: translateY(-6px);
+    transform: translateY(-7px);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ai-orb {
+  .ai-robot-trigger {
     animation: none !important;
   }
+  .ai-robot-trigger:hover .ai-robot-img {
+    transform: none !important;
+  }
 }
-
-

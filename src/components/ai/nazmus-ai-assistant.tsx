@@ -9,12 +9,12 @@ import type { ChatMessage, AiMode, ChatResponseBody } from '@/types/ai'
 const INITIAL_GREETING_MESSAGE: ChatMessage = {
   id: 'greeting-0',
   role: 'assistant',
-  content: `### **Welcome! I am Shakib AI.**\n\nI am the personal portfolio & engineering assistant for **Md. Nazmus Shakib**.\n\nI can help you explore his **Laravel & Next.js projects**, examine his **database architectures**, review his **experience at Appstick Tech Firm**, or help you **hire him for your next project**.\n\nHow can I help you today?`,
+  content: `Hello! I am **Shakib AI**, the portfolio assistant for **Md. Nazmus Shakib**.\n\nAsk me about Shakib's **Laravel & Next.js projects**, **database engineering**, **experience at Appstick**, or **how to contact him**.\n\nHow can I assist you today?`,
   suggestedQueries: [
     'Who is Shakib?',
     'Show me his best projects',
     'What technologies does he use?',
-    'Why should I hire him?',
+    'How to contact him?',
   ],
   timestamp: Date.now(),
 }

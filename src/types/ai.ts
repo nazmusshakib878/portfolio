@@ -27,6 +27,7 @@ export interface ResumeCardData {
   institution: string
   graduation: string
   resumeHref: string
+  resumeDownloadHref?: string
   certifications: Array<{ title: string; provider: string; duration?: string }>
 }
 
@@ -37,6 +38,8 @@ export interface ContactDirectData {
   availability: string
   githubUrl: string
   linkedinUrl?: string
+  facebookUrl?: string
+  whatsappUrl?: string
 }
 
 export type AiActionCard =

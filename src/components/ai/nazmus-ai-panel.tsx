@@ -512,7 +512,11 @@ function formatMarkdownContent(content: string) {
   })
 }
 
-function renderInlineFormatting(text: string) {
+function renderInlineFormatting(text: string): React.ReactNode {
+  if (!text.includes('**') && !text.includes('`') && !text.includes('](')) {
+    return text
+  }
+
   const parts: React.ReactNode[] = []
   let remaining = text
   let key = 0
@@ -529,7 +533,7 @@ function renderInlineFormatting(text: string) {
     ].filter(Boolean) as Array<{ type: string; index: number; length: number; data?: string; text?: string; href?: string }>
 
     if (matches.length === 0) {
-      parts.push(remaining)
+      parts.push(<span key={key++}>{remaining}</span>)
       break
     }
 
@@ -537,7 +541,7 @@ function renderInlineFormatting(text: string) {
     const first = matches[0]
 
     if (first.index > 0) {
-      parts.push(remaining.substring(0, first.index))
+      parts.push(<span key={key++}>{remaining.substring(0, first.index)}</span>)
     }
 
     if (first.type === 'bold') {

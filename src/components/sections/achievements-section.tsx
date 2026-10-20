@@ -1,3 +1,6 @@
+'use client'
+
+import { useState } from 'react'
 import {
   ArrowUpRight,
   Award,
@@ -11,8 +14,10 @@ import {
 } from 'lucide-react'
 import { Reveal } from '@/components/ui/reveal'
 import { portfolioData } from '@/data/portfolio'
+import { CertificateModal, type CertificateModalData } from '@/components/ui/certificate-modal'
 
 export function AchievementsSection() {
+  const [activeCert, setActiveCert] = useState<CertificateModalData | null>(null)
   const cert = portfolioData.certifications[0]
   const bootcampCert = portfolioData.certifications.find((c) => c.provider.includes('Programming Hero')) || portfolioData.certifications[1]
   const bsc = portfolioData.education.find((e) => e.type === 'degree')
@@ -133,16 +138,25 @@ export function AchievementsSection() {
                   <span className="font-mono text-[10px] text-[#747b8b]">
                     ID: {cert.certificateId}
                   </span>
-                  <a
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-[rgba(240,83,64,0.3)] bg-[rgba(240,83,64,0.08)] px-3 py-1.5 text-xs font-semibold text-[#ffb5ac] transition hover:bg-[rgba(240,83,64,0.15)] hover:text-white"
-                    href={cert.verifyUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setActiveCert({
+                        title: cert.title,
+                        provider: cert.provider,
+                        program: cert.program,
+                        issued: cert.issued,
+                        certificateId: cert.certificateId,
+                        imageUrl: cert.verifyUrl,
+                        downloadName: 'appstick-laravel-training-certificate.png',
+                      })
+                    }
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-[rgba(240,83,64,0.3)] bg-[rgba(240,83,64,0.08)] px-3 py-1.5 text-xs font-semibold text-[#ffb5ac] transition hover:bg-[rgba(240,83,64,0.15)] hover:text-white cursor-pointer active:scale-95"
                   >
                     <FileCheck2 size={13} />
-                    <span>Verify Certificate</span>
+                    <span>View Certificate</span>
                     <ArrowUpRight size={13} />
-                  </a>
+                  </button>
                 </div>
               </article>
             </Reveal>
@@ -307,21 +321,35 @@ export function AchievementsSection() {
                     <Check size={13} className="text-[#69e6cd]" />
                     <span>Verified Training</span>
                   </span>
-                  <a
-                    href={bootcampCert?.verifyUrl ?? 'https://drive.google.com/file/d/1yyTe1et7fZJb8YXVrKGzSP06oBsM9EhQ/view'}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 rounded-md border border-[rgba(251,191,36,0.3)] bg-[rgba(251,191,36,0.08)] px-2.5 py-1 text-[11px] font-semibold text-[#fde68a] transition hover:bg-[rgba(251,191,36,0.18)] hover:text-white"
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setActiveCert({
+                        title: bootcampCert?.title ?? '21 Days of Code – Web Development Bootcamp',
+                        provider: bootcampCert?.provider ?? 'Programming Hero',
+                        program: bootcampCert?.program ?? 'Web Development Training',
+                        issued: bootcampCert?.issued ?? '2024',
+                        imageUrl: bootcampCert?.verifyUrl ?? '/certificates/programming-hero-bootcamp-certificate.png',
+                        downloadName: 'programming-hero-bootcamp-certificate.png',
+                      })
+                    }
+                    className="inline-flex items-center gap-1.5 rounded-md border border-[rgba(251,191,36,0.3)] bg-[rgba(251,191,36,0.08)] px-2.5 py-1 text-[11px] font-semibold text-[#fde68a] transition hover:bg-[rgba(251,191,36,0.18)] hover:text-white cursor-pointer active:scale-95"
                   >
                     <span>View Certificate</span>
                     <ArrowUpRight size={12} />
-                  </a>
+                  </button>
                 </div>
               </article>
             </Reveal>
           </div>
         </div>
       </div>
+
+      <CertificateModal
+        isOpen={!!activeCert}
+        onClose={() => setActiveCert(null)}
+        certificate={activeCert}
+      />
     </section>
   )
 }

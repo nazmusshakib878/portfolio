@@ -11,7 +11,7 @@ const contentSecurityPolicy=[
   "form-action 'self' https://api.web3forms.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
-  "object-src 'none'",
+  "object-src 'self'",
   "upgrade-insecure-requests",
 ].join('; ')
 
@@ -33,11 +33,15 @@ const nextConfig: NextConfig = {
     return [
       { source: '/(.*)', headers: securityHeaders },
       {
-        source: '/:file(.*\\.pdf)',
+        source: '/:path*.pdf',
         headers: [
           {
+            key: 'Content-Disposition',
+            value: 'inline',
+          },
+          {
             key: 'Cache-Control',
-            value: 'public, max-age=0, must-revalidate',
+            value: 'no-cache, no-store, must-revalidate',
           },
         ],
       },

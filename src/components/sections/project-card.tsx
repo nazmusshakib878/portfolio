@@ -26,6 +26,15 @@ function getTechBadgeStyle(tech: string) {
   ) {
     return 'border-[rgba(43,217,181,0.28)] text-[#69e6cd] bg-[rgba(43,217,181,0.06)]'
   }
+  if (
+    tech.includes('n8n') ||
+    tech.includes('Telegram') ||
+    tech.includes('Docker') ||
+    tech.includes('Google Sheets') ||
+    tech.includes('Workflow')
+  ) {
+    return 'border-[rgba(234,75,113,0.28)] text-[#ff7597] bg-[rgba(234,75,113,0.06)]'
+  }
   return 'border-white/10 text-[#d9dee7] bg-white/[0.025]'
 }
 
@@ -85,6 +94,10 @@ export function ProjectCard({
           ) : isFullStack ? (
             <span className="rounded-full border border-[rgba(43,217,181,0.25)] bg-[#080a10]/90 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#69e6cd] backdrop-blur-md">
               Laravel &amp; MySQL
+            </span>
+          ) : project.category === 'Workflow Automation' ? (
+            <span className="rounded-full border border-[rgba(234,75,113,0.3)] bg-[#080a10]/90 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#ff7597] backdrop-blur-md">
+              n8n &amp; Docker
             </span>
           ) : null}
         </div>
@@ -178,7 +191,7 @@ export function ProjectCard({
               className="button primary min-h-10 rounded-xl px-4 text-xs font-semibold"
               href={caseStudyHref}
             >
-              Case Study <ArrowUpRight size={13} />
+              View Case Study <ArrowUpRight size={13} />
             </Link>
           )}
 

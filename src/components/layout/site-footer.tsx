@@ -131,10 +131,8 @@ export function SiteFooter() {
               Get in Touch
             </a>
             <a
-              href={portfolioData.resumeHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              download="Md_Nazmus_Shakib_Resume.pdf"
+              href={portfolioData.resumeDownloadHref}
+              download="Nazmus_Shakib_CV.pdf"
               className="button secondary min-h-9 justify-center rounded-xl text-xs font-semibold"
             >
               Download Resume

@@ -65,7 +65,7 @@ export function Hero() {
           </p>
 
           {/* Name Display */}
-          <h1 className="display mt-3.5 max-w-[650px] text-[clamp(2.75rem,10vw,4.5rem)] font-semibold leading-[1.03] text-[#f2f3f7]">
+          <h1 className="display mt-3.5 max-w-[650px] text-[clamp(2.35rem,8.5vw,4.5rem)] font-semibold leading-[1.03] text-[#f2f3f7]">
             Md. Nazmus <span className="text-[#9aa6b7]">Shakib</span>
           </h1>
 
@@ -107,8 +107,8 @@ export function Hero() {
               </a>
               <a
                 className="button min-h-11 rounded-xl border-white/15 bg-white/[0.03] px-5 text-xs font-semibold text-[#f2f3f7] transition hover:-translate-y-0.5 hover:border-white/30 hover:bg-white/[0.06] active:translate-y-0"
-                href={portfolioData.resumeHref}
-                download="Md_Nazmus_Shakib_Resume.pdf"
+                href={portfolioData.resumeDownloadHref}
+                download="Nazmus_Shakib_CV.pdf"
               >
                 Download Resume <Download size={14} />
               </a>
@@ -152,11 +152,11 @@ export function Hero() {
         </div>
 
         {/* Right Column: Profile Presentation */}
-        <div className="relative mx-auto h-[clamp(320px,95vw,440px)] w-full max-w-[450px] lg:h-[500px] lg:max-w-[460px]">
+        <div className="relative mx-auto aspect-[4/5] w-full max-w-[340px] xs:max-w-[380px] sm:max-w-[430px] lg:max-w-[460px] sm:aspect-auto sm:h-[480px] lg:h-[510px]">
           <HeroVisual />
 
-          {/* Floating Status / Core Stack Badge */}
-          <div className="absolute right-3 top-3 max-w-[calc(100%-1.5rem)] rounded-xl border border-white/10 bg-[#090d15]/80 px-3.5 py-2.5 text-right backdrop-blur-md shadow-[0_12px_32px_rgba(0,0,0,0.35)] sm:max-w-none">
+          {/* Floating Status / Core Stack Badge - Visible on tablet/desktop to avoid obstructing portrait on mobile */}
+          <div className="hidden sm:block absolute right-3 top-3 max-w-[calc(100%-1.5rem)] rounded-xl border border-white/10 bg-[#090d15]/80 px-3.5 py-2.5 text-right backdrop-blur-md shadow-[0_12px_32px_rgba(0,0,0,0.35)] sm:max-w-none">
             <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#aeb6c3]">Core Stack</p>
             <p className="mt-1 flex items-center justify-end gap-1.5 text-xs font-medium text-[#f2f3f7] sm:text-sm">
               <span className="text-[#ff9c90]">Laravel</span>
@@ -169,9 +169,10 @@ export function Hero() {
             </p>
           </div>
 
-          <div className="absolute bottom-3 left-3 max-w-[calc(100%-1.5rem)] rounded-xl border border-white/10 bg-[#090d15]/85 px-3.5 py-2.5 backdrop-blur-md shadow-[0_12px_32px_rgba(0,0,0,0.35)] sm:max-w-none">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#2bd9b5]">Engineering Focus</p>
-            <p className="mt-1 text-xs font-medium text-[#f2f3f7] sm:text-sm">
+          {/* Engineering Focus Badge */}
+          <div className="absolute bottom-3 left-3 right-3 sm:right-auto sm:max-w-none rounded-xl border border-white/10 bg-[#090d15]/85 px-3 py-2 sm:px-3.5 sm:py-2.5 backdrop-blur-md shadow-[0_12px_32px_rgba(0,0,0,0.35)]">
+            <p className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.14em] text-[#2bd9b5]">Engineering Focus</p>
+            <p className="mt-0.5 sm:mt-1 text-xs font-medium text-[#f2f3f7] sm:text-sm">
               Backend Systems &middot; Full Stack
             </p>
           </div>

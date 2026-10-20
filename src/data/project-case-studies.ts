@@ -823,4 +823,110 @@ export const projectCaseStudies: Record<string, CaseStudyDetail> = {
       ],
     },
   },
+  'cv-payment-reminder-automation': {
+    slug: 'cv-payment-reminder-automation',
+    shortTitle: 'CV Payment Reminder',
+    subtitle: 'Scheduled client payment reminder automation pipeline integrating n8n, Google Sheets, and Telegram Bot API in a containerized Docker environment.',
+    problemStatement:
+      'Managing client billing cycles and sending timely payment reminders manually is time-consuming, prone to human error, and inconsistent. Without an automated scheduler, freelancers and service agencies frequently experience delayed cash flows, missed follow-ups, and repetitive copy-pasting of payment notices across chat applications.',
+    solutionStatement:
+      'Architected and deployed a containerized n8n automation workflow that polls client payment ledgers in Google Sheets, evaluates payment status using conditional IF logic, dispatches personalized Telegram notifications via Telegram Bot API, and updates spreadsheet records with confirmation timestamps to prevent duplicate reminders.',
+    myRoleDescription:
+      'Workflow Automation Developer responsible for end-to-end pipeline architecture, n8n Docker container setup, Google Cloud OAuth2 credentials configuration, Telegram Bot API token setup, conditional routing logic, and spreadsheet row status tracking.',
+    myContributions: [
+      'Configured a self-hosted n8n automation instance running in a containerized Docker environment with persistent volume storage.',
+      'Integrated Google Cloud Console API credentials with OAuth2 authentication to securely read and update Google Sheets ledgers.',
+      'Configured Telegram Bot via BotFather, setting up automated messaging endpoints with Markdown-formatted notifications.',
+      'Designed a 5-stage sequential automation flow: Schedule Trigger → Google Sheets Read → Conditional IF Filter → Telegram Message Dispatch → Google Sheets Row Update.',
+      'Implemented idempotent status tracking by updating the spreadsheet with notification timestamps to prevent redundant reminder delivery.',
+      'Tested edge cases including empty rows, partial payments, and API rate limits to ensure dependable execution.',
+    ],
+    techStackGrouped: {
+      backend: ['n8n Workflow Automation', 'Docker Container', 'Node.js Runtime', 'Cron Scheduler'],
+      frontend: ['n8n Visual Workflow Canvas', 'Google Sheets Spreadsheet UI', 'Telegram Mobile & Desktop Apps'],
+      database: ['Google Sheets API v4', 'Tabular Client Ledger Schema', 'Row Status Tracking'],
+      integrations: ['Telegram Bot API', 'Google Cloud Platform (GCP)', 'OAuth2 Service Connection', 'HTTP Request / Webhooks'],
+    },
+    screenshots: {
+      platformShowcase: {
+        id: 'n8n-workflow-showcase',
+        title: 'n8n Automation Architecture & Canvas Overview',
+        subtitle: 'Scheduled Multi-Node Automation Pipeline',
+        description:
+          'Complete n8n automation canvas demonstrating the 5-node workflow connecting Schedule Trigger, Google Sheets ingestion, conditional IF decision logic, Telegram Bot dispatch, and spreadsheet record updates.',
+        src: '/images/n8n-workflow-architecture.png',
+        alt: 'CV Payment Reminder Automation n8n Editor Workflow Screenshot',
+        badge: 'n8n Workflow Canvas',
+        route: 'localhost:5678/workflow/cv-payment-reminder',
+      },
+      workflowShowcase: {
+        id: 'n8n-full-banner',
+        title: 'CV Payment Reminder System Map & Cover Visual',
+        subtitle: 'Google Sheets & Telegram Notification Flow',
+        description:
+          'Architectural presentation showcasing the end-to-end scheduled automation that monitors client dues and triggers instantaneous chat alerts.',
+        src: '/projects/cv-payment-reminder-cover.webp',
+        alt: 'CV Payment Reminder Automation Designed Cover and Node Map',
+        badge: 'System Architecture',
+        route: 'Docker: n8n Container',
+      },
+    },
+    databaseArchitecture: {
+      overview:
+        'Utilizes Google Sheets as a structured, lightweight tabular database accessible via Google Sheets API v4. Each row represents an individual client transaction with strict column definitions.',
+      keyEntities: [
+        'Client ID & Name: Unique client identifier and customer contact name',
+        'Due Amount & Currency: Pending balance and service fee',
+        'Payment Due Date: Scheduled date threshold used by conditional IF logic',
+        'Telegram Chat ID: Recipient destination ID for targeted bot delivery',
+        'Reminder Status & Timestamp: Status flag and dispatch timestamp preventing duplicate alerts',
+      ],
+      schemaPrinciples: [
+        'Tabular normalization ensuring distinct rows for each billing transaction',
+        'Explicit status column ("Pending", "Sent", "Paid") ensuring idempotency',
+        'Audit timestamp logging recording exactly when the reminder was dispatched',
+      ],
+    },
+    apiArchitecture: {
+      overview:
+        'Orchestrates RESTful API requests between Google Cloud Sheets API v4 and Telegram Bot API using n8n pre-built credential handlers and secure environment variables in Docker.',
+      dataFlowSteps: [
+        'Schedule Trigger fires on configured interval (e.g., daily at 09:00 AM)',
+        'Google Sheets node retrieves active client rows using OAuth2 credentials',
+        'IF node evaluates payment status (e.g., status == "Pending" && dueDate <= today)',
+        'Telegram node dispatches formatted message to specific client Chat ID',
+        'Google Sheets Update node writes "Reminder Sent" with current ISO timestamp',
+      ],
+      authMethod: 'Google Cloud OAuth2 & Telegram Bot Token',
+    },
+    challenges: [
+      {
+        challenge: 'Preventing duplicate reminder notifications on consecutive automated schedule runs.',
+        solution:
+          'Engineered a state-tracking update step: after Telegram successfully dispatches the message, the workflow immediately writes back to the Google Sheet row, updating the status to "Sent" and logging the timestamp so subsequent runs skip already-notified clients.',
+      },
+      {
+        challenge: 'Handling rate limits and connection retries when contacting Telegram Bot API.',
+        solution:
+          'Configured built-in n8n retry-on-failure settings and error output paths to capture transient network blips without crashing the container.',
+      },
+      {
+        challenge: 'Managing secure credentials in a self-hosted Dockerized environment.',
+        solution:
+          'Created an isolated Docker environment with persistent volume storage for n8n configuration, storing sensitive tokens and API keys securely in n8n encrypted credentials storage.',
+      },
+    ],
+    finalResult: {
+      summary:
+        'Successfully engineered and tested a production-ready automated payment reminder pipeline using n8n, Google Sheets, and Telegram Bot API. The workflow eliminates manual tracking, guarantees timely client communication, and demonstrates practical API integration and workflow automation capabilities.',
+      achievements: [
+        '100% automated scheduled payment verification',
+        'Zero manual copy-pasting for payment notices',
+        'Containerized Docker deployment with persistent state',
+        'Idempotent row updates preventing duplicate notifications',
+        'Reliable Google Cloud and Telegram Bot API integration',
+      ],
+    },
+  },
 }
+
