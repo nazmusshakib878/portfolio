@@ -60,22 +60,34 @@ export function ProjectWheelShowcase() {
   const [isPaused, setIsPaused] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
   const [windowWidth, setWindowWidth] = useState(1200)
-  const [lastInteraction, setLastInteraction] = useState(0)
 
-  // Target position for smooth interpolation
-  const targetPosRef = useRef(0)
+  // Physics & Animation Refs (decoupled from React re-renders for maximum smoothness)
   const posRef = useRef(0)
-  const animationFrameRef = useRef<number | null>(null)
-  const autoplayTimerRef = useRef<NodeJS.Timeout | null>(null)
-  const dragRef = useRef<{
-    startX: number
+  const isDraggingRef = useRef(false)
+  const hasDraggedRef = useRef(false)
+  const holdUntilRef = useRef(0)
+  const stageRef = useRef<HTMLDivElement>(null)
+
+  // Active smooth tween descriptor (frame-rate independent power3 easing)
+  const tweenRef = useRef<{
     startPos: number
+    targetPos: number
+    startTime: number
+    duration: number
+  } | null>(null)
+
+  // Kinematic drag tracking ref
+  const dragRef = useRef<{
+    pointerId: number
+    startX: number
+    startY: number
+    startPos: number
+    currentX: number
     lastX: number
     lastTime: number
     velocity: number
-    hasMoved: boolean
+    captured: boolean
   } | null>(null)
-  const stageRef = useRef<HTMLDivElement>(null)
 
   // Track window width for responsive arc calculation
   useEffect(() => {
@@ -85,16 +97,11 @@ export function ProjectWheelShowcase() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-
-
   // Responsive geometry parameters based on screen size
   const isMobile = windowWidth < 640
   const isTablet = windowWidth >= 640 && windowWidth < 1024
 
   // Radius, angular step, and card dimensions
-  // Desktop: 390px wide x 695px high (+90px usable height increase), radius 1020px, stepDeg 21°
-  // Tablet: 350px wide x 630px high (+80px), radius 860px, stepDeg 23°
-  // Mobile: ~305px wide x 550px high (+55px), radius 660px, stepDeg 27°
   const radius = isMobile ? 660 : isTablet ? 860 : 1020
   const stepDeg = isMobile ? 27 : isTablet ? 23 : 21
   const cardWidth = isMobile ? Math.min(305, Math.max(280, windowWidth - 32)) : isTablet ? 350 : 390
@@ -119,136 +126,287 @@ export function ProjectWheelShowcase() {
   // Normalized active index (0 to total - 1)
   const activeIndex = ((Math.round(pos) % total) + total) % total
 
-  // Smooth position interpolation loop
-  useEffect(() => {
-    let active = true
+  // Pause autoplay on manual interactions for a specified duration
+  const holdAutoplay = useCallback((ms = 5000) => {
+    holdUntilRef.current = performance.now() + ms
+  }, [])
 
-    const updateLoop = () => {
-      if (!active) return
-
-      const diff = targetPosRef.current - posRef.current
-      if (Math.abs(diff) > 0.0005) {
-        // Smooth exponential approach
-        posRef.current += diff * 0.12
-        setPos(posRef.current)
-      } else if (posRef.current !== targetPosRef.current) {
-        posRef.current = targetPosRef.current
-        setPos(posRef.current)
+  // Smooth tween animation using cubic-out power3 deceleration
+  const animateTo = useCallback(
+    (target: number, customDuration?: number) => {
+      const current = posRef.current
+      const dist = Math.abs(target - current)
+      if (dist < 0.0001) {
+        posRef.current = target
+        setPos(target)
+        tweenRef.current = null
+        return
       }
 
-      animationFrameRef.current = requestAnimationFrame(updateLoop)
-    }
+      // Check prefers-reduced-motion
+      if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        posRef.current = target
+        setPos(target)
+        tweenRef.current = null
+        return
+      }
 
-    animationFrameRef.current = requestAnimationFrame(updateLoop)
-    return () => {
-      active = false
-      if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current)
-    }
-  }, [])
-
-  // Reset autoplay timer on manual interactions
-  const markInteraction = useCallback(() => {
-    setLastInteraction(Date.now())
-  }, [])
+      const duration = customDuration ?? Math.min(1.2, 0.45 + dist * 0.12)
+      tweenRef.current = {
+        startPos: current,
+        targetPos: target,
+        startTime: performance.now(),
+        duration: duration * 1000,
+      }
+    },
+    []
+  )
 
   // Navigation handlers
   const goTo = useCallback(
     (index: number) => {
-      markInteraction()
-      const current = targetPosRef.current
+      holdAutoplay(5000)
+      const current = posRef.current
       const offset = wrapN(index - current)
-      targetPosRef.current = current + offset
+      animateTo(current + offset)
     },
-    [wrapN, markInteraction]
+    [wrapN, animateTo, holdAutoplay]
   )
 
   const next = useCallback(() => {
-    markInteraction()
-    targetPosRef.current = Math.round(targetPosRef.current) + 1
-  }, [markInteraction])
+    holdAutoplay(5000)
+    animateTo(Math.round(posRef.current) + 1)
+  }, [animateTo, holdAutoplay])
 
   const prev = useCallback(() => {
-    markInteraction()
-    targetPosRef.current = Math.round(targetPosRef.current) - 1
-  }, [markInteraction])
+    holdAutoplay(5000)
+    animateTo(Math.round(posRef.current) - 1)
+  }, [animateTo, holdAutoplay])
 
-  // Autoplay cycle (every 4.2 seconds; pauses on hover or drag, resets on manual interaction)
+  // Continuous frame-time-aware physics & animation loop
   useEffect(() => {
-    if (isPaused || isHovered || isDragging) {
-      if (autoplayTimerRef.current) clearInterval(autoplayTimerRef.current)
-      return
+    let lastFrameTime = performance.now()
+    let rafId: number
+
+    const tick = (now: number) => {
+      const dtMs = Math.min(50, Math.max(1, now - lastFrameTime))
+      const dt = dtMs / 1000
+      lastFrameTime = now
+
+      let newPos = posRef.current
+
+      if (isDraggingRef.current && dragRef.current) {
+        // DRAGGING: Follow pointer directly with critically damped high-frequency filter
+        const dx = dragRef.current.currentX - dragRef.current.startX
+        const targetDragPos = dragRef.current.startPos - dx / arcPerCard
+        const followFactor = 1 - Math.exp(-45 * dt)
+        newPos += (targetDragPos - newPos) * followFactor
+        posRef.current = newPos
+        setPos(newPos)
+      } else if (tweenRef.current) {
+        // TWEENING (inertia / settling / navigation / autoplay):
+        const { startPos, targetPos, startTime, duration } = tweenRef.current
+        const elapsed = now - startTime
+        const progress = Math.min(1, elapsed / duration)
+
+        // Silky power3.out (cubic-out) easing
+        const ease = 1 - Math.pow(1 - progress, 3)
+        newPos = startPos + (targetPos - startPos) * ease
+        posRef.current = newPos
+        setPos(newPos)
+
+        if (progress >= 1) {
+          posRef.current = targetPos
+          setPos(targetPos)
+          tweenRef.current = null
+        }
+      }
+
+      rafId = requestAnimationFrame(tick)
     }
 
-    autoplayTimerRef.current = setInterval(() => {
-      targetPosRef.current = Math.round(targetPosRef.current) + 1
+    rafId = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(rafId)
+  }, [arcPerCard])
+
+  // Autoplay cycle (every 4.2 seconds; pauses on hover, drag, pause toggle, or user interaction)
+  useEffect(() => {
+    if (isPaused || isHovered) return
+
+    const interval = setInterval(() => {
+      // Don't auto-advance if dragging, interacting, tab hidden, or user prefers reduced motion
+      if (
+        isDraggingRef.current ||
+        performance.now() < holdUntilRef.current ||
+        (typeof document !== 'undefined' && document.hidden) ||
+        (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+      ) {
+        return
+      }
+
+      animateTo(Math.round(posRef.current) + 1, 0.85)
     }, 4200)
 
-    return () => {
-      if (autoplayTimerRef.current) clearInterval(autoplayTimerRef.current)
+    return () => clearInterval(interval)
+  }, [isPaused, isHovered, animateTo])
+
+  // Reset autoplay delay on tab visibility change
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        holdAutoplay(3000)
+      }
     }
-  }, [isPaused, isHovered, isDragging, lastInteraction])
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
+  }, [holdAutoplay])
+
+  // Horizontal wheel / touchpad swipe scrubbing
+  useEffect(() => {
+    const stage = stageRef.current
+    if (!stage) return
+
+    let wheelTimeout: NodeJS.Timeout | null = null
+
+    const handleWheel = (e: WheelEvent) => {
+      // Only horizontal scrolling (trackpad swipe or shift+wheel)
+      const dx = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.shiftKey ? e.deltaY : 0
+      if (!dx || Math.abs(dx) < 2) return
+
+      // Prevent native horizontal navigation
+      e.preventDefault()
+      holdAutoplay(4000)
+      tweenRef.current = null
+
+      posRef.current += dx / arcPerCard
+      setPos(posRef.current)
+
+      if (wheelTimeout) clearTimeout(wheelTimeout)
+      wheelTimeout = setTimeout(() => {
+        animateTo(Math.round(posRef.current), 0.45)
+      }, 140)
+    }
+
+    stage.addEventListener('wheel', handleWheel, { passive: false })
+    return () => {
+      stage.removeEventListener('wheel', handleWheel)
+      if (wheelTimeout) clearTimeout(wheelTimeout)
+    }
+  }, [arcPerCard, holdAutoplay, animateTo])
 
   // Mouse & Touch Drag Interaction
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (e.button !== 0 && e.pointerType === 'mouse') return
 
+    // If clicking an interactive button or explicit link, DO NOT initiate drag or capture pointer!
+    const target = e.target as HTMLElement | null
+    if (target?.closest('button, .button, a[target="_blank"], [data-action-button="true"]')) {
+      holdAutoplay(6000)
+      return
+    }
+
+    // Stop active tween on press
+    tweenRef.current = null
+    holdAutoplay(6000)
+
     dragRef.current = {
+      pointerId: e.pointerId,
       startX: e.clientX,
-      startPos: targetPosRef.current,
+      startY: e.clientY,
+      startPos: posRef.current,
+      currentX: e.clientX,
       lastX: e.clientX,
       lastTime: performance.now(),
       velocity: 0,
-      hasMoved: false,
+      captured: false,
     }
-
-    stageRef.current?.setPointerCapture(e.pointerId)
+    hasDraggedRef.current = false
   }
 
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!dragRef.current) return
+    if (!dragRef.current || dragRef.current.pointerId !== e.pointerId) return
 
     const dx = e.clientX - dragRef.current.startX
-    if (!dragRef.current.hasMoved && Math.abs(dx) > 6) {
-      dragRef.current.hasMoved = true
+    const dy = e.clientY - dragRef.current.startY
+
+    // Only engage drag if movement exceeds 6px threshold
+    if (!dragRef.current.captured) {
+      if (Math.hypot(dx, dy) < 6) return
+
+      // On touch devices: if vertical movement dominates, let native page scroll proceed
+      if (e.pointerType === 'touch' && Math.abs(dy) > Math.abs(dx)) {
+        dragRef.current = null
+        return
+      }
+
+      dragRef.current.captured = true
+      hasDraggedRef.current = true
+      isDraggingRef.current = true
       setIsDragging(true)
+
+      try {
+        stageRef.current?.setPointerCapture(e.pointerId)
+      } catch {
+        // Safe fallback
+      }
     }
 
-    if (dragRef.current.hasMoved) {
-      const now = performance.now()
-      const dt = Math.max(1, now - dragRef.current.lastTime)
-      const v = (e.clientX - dragRef.current.lastX) / dt
+    const now = performance.now()
+    const dt = Math.max(1, now - dragRef.current.lastTime)
+    const instV = (e.clientX - dragRef.current.lastX) / dt
 
-      dragRef.current.velocity = dragRef.current.velocity * 0.6 + v * 0.4
-      dragRef.current.lastX = e.clientX
-      dragRef.current.lastTime = now
-
-      // Immediate scrubbing response
-      const target = dragRef.current.startPos - dx / arcPerCard
-      targetPosRef.current = target
-      posRef.current = target
-      setPos(target)
-    }
+    dragRef.current.velocity = dragRef.current.velocity * 0.6 + instV * 0.4
+    dragRef.current.lastX = e.clientX
+    dragRef.current.currentX = e.clientX
+    dragRef.current.lastTime = now
   }
 
   const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!dragRef.current) return
+    if (!dragRef.current || dragRef.current.pointerId !== e.pointerId) return
 
-    if (stageRef.current?.hasPointerCapture(e.pointerId)) {
-      stageRef.current.releasePointerCapture(e.pointerId)
+    const drag = dragRef.current
+    if (drag.captured && stageRef.current?.hasPointerCapture(e.pointerId)) {
+      try {
+        stageRef.current.releasePointerCapture(e.pointerId)
+      } catch {
+        // Safe fallback
+      }
     }
 
-    if (dragRef.current.hasMoved) {
-      markInteraction()
-      // Release with momentum
-      const momentumStep = (dragRef.current.velocity * 240) / arcPerCard
-      const snapped = Math.round(targetPosRef.current - momentumStep)
-      targetPosRef.current = snapped
+    if (drag.captured) {
+      holdAutoplay(5000)
+
+      // If held stationary before release (>80ms), zero out momentum
+      const timeSinceMove = performance.now() - drag.lastTime
+      const effectiveVelocity = timeSinceMove > 80 ? 0 : drag.velocity
+
+      // Momentum step: projects landing index in direction of drag
+      const momentumCards = (-effectiveVelocity * 220) / arcPerCard
+      const target = Math.round(posRef.current + momentumCards)
+      const distance = Math.abs(target - posRef.current)
+      const duration = Math.min(1.1, 0.42 + distance * 0.12)
+      animateTo(target, duration)
     }
 
-    setTimeout(() => {
-      setIsDragging(false)
-      dragRef.current = null
-    }, 60)
+    dragRef.current = null
+    isDraggingRef.current = false
+    setIsDragging(false)
+
+    // Keep hasDraggedRef active for the ensuing click cycle to suppress unintended navigation
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        hasDraggedRef.current = false
+      }, 50)
+    })
+  }
+
+  // Intercept click on the stage container in capture phase to suppress accidental clicks after real drags
+  const handleStageClickCapture = (e: React.MouseEvent) => {
+    if (hasDraggedRef.current) {
+      e.preventDefault()
+      e.stopPropagation()
+      hasDraggedRef.current = false
+    }
   }
 
   // Keyboard navigation
@@ -262,10 +420,11 @@ export function ProjectWheelShowcase() {
     }
   }
 
-  // Prevent link navigation if user was performing a drag gesture
+  // Link click handler: only suppresses if an actual drag gesture occurred
   const handleLinkClick = (e: React.MouseEvent) => {
-    if (isDragging) {
+    if (hasDraggedRef.current) {
       e.preventDefault()
+      e.stopPropagation()
     }
   }
 
@@ -301,7 +460,10 @@ export function ProjectWheelShowcase() {
               {/* Autoplay status toggle */}
               <button
                 type="button"
-                onClick={() => setIsPaused((prev) => !prev)}
+                onClick={() => {
+                  holdAutoplay(5000)
+                  setIsPaused((prev) => !prev)
+                }}
                 className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-medium text-[#d9dee7] backdrop-blur-md transition hover:border-[#00f5ff]/40 hover:text-white"
                 aria-label={isPaused ? 'Resume auto rotation' : 'Pause auto rotation'}
               >
@@ -353,8 +515,15 @@ export function ProjectWheelShowcase() {
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        onClickCapture={handleStageClickCapture}
+        onMouseEnter={() => {
+          setIsHovered(true)
+          holdAutoplay(4000)
+        }}
+        onMouseLeave={() => {
+          setIsHovered(false)
+          holdAutoplay(2500)
+        }}
         style={{
           height: `${stageHeight}px`,
         }}
@@ -422,7 +591,7 @@ export function ProjectWheelShowcase() {
               <div
                 key={project.title}
                 onClick={() => {
-                  if (isDragging) return
+                  if (hasDraggedRef.current) return
                   if (!isActive) goTo(i)
                 }}
                 style={{
@@ -459,7 +628,8 @@ export function ProjectWheelShowcase() {
                         fill
                         sizes="(max-width: 640px) 300px, 420px"
                         priority={isActive}
-                        className="object-cover transition duration-500 group-hover:scale-[1.03]"
+                        draggable={false}
+                        className="object-cover transition duration-500 group-hover:scale-[1.03] select-none pointer-events-none"
                       />
                     </Link>
                   ) : (
@@ -469,7 +639,8 @@ export function ProjectWheelShowcase() {
                       fill
                       sizes="(max-width: 640px) 300px, 420px"
                       priority={false}
-                      className="object-cover transition duration-500 group-hover:scale-[1.03]"
+                      draggable={false}
+                      className="object-cover transition duration-500 group-hover:scale-[1.03] select-none pointer-events-none"
                     />
                   )}
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#090d15] via-transparent to-transparent" />
@@ -500,7 +671,7 @@ export function ProjectWheelShowcase() {
                     <div className="flex flex-col gap-2 sm:gap-2.5">
                       <div className="flex items-center justify-between gap-2">
                         <span className="font-mono text-xs font-semibold uppercase tracking-wider text-[#00f5ff]">
-                          {project.category}
+                           {project.category}
                         </span>
                         {project.role && (
                           <span
@@ -516,6 +687,7 @@ export function ProjectWheelShowcase() {
                         <Link
                           href={caseStudyHref}
                           onClick={handleLinkClick}
+                          data-action-button="true"
                           className="hover:text-[#00f5ff] transition-colors"
                         >
                           {project.title}
@@ -559,10 +731,11 @@ export function ProjectWheelShowcase() {
                         ))}
                       </div>
 
-                      <div className="pt-3.5 border-t border-white/[0.08] flex items-center gap-2.5">
+                      <div className="pt-3.5 border-t border-white/[0.08] flex items-center gap-2.5 relative z-20">
                         <Link
                           href={caseStudyHref}
                           onClick={handleLinkClick}
+                          data-action-button="true"
                           className="button primary flex-1 min-h-[44px] rounded-xl px-4 text-xs sm:text-[13px] font-semibold shadow-[0_0_20px_rgba(0,245,255,0.25)]"
                         >
                           <span>View Case Study</span>
@@ -575,6 +748,7 @@ export function ProjectWheelShowcase() {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={handleLinkClick}
+                            data-action-button="true"
                             className="grid size-[44px] place-items-center rounded-xl border border-emerald-500/40 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition shrink-0"
                             aria-label={`Live Demo of ${project.title}`}
                             title="Live Demo"
@@ -589,6 +763,7 @@ export function ProjectWheelShowcase() {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={handleLinkClick}
+                            data-action-button="true"
                             className="grid size-[44px] place-items-center rounded-xl border border-white/15 bg-white/[0.04] text-[#d9dee7] hover:border-white/30 hover:text-white transition shrink-0"
                             aria-label={`GitHub repo of ${project.title}`}
                             title="GitHub Repository"
