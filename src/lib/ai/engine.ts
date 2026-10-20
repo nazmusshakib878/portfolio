@@ -314,8 +314,27 @@ function handleUnverifiedEmployers(
     'kaz software',
   ]
 
-  const mentionedCompany = unverifiedCompanies.find((c) => q.includes(c))
-  if (!mentionedCompany) return null
+  // Find all unverified companies mentioned in the query (English and Bengali)
+  const matched = unverifiedCompanies.filter((c) => {
+    if (c === 'google') return q.includes('google') || q.includes('গুগল')
+    if (c === 'microsoft') return q.includes('microsoft') || q.includes('মাইক্রোসফট')
+    if (c === 'meta' || c === 'facebook company') {
+      return (
+        q.includes('meta') ||
+        q.includes('মেটা') ||
+        q.includes('facebook company') ||
+        q.includes('work at facebook') ||
+        q.includes('facebook employee')
+      )
+    }
+    if (c === 'amazon') return q.includes('amazon') || q.includes('অ্যামাজন')
+    if (c === 'apple') return q.includes('apple') || q.includes('অ্যাপল')
+    return q.includes(c)
+  })
+
+  const mentionsAppstick = q.includes('appstick')
+
+  if (matched.length === 0) return null
 
   // Check if user is asking about work experience / employment at this company
   const isWorkInquiry =
@@ -326,10 +345,19 @@ function handleUnverifiedEmployers(
     q.includes('intern') ||
     q.includes('history') ||
     q.includes('role') ||
+    q.includes('career') ||
+    q.includes('at google') ||
+    q.includes('at microsoft') ||
+    q.includes('or microsoft') ||
+    q.includes('and microsoft') ||
+    q.includes('or google') ||
+    q.includes('and google') ||
     q.includes('চাকরি') ||
     q.includes('অভিজ্ঞতা') ||
+    q.includes('কাজ করেছেন') ||
     q.includes('কাজ করেছে') ||
     q.includes('কাজ করছেন') ||
+    q.includes('কাজ') ||
     q.startsWith('does shakib have') ||
     q.startsWith('did shakib') ||
     q.startsWith('has shakib') ||
@@ -337,15 +365,64 @@ function handleUnverifiedEmployers(
 
   if (!isWorkInquiry) return null
 
-  const compName =
-    mentionedCompany === 'google'
-      ? 'Google'
-      : mentionedCompany === 'microsoft'
-        ? 'Microsoft'
-        : mentionedCompany.charAt(0).toUpperCase() + mentionedCompany.slice(1)
+  const formatName = (c: string) => {
+    if (c === 'google') return 'Google'
+    if (c === 'microsoft') return 'Microsoft'
+    if (c === 'meta' || c === 'facebook company') return 'Meta'
+    if (c === 'amazon') return 'Amazon'
+    if (c === 'apple') return 'Apple'
+    if (c === 'netflix') return 'Netflix'
+    if (c === 'tesla') return 'Tesla'
+    if (c === 'uber') return 'Uber'
+    if (c === 'twitter') return 'Twitter (X)'
+    if (c === 'oracle') return 'Oracle'
+    if (c === 'ibm') return 'IBM'
+    if (c === 'intel') return 'Intel'
+    if (c === 'cisco') return 'Cisco'
+    if (c === 'brain station') return 'Brain Station 23'
+    if (c === 'kaz software') return 'Kaz Software'
+    return c.charAt(0).toUpperCase() + c.slice(1)
+  }
+
+  const formatNameBn = (c: string) => {
+    if (c === 'google') return 'গুগল (Google)'
+    if (c === 'microsoft') return 'মাইক্রোসফট (Microsoft)'
+    if (c === 'meta' || c === 'facebook company') return 'মেটা (Meta)'
+    if (c === 'amazon') return 'অ্যামাজন (Amazon)'
+    if (c === 'apple') return 'অ্যাপল (Apple)'
+    return formatName(c)
+  }
+
+  const companyNamesEn = matched.map(formatName)
+  const companyNamesBn = matched.map(formatNameBn)
+
+  const isConjAnd = q.includes('and') || q.includes('এবং') || q.includes('ও')
+  const conjEn = isConjAnd ? 'and' : 'or'
+  const conjBn = isConjAnd ? 'এবং' : 'বা'
+
+  const formattedCompaniesEn =
+    companyNamesEn.length === 1
+      ? companyNamesEn[0]
+      : companyNamesEn.length === 2
+        ? `${companyNamesEn[0]} ${conjEn} ${companyNamesEn[1]}`
+        : `${companyNamesEn.slice(0, -1).join(', ')}, ${conjEn} ${companyNamesEn[companyNamesEn.length - 1]}`
+
+  const formattedCompaniesBn =
+    companyNamesBn.length === 1
+      ? companyNamesBn[0]
+      : companyNamesBn.length === 2
+        ? `${companyNamesBn[0]} ${conjBn} ${companyNamesBn[1]}`
+        : `${companyNamesBn.slice(0, -1).join(', ')}, ${conjBn} ${companyNamesBn[companyNamesBn.length - 1]}`
+
+  const expPeriod = portfolioData.experience[0]?.period || 'Feb 2026 – Mar 2026'
 
   if (isBangla) {
-    let reply = `না, মোঃ নাজমুল শাকিবের ${compName} বা অন্য কোনো টেক জায়ান্টে কাজ করার পূর্ব অভিজ্ঞতা নেই। তাঁর অফিসিয়াল কাজের অভিজ্ঞতা হলো অ্যাপস্টিক টেক ফার্মে (Appstick Tech Firm) ব্যাকএন্ড ডেভেলপার ইন্টার্ন হিসেবে (সেপ্টেম্বর ২০২৫ – ডিসেম্বর ২০২৫, খুলনা), যেখানে তিনি লারাভেল এমভিসি, সিকিউর রেস্ট এপিআই এবং ৩এনএফ মাইএসকিউএল ডেটাবেস নিয়ে কাজ করেছেন। বর্তমানে তিনি নর্দান ইউনিভার্সিটি খুলনায় সিএসইর ফাইনাল সেমিস্টারে অধ্যয়নরত।`
+    let reply = ''
+    if (mentionsAppstick) {
+      reply = `অ্যাপস্টিকের (Appstick) ক্ষেত্রে হ্যাঁ, তবে ${formattedCompaniesBn}-এর ক্ষেত্রে না। মোঃ নাজমুল শাকিব অ্যাপস্টিক টেক ফার্মে ব্যাকএন্ড ডেভেলপার ইন্টার্ন হিসেবে কাজ করেছেন (${expPeriod}, খুলনা), তবে ${formattedCompaniesBn}-এ তাঁর কোনো কাজের অভিজ্ঞতা নেই।`
+    } else {
+      reply = `না, মোঃ নাজমুল শাকিবের ${formattedCompaniesBn}-এ কাজ করার পূর্ব অভিজ্ঞতা নেই। তাঁর ভেরিফায়েড কাজের অভিজ্ঞতা হলো অ্যাপস্টিক টেক ফার্মে (Appstick Tech Firm) ব্যাকএন্ড ডেভেলপার ইন্টার্ন হিসেবে (${expPeriod}, খুলনা)।`
+    }
     if (constraints.exactSentences) {
       reply = enforceExactSentenceCount(reply, constraints.exactSentences, true)
     }
@@ -361,7 +438,13 @@ function handleUnverifiedEmployers(
     }
   }
 
-  let reply = `No, Shakib does not have experience working at ${compName}. His verified professional experience is as a Backend Developer Intern at Appstick Tech Firm (September 2025 – December 2025 in Khulna), where he engineered Laravel MVC architectures, secure REST APIs, and normalized MySQL databases. He is currently completing his final semester of BSc in CSE at Northern University of Business and Technology Khulna.`
+  let reply = ''
+  if (mentionsAppstick) {
+    reply = `Yes for Appstick, but no for ${formattedCompaniesEn}. Shakib completed a verified internship as a Backend Developer Intern at Appstick Tech Firm (${expPeriod} in Khulna), but he does not have experience working at ${formattedCompaniesEn}.`
+  } else {
+    reply = `No, Shakib does not have experience working at ${formattedCompaniesEn}. His verified professional experience is as a Backend Developer Intern at Appstick Tech Firm (${expPeriod} in Khulna).`
+  }
+
   if (constraints.exactSentences) {
     reply = enforceExactSentenceCount(reply, constraints.exactSentences, false)
   }
@@ -388,15 +471,6 @@ function handleProjectComparison(
 ): { reply: string; cards: AiActionCard[]; suggestedQueries: string[] } | null {
   const q = query.toLowerCase()
 
-  const isComparisonQuery =
-    q.includes('compare') ||
-    q.includes('comparison') ||
-    q.includes('vs') ||
-    q.includes('versus') ||
-    q.includes('difference') ||
-    q.includes('তুলনা') ||
-    q.includes('পার্থক্য')
-
   // Check which projects are mentioned
   const mentionsSecurex = q.includes('securex')
   const mentionsSmartCampus =
@@ -417,7 +491,8 @@ function handleProjectComparison(
     mentionsLogistica,
   ].filter(Boolean).length
 
-  if (!isComparisonQuery && projectMentions < 2) {
+  // Project comparison strictly requires at least two mentioned projects
+  if (projectMentions < 2) {
     return null
   }
 
@@ -610,6 +685,9 @@ function handleCapabilityInquiry(
     }
   }
 
+  const isWeb =
+    q.includes('web') || q.includes('website') || q.includes('web app') || q.includes('ওয়েব')
+
   const isEcommerce =
     q.includes('e-commerce') ||
     q.includes('ecommerce') ||
@@ -631,12 +709,38 @@ function handleCapabilityInquiry(
     q.includes('ios app') ||
     q.includes('flutter') ||
     q.includes('react native') ||
-    q.includes('মোবাইল অ্যাপ')
+    q.includes('মোবাইল অ্যাপ') ||
+    (q.includes('mobile') && !q.includes('phone') && !q.includes('number') && !q.includes('call'))
 
-  // Case 4a: E-commerce Website
+  // Case 4-Multi: Both Web Apps and Mobile Apps asked
+  if (isWeb && isMobileApp && isAbilityQuestion) {
+    if (isBangla) {
+      let reply = `ওয়েব অ্যাপ্লিকেশনের ক্ষেত্রে হ্যাঁ, কিন্তু নেটিভ মোবাইল অ্যাপের ক্ষেত্রে না। নাজমুল শাকিব লারাভেল, নেক্সট.জেএস, রিঅ্যাক্ট এবং মাইএসকিউএল দিয়ে পূর্ণাঙ্গ রেসপনসিভ ওয়েব অ্যাপ্লিকেশন তৈরিতে পারদর্শী, তবে তিনি নেটিভ অ্যান্ড্রয়েড বা আইওএস মোবাইল অ্যাপ (যেমন ফ্লাটার বা সুইফট) তৈরি করেন না।`
+      if (constraints.exactSentences) {
+        reply = enforceExactSentenceCount(reply, constraints.exactSentences, true)
+      }
+      return {
+        reply,
+        cards: [],
+        suggestedQueries: ['তাঁর ওয়েব প্রজেক্টগুলো দেখাও', 'টেকনোলজি স্ট্যাক কি?', 'যোগাযোগের মাধ্যম'],
+      }
+    }
+
+    let reply = `Yes for web applications, but no for native mobile apps. Shakib specializes in building full-stack web applications with Laravel, Next.js, React, and MySQL, which are fully responsive on mobile devices, but he does not develop native Android or iOS apps (such as with Flutter or React Native).`
+    if (constraints.exactSentences) {
+      reply = enforceExactSentenceCount(reply, constraints.exactSentences, false)
+    }
+    return {
+      reply,
+      cards: [],
+      suggestedQueries: ['Show his web projects', 'What is his tech stack?', 'How to contact him?'],
+    }
+  }
+
+  // Case 4a: E-commerce Website (grounded in verified skills and Nur Foodes)
   if (isEcommerce) {
     if (isBangla) {
-      let reply = `হ্যাঁ, নাজমুল শাকিব আপনার ব্যবসার জন্য একটি সম্পূর্ণ ই-কমার্স ওয়েবসাইট তৈরি করতে সক্ষম। তিনি লারাভেল ব্যাকএন্ডের মাধ্যমে প্রোডাক্ট ক্যাটালগ, কার্ট ও অর্ডার স্টেট মেশিন, পেমেন্ট গেটওয়ে ইন্টিগ্রেশন এবং সুরক্ষিত স্যাঙ্কটাম অথেন্টিকেশন বাস্তবায়ন করেন। পাশাপাশি ৩এনএফ নরম্যালাইজড মাইএসকিউএল ডেটাবেস এবং নেক্সট.জেএস/রিঅ্যাক্ট ফ্রন্টএন্ড দিয়ে দ্রুতগতির এসইও-বান্ধব ইউজার ইন্টারফেস তৈরি করেন। অর্ডারের স্বয়ংক্রিয় নোটিফিকেশনের জন্য তিনি n8n অথবা টেলিগ্রাম/এসএমটিপি ওয়ার্কফ্লোও যুক্ত করতে পারেন।`
+      let reply = `হ্যাঁ, নাজমুল শাকিব কাস্টম ই-কমার্স ও রিটেইল ম্যানেজমেন্ট ওয়েব অ্যাপ্লিকেশন তৈরি করতে সক্ষম। তিনি লারাভেল ব্যাকএন্ড ও মাইএসকিউএল ডেটাবেস দিয়ে প্রোডাক্ট ক্যাটালগ, কার্ট ওয়ার্কফ্লো ও অর্ডার ম্যানেজমেন্ট এবং নেক্সট.জেএস/রিঅ্যাক্ট দিয়ে রেসপনসিভ ইউজার ইন্টারফেস তৈরি করেন। রিটেইল অপারেশনের বাস্তব উদাহরণ হিসেবে তিনি 'Nur Foodes' পিওএস ও ইআরপি সিস্টেম সফলভাবে তৈরি করেছেন।`
       if (constraints.exactSentences) {
         reply = enforceExactSentenceCount(reply, constraints.exactSentences, true)
       }
@@ -652,7 +756,7 @@ function handleCapabilityInquiry(
       }
     }
 
-    let reply = `Yes, Shakib can build a complete e-commerce website for your business. He has strong expertise in building full-stack web applications using Laravel for robust backend logic (product catalogs, cart processing, order status lifecycles, and secure payment integrations), strictly normalized MySQL relational databases for transactional integrity, and Next.js/React for fast, responsive, and SEO-friendly storefronts. Additionally, he can integrate automated customer alerts and invoice delivery using n8n or SMTP workflows.`
+    let reply = `Yes, Shakib can build custom e-commerce and retail management web applications. He utilizes Laravel and normalized MySQL databases for backend architectures (catalog management, cart workflows, order statuses, and role-based permissions) and Next.js/React for responsive interfaces. For retail workflows, he engineered 'Nur Foodes', a POS and ERP application featuring catalog ordering, split payments, and automated invoice delivery.`
     if (constraints.exactSentences) {
       reply = enforceExactSentenceCount(reply, constraints.exactSentences, false)
     }
@@ -719,6 +823,68 @@ function handleCapabilityInquiry(
       reply,
       cards: proj ? [{ type: 'project-detail', data: proj }] : [],
       suggestedQueries: ['Show Nur Foodes live demo', 'How to hire Shakib?', 'Download resume'],
+    }
+  }
+
+  // Case 4d: Full-Stack (Both Frontend and Backend)
+  const isFullstack =
+    (q.includes('frontend') || q.includes('front-end') || q.includes('ফ্রন্টএন্ড')) &&
+    (q.includes('backend') || q.includes('back-end') || q.includes('ব্যাকএন্ড'))
+
+  if (isFullstack && isAbilityQuestion) {
+    if (isBangla) {
+      let reply = `হ্যাঁ, নাজমুল শাকিব ফুল-স্ট্যাক ডেভেলপার হিসেবে ফ্রন্টএন্ড এবং ব্যাকএন্ড উভয় অংশেই কাজ করেন। ব্যাকএন্ডে তিনি Laravel 12 (PHP) এবং MySQL (3NF) ব্যবহার করেন, আর ফ্রন্টএন্ডে Next.js 16, React 19, TypeScript এবং Tailwind CSS নিয়ে কাজ করেন।`
+      if (constraints.exactSentences) {
+        reply = enforceExactSentenceCount(reply, constraints.exactSentences, true)
+      }
+      return {
+        reply,
+        cards: [],
+        suggestedQueries: ['তাঁর ওয়েব প্রজেক্টগুলো দেখাও', 'টেকনোলজি স্ট্যাক কি?', 'যোগাযোগের মাধ্যম'],
+      }
+    }
+
+    let reply = `Yes, Shakib handles both frontend and backend development as a full-stack engineer. For backend architectures, he specializes in Laravel (PHP) and normalized MySQL databases, while for frontend interfaces, he builds with Next.js 16, React 19, TypeScript, and Tailwind CSS.`
+    if (constraints.exactSentences) {
+      reply = enforceExactSentenceCount(reply, constraints.exactSentences, false)
+    }
+    return {
+      reply,
+      cards: [],
+      suggestedQueries: ['Show his full-stack projects', 'What is his tech stack?', 'How to contact him?'],
+    }
+  }
+
+  // Case 4e: Payment Workflows & Gateways (Honest, no unverified claims)
+  const isPayment =
+    q.includes('payment') ||
+    q.includes('payment gateway') ||
+    q.includes('stripe') ||
+    q.includes('bkash') ||
+    q.includes('nagad') ||
+    q.includes('পেমেন্ট')
+
+  if (isPayment && isAbilityQuestion) {
+    if (isBangla) {
+      let reply = `হ্যাঁ, নাজমুল শাকিব পেমেন্ট ওয়ার্কফ্লো এবং ইনভয়েসিং সিস্টেমে অভিজ্ঞ। তিনি CV Payment Reminder প্রজেক্টে n8n ও টেলিগ্রামের মাধ্যমে স্বয়ংক্রিয় পেমেন্ট ট্র্যাকিং এবং Nur Foodes-এ স্প্লিট পেমেন্ট ও ZATCA QR ইনভয়েসিং বাস্তবায়ন করেছেন। বাণিজ্যিক পেমেন্ট গেটওয়ের জন্য তিনি লারাভেলের মাধ্যমে স্ট্যান্ডার্ড REST API ও সুরক্ষিত ওয়েবহুক ইন্টিগ্রেট করতে পারেন।`
+      if (constraints.exactSentences) {
+        reply = enforceExactSentenceCount(reply, constraints.exactSentences, true)
+      }
+      return {
+        reply,
+        cards: [],
+        suggestedQueries: ['CV Payment Reminder দেখাও', 'Nur Foodes POS দেখাও', 'যোগাযোগের মাধ্যম'],
+      }
+    }
+
+    let reply = `Yes, Shakib can integrate payment workflows and billing features. He implemented automated payment reminder pipelines using n8n and Telegram in CV Payment Reminder, dynamic PDF invoices in Securex, and retail split payments with ZATCA Phase-2 QR invoicing in Nur Foodes. For standard payment processors, he integrates standard REST APIs and secure webhooks via Laravel.`
+    if (constraints.exactSentences) {
+      reply = enforceExactSentenceCount(reply, constraints.exactSentences, false)
+    }
+    return {
+      reply,
+      cards: [],
+      suggestedQueries: ['Tell me about CV Payment Reminder', 'Tell me about Nur Foodes POS', 'Contact Shakib'],
     }
   }
 
@@ -889,19 +1055,58 @@ function handleExperienceInquiry(
 
   if (!isExpInquiry) return null
 
+  // Guard: If the query is specifically asking about technology skills (e.g. React, Angular, Laravel, Next.js)
+  // and NOT asking about Appstick or his internship/job/workplace, let technology inquiry handle it.
+  const isTechSpecific =
+    q.includes('react') ||
+    q.includes('angular') ||
+    q.includes('vue') ||
+    q.includes('django') ||
+    q.includes('spring') ||
+    q.includes('java') ||
+    q.includes('python') ||
+    q.includes('laravel') ||
+    q.includes('next.js') ||
+    q.includes('nextjs') ||
+    q.includes('node') ||
+    q.includes('php') ||
+    q.includes('docker') ||
+    q.includes('n8n') ||
+    q.includes('mysql') ||
+    q.includes('sql')
+
+  const isCompanyOrJobSpecific =
+    q.includes('intern') ||
+    q.includes('appstick') ||
+    q.includes('job') ||
+    q.includes('work history') ||
+    q.includes('company') ||
+    q.includes('career') ||
+    q.includes('past role') ||
+    q.includes('employer') ||
+    q.includes('firm') ||
+    q.includes('ইন্টার্ন') ||
+    q.includes('চাকরি') ||
+    q.includes('কোম্পানি')
+
+  if (isTechSpecific && !isCompanyOrJobSpecific) {
+    return null
+  }
+
   const resume = getResumeCardData()
+  const expPeriod = portfolioData.experience[0]?.period || 'Feb 2026 – Mar 2026'
 
   // Detailed breakdown requested
   if (constraints.isDetailed) {
     if (isBangla) {
       return {
-        reply: `### **অ্যাপস্টিক টেক ফার্মে ইন্টার্নশিপ অভিজ্ঞতা**\n\nমোঃ নাজমুল শাকিব **অ্যাপস্টিক টেক ফার্মে (Appstick Tech Firm)** ব্যাকএন্ড ডেভেলপার ইন্টার্ন হিসেবে কাজ করেছেন (সেপ্টেম্বর ২০২৫ – ডিসেম্বর ২০২৫, খুলনা)।\n\n**মূল দায়িত্বসমূহ:**\n- **লারাভেল ও পিএইচপি ব্যাকএন্ড**: লারাভেল এমভিসি স্ট্রাকচার ও রিইউজেবল বিজনেস লজিক বাস্তবায়ন।\n- **ডেটাবেস ইন্টিগ্রিটি**: মাইএসকিউএল রিলেশনাল স্কিমা তৈরি ও ৩এনএফ ডেটা ইন্টিগ্রিটি নিশ্চিতকরণ।\n- **রেস্ট এপিআই ও সিকিউরিটি**: স্যাঙ্কটাম অথেন্টিকেশন ও সুরক্ষিত এপিআই এন্ডপয়েন্ট তৈরি।\n- **Logistica প্ল্যাটফর্ম**: সাপ্লাই চেইন ও শিপমেন্ট ট্র্যাকিং ফিচার বাস্তবায়নে অবদান।\n- **টিম কোলাবোরেশন**: এজাইল স্প্রিন্টে গিট ও গিটহাব ব্যবহার করে কোড রিভিউ সম্পন্ন।`,
+        reply: `### **অ্যাপস্টিক টেক ফার্মে ইন্টার্নশিপ অভিজ্ঞতা**\n\nমোঃ নাজমুল শাকিব **অ্যাপস্টিক টেক ফার্মে (Appstick Tech Firm)** ব্যাকএন্ড ডেভেলপার ইন্টার্ন হিসেবে কাজ করেছেন (${expPeriod}, খুলনা)।\n\n**মূল দায়িত্বসমূহ:**\n- **লারাভেল ও পিএইচপি ব্যাকএন্ড**: লারাভেল এমভিসি স্ট্রাকচার ও রিইউজেবল বিজনেস লজিক বাস্তবায়ন।\n- **ডেটাবেস ইন্টিগ্রিটি**: মাইএসকিউএল রিলেশনাল স্কিমা তৈরি ও ৩এনএফ ডেটা ইন্টিগ্রিটি নিশ্চিতকরণ।\n- **রেস্ট এপিআই ও সিকিউরিটি**: স্যাঙ্কটাম অথেন্টিকেশন ও সুরক্ষিত এপিআই এন্ডপয়েন্ট তৈরি।\n- **Logistica প্ল্যাটফর্ম**: সাপ্লাই চেইন ও শিপমেন্ট ট্র্যাকিং ফিচার বাস্তবায়নে অবদান।\n- **টিম কোলাবোরেশন**: এজাইল স্প্রিন্টে গিট ও গিটহাব ব্যবহার করে কোড রিভিউ সম্পন্ন।`,
         cards: [{ type: 'resume-card', data: resume }],
         suggestedQueries: ['Logistica প্রজেক্ট সম্পর্কে বলো', 'লারাভেল স্কিল কি কি?', 'রেজুমে ডাউনলোড'],
       }
     }
     return {
-      reply: `### **Professional Experience at Appstick Tech Firm**\n\nMd. Nazmus Shakib served as a **Backend Developer Intern at Appstick Tech Firm** (September 2025 – December 2025, Khulna).\n\n**Key Responsibilities & Impact:**\n- **Laravel & PHP Backend**: Built clean MVC application logic and modular service layers.\n- **Database Architecture**: Designed normalized 3NF MySQL schemas and ensured relational data integrity.\n- **Secure APIs**: Created structured RESTful endpoints with Laravel Sanctum authentication.\n- **Logistica Project**: Developed backend consignment tracking and status workflow features.\n- **Agile Collaboration**: Worked in team sprints using Git, GitHub branching, and code reviews.`,
+      reply: `### **Professional Experience at Appstick Tech Firm**\n\nMd. Nazmus Shakib served as a **Backend Developer Intern at Appstick Tech Firm** (${expPeriod}, Khulna).\n\n**Key Responsibilities & Impact:**\n- **Laravel & PHP Backend**: Built clean MVC application logic and modular service layers.\n- **Database Architecture**: Designed normalized 3NF MySQL schemas and ensured relational data integrity.\n- **Secure APIs**: Created structured RESTful endpoints with Laravel Sanctum authentication.\n- **Logistica Project**: Developed backend consignment tracking and status workflow features.\n- **Agile Collaboration**: Worked in team sprints using Git, GitHub branching, and code reviews.`,
       cards: [{ type: 'resume-card', data: resume }],
       suggestedQueries: ['Tell me about Logistica', 'What backend skills does he have?', 'Download his resume'],
     }
@@ -911,9 +1116,9 @@ function handleExperienceInquiry(
   if (constraints.exactSentences === 2) {
     if (isBangla) {
       const sentence1 =
-        'মোঃ নাজমুল শাকিব অ্যাপস্টিক টেক ফার্মে (Appstick Tech Firm) ব্যাকএন্ড ডেভেলপার ইন্টার্ন হিসেবে দায়িত্ব পালন করেছেন (সেপ্টেম্বর ২০২৫ – ডিসেম্বর ২০২৫, খুলনা), যেখানে তিনি লারাভেল এমভিসি, সিকিউর রেস্ট এপিআই এবং ৩এনএফ মাইএসকিউএল ডেটাবেস নিয়ে কাজ করেছেন।'
+        `মোঃ নাজমুল শাকিব অ্যাপস্টিক টেক ফার্মে (Appstick Tech Firm) ব্যাকএন্ড ডেভেলপার ইন্টার্ন হিসেবে দায়িত্ব পালন করেছেন (${expPeriod}, খুলনা), যেখানে তিনি লারাভেল এমভিসি, সিকিউর রেস্ট এপিআই এবং ৩এনএফ মাইএসকিউএল ডেটাবেস নিয়ে কাজ করেছেন।`
       const sentence2 =
-        'এর পাশাপাশি তিনি নর্দান ইউনিভার্সিটিতে কম্পিউটার সায়েন্স অ্যান্ড ইঞ্জিনিয়ারিংয়ের ফাইনাল সেমিস্টারে অধ্যয়নরত (CGPA ৩.৬০/৪.০০) এবং বিভিন্ন বাস্তবসম্মত ফুল-স্ট্যাক ও অটোমেশন প্রজেক্ট সফলভাবে সম্পন্ন করেছেন।'
+        'তিনি এজাইল টিম স্প্রিন্টে Logistica সাপ্লাই চেইন প্ল্যাটফর্ম তৈরিতে সক্রিয়ভাবে কাজ করেছেন এবং ডেটাবেস ইন্টিগ্রিটি নিশ্চিত করেছেন।'
       return {
         reply: `${sentence1} ${sentence2}`,
         cards: [],
@@ -922,9 +1127,9 @@ function handleExperienceInquiry(
     }
 
     const sentence1 =
-      'Md. Nazmus Shakib served as a Backend Developer Intern at Appstick Tech Firm (September 2025 – December 2025 in Khulna), where he engineered Laravel MVC backend architectures, secure REST APIs with Sanctum, and normalized 3NF MySQL databases.'
+      `Md. Nazmus Shakib served as a Backend Developer Intern at Appstick Tech Firm (${expPeriod} in Khulna), where he engineered Laravel MVC backend architectures, secure REST APIs with Sanctum, and normalized 3NF MySQL databases.`
     const sentence2 =
-      'He is currently in his final semester of BSc in CSE at Northern University of Business and Technology Khulna with a 3.60 CGPA, actively engineering production-ready web platforms and automation workflows.'
+      'He contributed to the Logistica supply chain platform within an Agile development team, delivering reliable server-side workflows and ensuring relational data integrity.'
     return {
       reply: `${sentence1} ${sentence2}`,
       cards: [],
@@ -934,7 +1139,7 @@ function handleExperienceInquiry(
 
   // Standard concise answer
   if (isBangla) {
-    let reply = `মোঃ নাজমুল শাকিব **অ্যাপস্টিক টেক ফার্মে (Appstick Tech Firm)** ব্যাকএন্ড ডেভেলপার ইন্টার্ন হিসেবে দায়িত্ব পালন করেছেন (সেপ্টেম্বর ২০২৫ – ডিসেম্বর ২০২৫, খুলনা)। সেখানে তিনি লারাভেল এমভিসি আর্কিটেকচার, সিকিউর রেস্ট এপিআই, ৩এনএফ মাইএসকিউএল ডেটাবেস এবং **Logistica** প্ল্যাটফর্মে এজাইল টিম স্প্রিন্টে কাজ করেছেন। এর পাশাপাশি তিনি নর্দান ইউনিভার্সিটিতে সিএসই ফাইনাল সেমিস্টারে অধ্যয়নরত (CGPA ৩.৬০/৪.০০)।`
+    let reply = `মোঃ নাজমুল শাকিব **অ্যাপস্টিক টেক ফার্মে (Appstick Tech Firm)** ব্যাকএন্ড ডেভেলপার ইন্টার্ন হিসেবে দায়িত্ব পালন করেছেন (${expPeriod}, খুলনা)। সেখানে তিনি লারাভেল এমভিসি আর্কিটেকচার, সিকিউর রেস্ট এপিআই, ৩এনএফ মাইএসকিউএল ডেটাবেস এবং **Logistica** প্ল্যাটফর্মে এজাইল টিম স্প্রিন্টে কাজ করেছেন।`
     if (constraints.exactSentences) {
       reply = enforceExactSentenceCount(reply, constraints.exactSentences, true)
     }
@@ -945,7 +1150,7 @@ function handleExperienceInquiry(
     }
   }
 
-  let reply = `Md. Nazmus Shakib worked as a **Backend Developer Intern at Appstick Tech Firm** (September 2025 – December 2025, Khulna). He engineered Laravel MVC backend systems, developed secure REST APIs with Sanctum, optimized normalized MySQL databases, and contributed to the **Logistica** supply chain platform in an Agile team. He is also completing his BSc in CSE at Northern University with a 3.60 CGPA.`
+  let reply = `Md. Nazmus Shakib worked as a **Backend Developer Intern at Appstick Tech Firm** (${expPeriod}, Khulna). He engineered Laravel MVC backend systems, developed secure REST APIs with Sanctum, optimized normalized MySQL databases, and contributed to the **Logistica** supply chain platform in an Agile team.`
   if (constraints.exactSentences) {
     reply = enforceExactSentenceCount(reply, constraints.exactSentences, false)
   }
@@ -1185,6 +1390,77 @@ function handleDirectContacts(
   const q = query.toLowerCase()
   const contact = getContactDirectData()
 
+  const wantsEmail = q.includes('email') || q.includes('gmail') || q.includes('mail') || q.includes('ইমেইল')
+  const wantsPhone = q.includes('phone') || q.includes('mobile') || q.includes('call') || q.includes('ফোন') || q.includes('নাম্বার')
+  const wantsWhatsApp = q.includes('whatsapp') || q.includes('wa.me') || q.includes('হোয়াটসঅ্যাপ')
+  const wantsFb =
+    q.includes('facebook') ||
+    q.includes('fb link') ||
+    q.includes('fb id') ||
+    q.includes('fb profile') ||
+    q === 'fb' ||
+    q.includes('ফেসবুক') ||
+    q.includes('fb daw') ||
+    q.includes('fb dao')
+  const wantsLinkedIn = q.includes('linkedin') || q.includes('linked in') || q.includes('লিঙ্কডইন')
+  const wantsGitHub =
+    q.includes('github') ||
+    q.includes('git repo') ||
+    q.includes('repositories') ||
+    q.includes('source code') ||
+    q.includes('গিটহাব')
+
+  // Multi-channel contact request (e.g. email and phone, facebook and linkedin)
+  const requestedChannels: string[] = []
+  if (wantsEmail) requestedChannels.push('email')
+  if (wantsPhone) requestedChannels.push('phone')
+  if (wantsWhatsApp && !wantsPhone) requestedChannels.push('whatsapp')
+  if (wantsFb) requestedChannels.push('facebook')
+  if (wantsLinkedIn) requestedChannels.push('linkedin')
+  if (wantsGitHub) requestedChannels.push('github')
+
+  if (requestedChannels.length >= 2) {
+    if (isBangla) {
+      const itemsBn: string[] = []
+      if (wantsEmail) itemsBn.push(`- 📧 **ইমেইল**: [${portfolioData.email}](mailto:${portfolioData.email})`)
+      if (wantsPhone && wantsWhatsApp) {
+        itemsBn.push(`- 📞 **ফোন ও হোয়াটসঅ্যাপ**: [${portfolioData.phone}](tel:${portfolioData.phone}) ([হোয়াটসঅ্যাপ চ্যাট](${socialLinks.whatsapp}))`)
+      } else if (wantsPhone) {
+        itemsBn.push(`- 📞 **ফোন**: [${portfolioData.phone}](tel:${portfolioData.phone})`)
+      } else if (wantsWhatsApp) {
+        itemsBn.push(`- 💬 **হোয়াটসঅ্যাপ**: [সরাসরি মেসেজ দিন](${socialLinks.whatsapp})`)
+      }
+      if (wantsFb) itemsBn.push(`- 🌐 **ফেসবুক**: [${socialLinks.facebook}](${socialLinks.facebook})`)
+      if (wantsLinkedIn) itemsBn.push(`- 💼 **লিঙ্কডইন**: [${socialLinks.linkedin}](${socialLinks.linkedin})`)
+      if (wantsGitHub) itemsBn.push(`- 🐙 **গিটহাব**: [github.com/${portfolioData.githubUsername}](${portfolioData.githubUrl})`)
+
+      return {
+        reply: `মোঃ নাজমুল শাকিবের অনুরোধকৃত যোগাযোগের মাধ্যমসমূহ:\n\n${itemsBn.join('\n')}`,
+        cards: [],
+        suggestedQueries: ['হায়ার করার উপায়', 'সেরা প্রজেক্টগুলো দেখাও', 'রেজুমে ডাউনলোড'],
+      }
+    }
+
+    const itemsEn: string[] = []
+    if (wantsEmail) itemsEn.push(`- 📧 **Email**: [${portfolioData.email}](mailto:${portfolioData.email})`)
+    if (wantsPhone && wantsWhatsApp) {
+      itemsEn.push(`- 📞 **Phone & WhatsApp**: [${portfolioData.phone}](tel:${portfolioData.phone}) ([Chat on WhatsApp](${socialLinks.whatsapp}))`)
+    } else if (wantsPhone) {
+      itemsEn.push(`- 📞 **Phone**: [${portfolioData.phone}](tel:${portfolioData.phone})`)
+    } else if (wantsWhatsApp) {
+      itemsEn.push(`- 💬 **WhatsApp**: [Chat on WhatsApp](${socialLinks.whatsapp})`)
+    }
+    if (wantsFb) itemsEn.push(`- 🌐 **Facebook**: [${socialLinks.facebook}](${socialLinks.facebook})`)
+    if (wantsLinkedIn) itemsEn.push(`- 💼 **LinkedIn**: [${socialLinks.linkedin}](${socialLinks.linkedin})`)
+    if (wantsGitHub) itemsEn.push(`- 🐙 **GitHub**: [github.com/${portfolioData.githubUsername}](${portfolioData.githubUrl})`)
+
+    return {
+      reply: `Here are the requested contact details for **Md. Nazmus Shakib**:\n\n${itemsEn.join('\n')}`,
+      cards: [],
+      suggestedQueries: ['How to hire Shakib?', 'Show his best projects', 'Download his resume'],
+    }
+  }
+
   // Facebook
   if (
     q.includes('facebook') ||
@@ -1337,8 +1613,7 @@ function handleEducationAndLocation(
   const q = query.toLowerCase()
   const resume = getResumeCardData()
 
-  // Location
-  if (
+  const wantsLocation =
     q.includes('location') ||
     q.includes('address') ||
     q.includes('where do you live') ||
@@ -1351,23 +1626,8 @@ function handleEducationAndLocation(
     q.includes('satkhira') ||
     q.includes('কোথায় থাকো') ||
     q.includes('ঠিকানা')
-  ) {
-    if (isBangla) {
-      return {
-        reply: `মোঃ নাজমুল শাকিব বর্তমানে **খুলনা, বাংলাদেশ**-এ অবস্থান করছেন (হোমটাউন: সাতক্ষীরা)। তিনি খুলনা/ঢাকায় অন-সাইট রোলের পাশাপাশি বিশ্বব্যাপী রিমোট প্রজেক্টে কাজ করতে প্রস্তুত।`,
-        cards: [],
-        suggestedQueries: ['যোগাযোগের মাধ্যম', 'সেরা প্রজেক্ট দেখাও', 'কেন তাঁকে হায়ার করবেন?'],
-      }
-    }
-    return {
-      reply: `Md. Nazmus Shakib is based in **Khulna, Bangladesh** (Hometown: Satkhira). He is available for on-site engineering roles in Khulna/Dhaka as well as remote engineering positions worldwide.`,
-      cards: [],
-      suggestedQueries: ['How to contact him?', 'Show his best projects', 'Why should I hire him?'],
-    }
-  }
 
-  // Academic Education & CGPA
-  if (
+  const wantsEduOrCgpa =
     q.includes('education') ||
     q.includes('cgpa') ||
     q.includes('gpa') ||
@@ -1388,7 +1648,50 @@ function handleEducationAndLocation(
     q.includes('রেজাল্ট') ||
     q.includes('ভার্সিটি') ||
     q.includes('বিশ্ববিদ্যালয়')
-  ) {
+
+  // Multi-entity: Both Location and Education / CGPA requested
+  if (wantsLocation && wantsEduOrCgpa) {
+    if (isBangla) {
+      let reply = `মোঃ নাজমুল শাকিব বর্তমানে **খুলনা, বাংলাদেশ**-এ অবস্থান করছেন (হোমটাউন: সাতক্ষীরা) এবং নর্দান ইউনিভার্সিটি অব বিজনেস অ্যান্ড টেকনোলজি খুলনা-তে সিএসই ফাইনাল সেমিস্টারে অধ্যয়নরত (বর্তমান **CGPA ৩.৬০ / ৪.০০**)।`
+      if (constraints.exactSentences) {
+        reply = enforceExactSentenceCount(reply, constraints.exactSentences, true)
+      }
+      return {
+        reply,
+        cards: [],
+        suggestedQueries: ['সার্টিফিকেশন কি কি আছে?', 'কাজের অভিজ্ঞতা কেমন?', 'রেজুমে ডাউনলোড'],
+      }
+    }
+
+    let reply = `Md. Nazmus Shakib is located in **Khulna, Bangladesh** (hometown: Satkhira) and is currently in his final semester of BSc in CSE at Northern University of Business and Technology Khulna with a **3.60 / 4.00 CGPA**.`
+    if (constraints.exactSentences) {
+      reply = enforceExactSentenceCount(reply, constraints.exactSentences, false)
+    }
+    return {
+      reply,
+      cards: [],
+      suggestedQueries: ['What certifications does he hold?', 'Tell me about his experience', 'Download his resume'],
+    }
+  }
+
+  // Location
+  if (wantsLocation) {
+    if (isBangla) {
+      return {
+        reply: `মোঃ নাজমুল শাকিব বর্তমানে **খুলনা, বাংলাদেশ**-এ অবস্থান করছেন (হোমটাউন: সাতক্ষীরা)। তিনি খুলনা/ঢাকায় অন-সাইট রোলের পাশাপাশি বিশ্বব্যাপী রিমোট প্রজেক্টে কাজ করতে প্রস্তুত।`,
+        cards: [],
+        suggestedQueries: ['যোগাযোগের মাধ্যম', 'সেরা প্রজেক্ট দেখাও', 'কেন তাঁকে হায়ার করবেন?'],
+      }
+    }
+    return {
+      reply: `Md. Nazmus Shakib is based in **Khulna, Bangladesh** (Hometown: Satkhira). He is available for on-site engineering roles in Khulna/Dhaka as well as remote engineering positions worldwide.`,
+      cards: [],
+      suggestedQueries: ['How to contact him?', 'Show his best projects', 'Why should I hire him?'],
+    }
+  }
+
+  // Academic Education & CGPA
+  if (wantsEduOrCgpa) {
     if (isBangla) {
       let reply = `মোঃ নাজমুল শাকিব নর্দান ইউনিভার্সিটি অব বিজনেস অ্যান্ড টেকনোলজি খুলনা (NUBTK)-তে **কম্পিউটার সায়েন্স অ্যান্ড ইঞ্জিনিয়ারিং (BSc in CSE)**-এর ফাইনাল সেমিস্টারে অধ্যয়নরত। তাঁর বর্তমান **CGPA ৩.৬০ / ৪.০০** এবং গ্র্যাজুয়েশন ২০২৬ সালে। পূর্বে তিনি HSC (GPA ৫.০০) এবং SSC (GPA ৫.০০) অর্জন করেছেন।`
       if (constraints.exactSentences) {
@@ -1416,16 +1719,355 @@ function handleEducationAndLocation(
 }
 
 /**
- * Intent 10: Single Technology Focus (Laravel, MySQL, Next.js, etc.)
+ * Intent 10: Multi-Technology & Single-Technology Inquiry Handler
+ * Directly answers multi-entity questions (e.g., React and Angular, Laravel and Next.js, PHP and Python, Java or Spring Boot).
+ * Strictly avoids claiming unverified expertise and remains natural and concise.
  */
-function handleSingleTechFocus(
+interface TechDescriptor {
+  id: string
+  nameEn: string
+  nameBn: string
+  category: 'verified-primary' | 'verified-secondary' | 'academic' | 'unverified'
+  detailEn: string
+  detailBn: string
+  detect: (q: string) => boolean
+}
+
+const TECH_CATALOG: TechDescriptor[] = [
+  {
+    id: 'laravel',
+    nameEn: 'Laravel',
+    nameBn: 'লারাভেল',
+    category: 'verified-primary',
+    detailEn: 'Laravel 12 is his primary backend framework for clean MVC architectures, Sanctum authentication, and RESTful APIs',
+    detailBn: 'লারাভেল ১২ শাকিবের প্রধান ব্যাকএন্ড ফ্রেমওয়ার্ক (MVC আর্কিটেকচার, স্যাঙ্কটাম অথেন্টিকেশন ও REST API)',
+    detect: (q) => /\b(laravel|lara)\b/i.test(q) || q.includes('লারাবেল') || q.includes('লারাভেল'),
+  },
+  {
+    id: 'nextjs',
+    nameEn: 'Next.js',
+    nameBn: 'নেক্সট.জেএস',
+    category: 'verified-primary',
+    detailEn: 'Next.js 16 is his primary full-stack React framework (App Router, SSR, and TypeScript, used in Resumate AI)',
+    detailBn: 'Next.js 16 হলো শাকিবের আধুনিক ফুল-স্ট্যাক ফ্রেমওয়ার্ক (Resumate AI ও পোর্টফোলিওতে ব্যবহৃত)',
+    detect: (q) => /\b(next\.?js|nextjs)\b/i.test(q) || q.includes('নেক্সট'),
+  },
+  {
+    id: 'react',
+    nameEn: 'React',
+    nameBn: 'রিঅ্যাক্ট',
+    category: 'verified-primary',
+    detailEn: 'React 19 & Vite is his core UI library for dynamic, responsive web interfaces (used in AI Smart Campus System)',
+    detailBn: 'রিঅ্যাক্ট ১৯ ও ভাইট শাকিবের মূল ইউআই লাইব্রেরি (AI Smart Campus System-এ ব্যবহৃত)',
+    detect: (q) => (/\b(react|reactjs)\b/i.test(q) || q.includes('রিঅ্যাক্ট')) && !q.includes('react native') && !q.includes('রিঅ্যাক্ট নেটিভ'),
+  },
+  {
+    id: 'php',
+    nameEn: 'PHP',
+    nameBn: 'পিএইচপি',
+    category: 'verified-primary',
+    detailEn: 'PHP is his primary backend language, reinforced by OOP design patterns and 80 hours of ICT Division training from Khulna University',
+    detailBn: 'পিএইচপি তাঁর মূল ব্যাকএন্ড ভাষা (ওওপি এবং খুলনা বিশ্ববিদ্যালয়ের ৮০ ঘণ্টার প্রফেশনাল ট্রেনিং)',
+    detect: (q) => /\bphp\b/i.test(q) || q.includes('পিএইচপি'),
+  },
+  {
+    id: 'mysql',
+    nameEn: 'MySQL',
+    nameBn: 'মাইএসকিউএল',
+    category: 'verified-primary',
+    detailEn: 'MySQL is his primary relational database, strictly normalized to Third Normal Form (3NF) for relational integrity',
+    detailBn: 'MySQL শাকিবের মূল রিলেশনাল ডেটাবেস (3NF নরম্যালাইজড ডেটা স্কিমা)',
+    detect: (q) => /\b(mysql|sql|3nf)\b/i.test(q) || q.includes('মাইএসকিউএল') || (/\bdatabase\b/i.test(q) && !q.includes('postgres') && !q.includes('mongo')) || q.includes('ডেটাবেস'),
+  },
+  {
+    id: 'n8n',
+    nameEn: 'n8n',
+    nameBn: 'n8n',
+    category: 'verified-primary',
+    detailEn: 'n8n is his self-hosted workflow automation platform for webhook triggers, Google Sheets sync, and Telegram notifications',
+    detailBn: 'n8n শাকিবের সেলফ-হোস্টেড অটোমেশন টুল (টেলিগ্রাম বট ও গুগল শিটস ওয়ার্কফ্লো)',
+    detect: (q) => /\bn8n\b/i.test(q),
+  },
+  {
+    id: 'docker',
+    nameEn: 'Docker',
+    nameBn: 'ডকার',
+    category: 'verified-secondary',
+    detailEn: 'Docker is used for containerized local development and hosting n8n automation instances',
+    detailBn: 'ডকার শাকিব কনটেইনারাইজেশন এবং n8n সেলফ-হোস্টিংয়ে ব্যবহার করেন',
+    detect: (q) => /\b(docker)\b/i.test(q) || q.includes('ডকার'),
+  },
+  {
+    id: 'typescript',
+    nameEn: 'TypeScript',
+    nameBn: 'টাইপস্ক্রিপ্ট',
+    category: 'verified-primary',
+    detailEn: 'TypeScript is used across modern Next.js and React codebases for strict type safety and cleaner architecture',
+    detailBn: 'টাইপস্ক্রিপ্ট শাকিব আধুনিক নেক্সট.জেএস ও রিঅ্যাক্ট কোডবেসে টাইপ সেফটির জন্য ব্যবহার করেন',
+    detect: (q) => /\b(typescript|ts)\b/i.test(q) || q.includes('টাইপস্ক্রিপ্ট'),
+  },
+  {
+    id: 'javascript',
+    nameEn: 'JavaScript',
+    nameBn: 'জাভাস্ক্রিপ্ট',
+    category: 'verified-primary',
+    detailEn: 'JavaScript is used extensively across interactive frontends and modular vanilla builds like Nur Foodes POS',
+    detailBn: 'জাভাস্ক্রিপ্ট শাকিব আধুনিক ফ্রন্টএন্ড এবং Nur Foodes POS-এ ব্যবহার করেছেন',
+    detect: (q) => (/\bjavascript\b/i.test(q) || q.includes('জাভাস্ক্রিপ্ট')) || (/\bjs\b/i.test(q) && !q.includes('next.js') && !q.includes('nextjs') && !q.includes('reactjs') && !q.includes('vuejs') && !q.includes('node.js') && !q.includes('nodejs')),
+  },
+  {
+    id: 'tailwind',
+    nameEn: 'Tailwind CSS',
+    nameBn: 'টেইলউইন্ড সিএসএস',
+    category: 'verified-primary',
+    detailEn: 'Tailwind CSS is his primary styling framework for responsive and accessible UI design',
+    detailBn: 'টেইলউইন্ড সিএসএস শাকিবের প্রধান স্টাইলিং ফ্রেমওয়ার্ক',
+    detect: (q) => /\b(tailwind|tailwindcss)\b/i.test(q) || q.includes('টেইলউইন্ড'),
+  },
+  {
+    id: 'supabase',
+    nameEn: 'Supabase / PostgreSQL',
+    nameBn: 'সুপাবেস / পোস্টগ্রেসকিউএল',
+    category: 'verified-secondary',
+    detailEn: 'Supabase PostgreSQL was integrated in Resumate AI for cloud authentication and database storage',
+    detailBn: 'সুপাবেস পোস্টগ্রেসকিউএল Resumate AI-তে ক্লাউড স্টোরেজ ও অথেন্টিকেশনে ব্যবহৃত হয়েছে',
+    detect: (q) => /\b(supabase|postgres|postgresql)\b/i.test(q) || q.includes('সুপাবেস'),
+  },
+  {
+    id: 'python',
+    nameEn: 'Python',
+    nameBn: 'পাইথন',
+    category: 'academic',
+    detailEn: 'Python is part of his academic coursework at Northern University (OOP, data structures, and automation scripts)',
+    detailBn: 'পাইথন শাকিবের বিশ্ববিদ্যালয়ে একাডেমিক কোর্সওয়ার্ক এবং স্ক্রিপ্টিংয়ের অভিজ্ঞতা রয়েছে',
+    detect: (q) => /\bpython\b/i.test(q) || q.includes('পাইথন') || q.includes('পাইভন'),
+  },
+  {
+    id: 'angular',
+    nameEn: 'Angular',
+    nameBn: 'অ্যাঙ্গুলার',
+    category: 'unverified',
+    detailEn: 'Angular is not in his verified portfolio stack',
+    detailBn: 'অ্যাঙ্গুলারে তাঁর কোনো কাজের অভিজ্ঞতা নেই',
+    detect: (q) => /\b(angular|angularjs)\b/i.test(q) || q.includes('অ্যাঙ্গুলার'),
+  },
+  {
+    id: 'vue',
+    nameEn: 'Vue.js',
+    nameBn: 'ভ্যু.জেএস',
+    category: 'unverified',
+    detailEn: 'Vue.js is not in his verified portfolio stack',
+    detailBn: 'ভ্যু.জেএস-এ তাঁর কোনো ভেরিফায়েড অভিজ্ঞতা নেই',
+    detect: (q) => /\b(vue|vuejs)\b/i.test(q) || q.includes('ভ্যু'),
+  },
+  {
+    id: 'django',
+    nameEn: 'Django',
+    nameBn: 'ডিজ্যাঙ্গো',
+    category: 'unverified',
+    detailEn: 'Django is not in his verified portfolio stack',
+    detailBn: 'ডিজ্যাঙ্গোতে তাঁর কোনো কাজের অভিজ্ঞতা নেই',
+    detect: (q) => /\bdjango\b/i.test(q) || q.includes('ডিজ্যাঙ্গো'),
+  },
+  {
+    id: 'flask',
+    nameEn: 'Flask',
+    nameBn: 'ফ্লাস্ক',
+    category: 'unverified',
+    detailEn: 'Flask is not in his verified portfolio stack',
+    detailBn: 'ফ্লাস্কে তাঁর কোনো কাজের অভিজ্ঞতা নেই',
+    detect: (q) => /\bflask\b/i.test(q) || q.includes('ফ্লাস্ক'),
+  },
+  {
+    id: 'spring',
+    nameEn: 'Spring Boot',
+    nameBn: 'স্প্রিং বুট',
+    category: 'unverified',
+    detailEn: 'Spring Boot is not in his verified portfolio stack',
+    detailBn: 'স্প্রিং বুটে তাঁর কোনো কাজের অভিজ্ঞতা নেই',
+    detect: (q) => /\b(spring|springboot|spring boot)\b/i.test(q) || q.includes('স্প্রিং'),
+  },
+  {
+    id: 'java',
+    nameEn: 'Java',
+    nameBn: 'জাভা',
+    category: 'unverified',
+    detailEn: 'Java enterprise backend engineering is not in his verified portfolio stack',
+    detailBn: 'জাভা ব্যাকএন্ড স্ট্যাকে তাঁর কোনো কাজের অভিজ্ঞতা নেই',
+    detect: (q) => (/\bjava\b/i.test(q) || q.includes('জাভা')) && !q.includes('javascript') && !q.includes('জাভাস্ক্রিপ্ট'),
+  },
+  {
+    id: 'flutter',
+    nameEn: 'Flutter',
+    nameBn: 'ফ্লাটার',
+    category: 'unverified',
+    detailEn: 'Flutter mobile app development is not in his verified portfolio stack',
+    detailBn: 'ফ্লাটার মোবাইল ডেভেলপমেন্টে তাঁর কোনো কাজের অভিজ্ঞতা নেই',
+    detect: (q) => /\bflutter\b/i.test(q) || q.includes('ফ্লাটার'),
+  },
+  {
+    id: 'react-native',
+    nameEn: 'React Native',
+    nameBn: 'রিঅ্যাক্ট নেটিভ',
+    category: 'unverified',
+    detailEn: 'React Native mobile app development is not in his verified portfolio stack',
+    detailBn: 'রিঅ্যাক্ট নেটিভে তাঁর কোনো কাজের অভিজ্ঞতা নেই',
+    detect: (q) => /\b(react native)\b/i.test(q) || q.includes('রিঅ্যাক্ট নেটিভ'),
+  },
+  {
+    id: 'ruby',
+    nameEn: 'Ruby on Rails',
+    nameBn: 'রুবি অন রেইলস',
+    category: 'unverified',
+    detailEn: 'Ruby on Rails is not in his verified portfolio stack',
+    detailBn: 'রুবি অন রেইলসে তাঁর কোনো কাজের অভিজ্ঞতা নেই',
+    detect: (q) => /\b(ruby|rails)\b/i.test(q) || q.includes('রুবি'),
+  },
+  {
+    id: 'golang',
+    nameEn: 'Go / Golang',
+    nameBn: 'গো / গোল্যাং',
+    category: 'unverified',
+    detailEn: 'Go / Golang is not in his verified portfolio stack',
+    detailBn: 'গোল্যাংয়ে তাঁর কোনো কাজের অভিজ্ঞতা নেই',
+    detect: (q) => /\b(golang|go language)\b/i.test(q) || q.includes('গোল্যাং'),
+  },
+  {
+    id: 'dotnet',
+    nameEn: 'ASP.NET / C#',
+    nameBn: '.নেট / সি#',
+    category: 'unverified',
+    detailEn: '.NET / C# is not in his verified portfolio stack',
+    detailBn: '.নেট / সি#-এ তাঁর কোনো কাজের অভিজ্ঞতা নেই',
+    detect: (q) => /\b(asp\.net|dotnet|\.net|c#)\b/i.test(q),
+  },
+]
+
+function handleTechnologyInquiry(
   query: string,
   isBangla: boolean,
   constraints: ParsedConstraints
 ): { reply: string; cards: AiActionCard[]; suggestedQueries: string[] } | null {
   const q = query.toLowerCase()
 
-  if (q.includes('laravel') || q.includes('লারাবেল') || q.includes('লারাভেল')) {
+  // Guard: If the query explicitly asks about work history or internship at Appstick, let handleExperienceInquiry handle it.
+  if (
+    q.includes('appstick') ||
+    q.includes('intern') ||
+    q.includes('work history') ||
+    q.includes('past role') ||
+    q.includes('employer') ||
+    q.includes('career')
+  ) {
+    return null
+  }
+
+  const matched = TECH_CATALOG.filter((t) => t.detect(q))
+  if (matched.length === 0) return null
+
+  const verified = matched.filter((t) => t.category === 'verified-primary' || t.category === 'verified-secondary')
+  const academic = matched.filter((t) => t.category === 'academic')
+  const unverified = matched.filter((t) => t.category === 'unverified')
+
+  // Case 1: Multi-Technology Inquiries (Answers EVERY requested entity)
+  if (matched.length >= 2) {
+    if (isBangla) {
+      let reply = ''
+      if (verified.length > 0 && unverified.length > 0) {
+        reply = `${verified.map((v) => v.nameBn).join(', ')}-এর ক্ষেত্রে হ্যাঁ, কিন্তু ${unverified.map((u) => u.nameBn).join(', ')}-এর ক্ষেত্রে না। নাজমুল শাকিব ${verified.map((v) => `${v.nameBn} (${v.detailBn})`).join(' ও ')} নিয়ে দক্ষ, তবে ${unverified.map((u) => u.nameBn).join(' বা ')}-এ তাঁর কোনো কাজের অভিজ্ঞতা নেই।`
+      } else if (verified.length > 0 && academic.length > 0) {
+        reply = `${verified.map((v) => v.nameBn).join(', ')}-এর ক্ষেত্রে হ্যাঁ, তবে ${academic.map((a) => a.nameBn).join(', ')}-এ তাঁর অভিজ্ঞতা একাডেমিক। ${verified.map((v) => `${v.nameBn} (${v.detailBn})`).join(' ও ')}-এ তাঁর বাস্তব কাজের অভিজ্ঞতা রয়েছে। অন্যদিকে ${academic.map((a) => a.nameBn).join(' ও ')}-এ তাঁর অভিজ্ঞতা মূলত বিশ্ববিদ্যালয়ের কোর্সওয়ার্ক ও স্ক্রিপ্টিংয়ের মধ্যে সীমাবদ্ধ।`
+      } else if (unverified.length > 0 && verified.length === 0 && academic.length === 0) {
+        reply = `না, নাজমুল শাকিবের ${unverified.map((u) => u.nameBn).join(' বা ')}-তে কোনো কাজের অভিজ্ঞতা নেই। তাঁর মূল ইঞ্জিনিয়ারিং দক্ষতা পিএইচপি, লারাভেল, মাইএসকিউএল, নেক্সট.জেএস এবং রিঅ্যাক্ট-এর ওপর প্রতিষ্ঠিত।`
+      } else {
+        reply = `হ্যাঁ, নাজমুল শাকিবের ${verified.map((v) => v.nameBn).join(' এবং ')} উভয় প্রযুক্তিতেই বাস্তব কাজের অভিজ্ঞতা রয়েছে। ${verified.map((v) => v.detailBn).join(', ')}।`
+      }
+
+      if (constraints.exactSentences) {
+        reply = enforceExactSentenceCount(reply, constraints.exactSentences, true)
+      }
+
+      return {
+        reply,
+        cards: [],
+        suggestedQueries: ['লারাভেল প্রজেক্ট দেখাও', 'অন্যান্য টেকনোলজি স্ট্যাক', 'হায়ার করার উপায়'],
+      }
+    }
+
+    let reply = ''
+    if (verified.length > 0 && unverified.length > 0) {
+      reply = `Yes for ${verified.map((v) => v.nameEn).join(', ')}, but no for ${unverified.map((u) => u.nameEn).join(', ')}. Shakib is proficient in ${verified.map((v) => `${v.nameEn} (${v.detailEn})`).join(' and ')}, but he does not have verified experience with ${unverified.map((u) => u.nameEn).join(' or ')} in his portfolio.`
+    } else if (verified.length > 0 && academic.length > 0) {
+      reply = `Yes for ${verified.map((v) => v.nameEn).join(', ')}, while his experience with ${academic.map((a) => a.nameEn).join(', ')} is academic. He has extensive production experience with ${verified.map((v) => `${v.nameEn} (${v.detailEn})`).join(' and ')}. For ${academic.map((a) => a.nameEn).join(', ')}, his experience is based on university coursework and scripting rather than commercial web backend engineering.`
+    } else if (unverified.length > 0 && verified.length === 0 && academic.length === 0) {
+      reply = `No, Shakib does not have verified production experience with ${unverified.map((u) => u.nameEn).join(' or ')}. His primary engineering stack centers on PHP, Laravel, MySQL, Next.js, and React.`
+    } else {
+      reply = `Yes, Shakib has verified experience with both ${verified.map((v) => v.nameEn).join(' and ')}. ${verified.map((v) => v.detailEn).join(', while ')}.`
+    }
+
+    if (constraints.exactSentences) {
+      reply = enforceExactSentenceCount(reply, constraints.exactSentences, false)
+    }
+
+    return {
+      reply,
+      cards: [],
+      suggestedQueries: ['Show projects using Laravel', 'Show projects using Next.js & React', 'How to hire him?'],
+    }
+  }
+
+  // Case 2: Single Technology Inquiries
+  const single = matched[0]
+  if (single.category === 'unverified') {
+    if (isBangla) {
+      let reply = `না, নাজমুল শাকিবের **${single.nameBn}**-এ কোনো ভেরিফায়েড কাজের অভিজ্ঞতা নেই। তাঁর মূল স্ট্যাক হলো লারাভেল (পিএইচপি), মাইএসকিউএল, নেক্সট.জেএস এবং রিঅ্যাক্ট।`
+      if (constraints.exactSentences) {
+        reply = enforceExactSentenceCount(reply, constraints.exactSentences, true)
+      }
+      return {
+        reply,
+        cards: [],
+        suggestedQueries: ['লারাভেল প্রজেক্ট দেখাও', 'টেকনোলজি স্ট্যাক কি?', 'যোগাযোগের মাধ্যম'],
+      }
+    }
+
+    let reply = `No, Shakib does not have verified experience with **${single.nameEn}**. His verified development stack centers on Laravel (PHP), MySQL, Next.js, and React.`
+    if (constraints.exactSentences) {
+      reply = enforceExactSentenceCount(reply, constraints.exactSentences, false)
+    }
+    return {
+      reply,
+      cards: [],
+      suggestedQueries: ['Show projects using Laravel', 'What technologies does he use?', 'Contact Shakib'],
+    }
+  }
+
+  if (single.category === 'academic') {
+    if (isBangla) {
+      let reply = `**${single.nameBn}**-এ নাজমুল শাকিবের অভিজ্ঞতা মূলত নর্দান ইউনিভার্সিটির একাডেমিক কোর্সওয়ার্ক (ডাটা স্ট্রাকচার, অ্যালগরিদম ও স্ক্রিপ্টিং)-এর মধ্যে সীমাবদ্ধ, এটি তাঁর কমার্শিয়াল ওয়েব ব্যাকএন্ড স্ট্যাক নয়। তাঁর প্রধান ব্যাকএন্ড স্ট্যাক হলো লারাভেল ও পিএইচপি।`
+      if (constraints.exactSentences) {
+        reply = enforceExactSentenceCount(reply, constraints.exactSentences, true)
+      }
+      return {
+        reply,
+        cards: [],
+        suggestedQueries: ['লারাভেল প্রজেক্ট দেখাও', 'টেকনোলজি স্ট্যাক কি?', 'রেজুমে ডাউনলোড'],
+      }
+    }
+
+    let reply = `For **${single.nameEn}**, Shakib's experience is primarily academic coursework at Northern University (covering data structures, algorithms, and scripting) rather than commercial production web backend development. His primary backend stack is Laravel and PHP.`
+    if (constraints.exactSentences) {
+      reply = enforceExactSentenceCount(reply, constraints.exactSentences, false)
+    }
+    return {
+      reply,
+      cards: [],
+      suggestedQueries: ['Show projects using Laravel', 'What technologies does he use?', 'Download his resume'],
+    }
+  }
+
+  // Single Verified Technology
+  if (single.id === 'laravel') {
     if (isBangla) {
       let reply = `হ্যাঁ, **Laravel** হলো নাজমুল শাকিবের প্রধান ব্যাকএন্ড ফ্রেমওয়ার্ক। তিনি Laravel 12, Laravel MVC আর্কিটেকচার, Sanctum API অথেন্টিকেশন, Eloquent ORM এবং সুরক্ষিত RESTful API তৈরিতে পারদর্শী। তিনি খুলনা বিশ্ববিদ্যালয় থেকে আইসিটি ডিভিশনের আওতায় ৮০ ঘণ্টার প্রফেশনাল লারাভেল ট্রেনিংও সম্পন্ন করেছেন।`
       if (constraints.exactSentences) {
@@ -1448,37 +2090,105 @@ function handleSingleTechFocus(
     }
   }
 
-  if (q.includes('mysql') || q.includes('database') || q.includes('sql') || q.includes('3nf')) {
+  if (single.id === 'mysql') {
     if (isBangla) {
+      let reply = `হ্যাঁ, নাজমুল শাকিব **MySQL রিলেশনাল ডেটাবেস** আর্কিটেকচারে পারদর্শী। তিনি রিলেশনাল স্কিমা ডিজাইন, থার্ড নরমাল ফর্ম (3NF) বাস্তবায়ন, ইনডেক্সিং এবং কুয়েরি ইন্টিগ্রিটি অপ্টিমাইজেশনে দক্ষ। AI Smart Campus System-এ তিনি ডেটাবেস লিড হিসেবে দায়িত্ব পালন করেছেন।`
+      if (constraints.exactSentences) {
+        reply = enforceExactSentenceCount(reply, constraints.exactSentences, true)
+      }
       return {
-        reply: `নাজমুল শাকিব **MySQL রিলেশনাল ডেটাবেস** আর্কিটেকচারে পারদর্শী। তিনি রিলেশনাল স্কিমা ডিজাইন, থার্ড নরমাল ফর্ম (3NF) বাস্তবায়ন, ইনডেক্সিং এবং কুয়েরি ইন্টিগ্রিটি অপ্টিমাইজেশনে দক্ষ। AI Smart Campus System-এ তিনি ডেটাবেস লিড হিসেবে দায়িত্ব পালন করেছেন।`,
+        reply,
         cards: [],
         suggestedQueries: ['AI Smart Campus সিস্টেম দেখাও', 'লারাভেল স্কিল কি কি?', 'অন্যান্য প্রজেক্ট'],
       }
     }
+    let reply = `Yes, Md. Nazmus Shakib specializes in **MySQL relational database engineering**. He focuses on designing schemas normalized strictly to Third Normal Form (3NF), foreign key cascading, query indexing, and relational integrity. He served as Database Lead for the AI Smart Campus System.`
+    if (constraints.exactSentences) {
+      reply = enforceExactSentenceCount(reply, constraints.exactSentences, false)
+    }
     return {
-      reply: `Md. Nazmus Shakib specializes in **MySQL relational database engineering**. He focuses on designing schemas normalized strictly to Third Normal Form (3NF), foreign key cascading, query indexing, and relational integrity. He served as Database Lead for the AI Smart Campus System.`,
+      reply,
       cards: [],
       suggestedQueries: ['Tell me about AI Smart Campus System', 'What backend skills does he have?', 'How to hire him?'],
     }
   }
 
-  if (q.includes('next') || q.includes('react') || q.includes('frontend') || q.includes('ফ্রন্টএন্ড')) {
+  if (single.id === 'nextjs') {
     if (isBangla) {
+      let reply = `হ্যাঁ, নাজমুল শাকিব ফ্রন্টএন্ড ও ফুল-স্ট্যাকে **Next.js 16** ব্যবহার করেন। তিনি App Router, সার্ভার/ক্লায়েন্ট কম্পোনেন্ট, এসএসআর এবং টাইপস্ক্রিপ্ট দিয়ে আধুনিক ও দ্রুতগতির ওয়েব অ্যাপ্লিকেশন নির্মাণে পারদর্শী, যেমনটি Resumate AI এবং এই পোর্টফোলিওতে রয়েছে।`
+      if (constraints.exactSentences) {
+        reply = enforceExactSentenceCount(reply, constraints.exactSentences, true)
+      }
       return {
-        reply: `নাজমুল শাকিব ফ্রন্টএন্ডে **Next.js 16, React 19, TypeScript, এবং Tailwind CSS** ব্যবহার করেন। তিনি আধুনিক রেসপনসিভ UI, সার্ভার/ক্লায়েন্ট কম্পোনেন্ট এবং ইন্টারঅ্যাক্টিভ ওয়েব অ্যাপ্লিকেশন নির্মাণে পারদর্শী।`,
+        reply,
+        cards: [],
+        suggestedQueries: ['রেজুমেট এআই দেখাও', 'অন্যান্য প্রজেক্ট দেখাও', 'হায়ার করতে চাই'],
+      }
+    }
+    let reply = `Yes, Md. Nazmus Shakib builds modern full-stack web applications with **Next.js 16**. He leverages the App Router, server-side rendering (SSR), and TypeScript for high-performance responsive platforms, demonstrated in Resumate AI and this portfolio.`
+    if (constraints.exactSentences) {
+      reply = enforceExactSentenceCount(reply, constraints.exactSentences, false)
+    }
+    return {
+      reply,
+      cards: [],
+      suggestedQueries: ['Tell me about Resumate AI', 'Show all projects', 'Contact Shakib'],
+    }
+  }
+
+  if (single.id === 'react') {
+    if (isBangla) {
+      let reply = `হ্যাঁ, **React 19** হলো নাজমুল শাকিবের প্রধান ফ্রন্টএন্ড ইউআই লাইব্রেরি। Vite, TypeScript, এবং Tailwind CSS-এর সমন্বয়ে তিনি রেসপনসিভ ও ইন্টারঅ্যাক্টিভ ওয়েব ইন্টারফেস তৈরি করেন, যেমনটি AI Smart Campus System ও Nur Foodes-এ দেখা যায়।`
+      if (constraints.exactSentences) {
+        reply = enforceExactSentenceCount(reply, constraints.exactSentences, true)
+      }
+      return {
+        reply,
         cards: [],
         suggestedQueries: ['AI Smart Campus সিস্টেম দেখাও', 'রেজুমেট এআই দেখাও', 'ব্যাকএন্ড স্কিল কি কি?'],
       }
     }
+    let reply = `Yes, **React 19** is Md. Nazmus Shakib's primary frontend UI library. Combined with Vite, TypeScript, and Tailwind CSS, he builds fast, responsive client interfaces, showcased in the AI Smart Campus System and Nur Foodes POS.`
+    if (constraints.exactSentences) {
+      reply = enforceExactSentenceCount(reply, constraints.exactSentences, false)
+    }
     return {
-      reply: `Md. Nazmus Shakib builds modern interfaces with **Next.js 16, React 19, TypeScript, and Tailwind CSS**. He focuses on clean App Router structure, responsive layouts, client islands, and accessible component architectures.`,
+      reply,
       cards: [],
-      suggestedQueries: ['Show projects using Next.js & React', 'What backend skills does he have?', 'Contact Shakib'],
+      suggestedQueries: ['Show projects using React', 'What backend skills does he have?', 'Contact Shakib'],
     }
   }
 
-  return null
+  // Any other single verified technology (PHP, n8n, Docker, TypeScript, JavaScript, Tailwind, Supabase)
+  if (isBangla) {
+    let reply = `হ্যাঁ, নাজমুল শাকিবের **${single.nameBn}**-এ বাস্তব অভিজ্ঞতা রয়েছে। ${single.detailBn}।`
+    if (constraints.exactSentences) {
+      reply = enforceExactSentenceCount(reply, constraints.exactSentences, true)
+    }
+    return {
+      reply,
+      cards: [],
+      suggestedQueries: ['তাঁর সেরা প্রজেক্টগুলো দেখাও', 'টেকনোলজি স্ট্যাক কি?', 'যোগাযোগের মাধ্যম'],
+    }
+  }
+
+  let reply = `Yes, Shakib has verified experience with **${single.nameEn}**. ${single.detailEn}.`
+  if (constraints.exactSentences) {
+    reply = enforceExactSentenceCount(reply, constraints.exactSentences, false)
+  }
+  return {
+    reply,
+    cards: [],
+    suggestedQueries: ['Show his best projects', 'What is his tech stack?', 'Contact Shakib'],
+  }
+}
+
+function handleSingleTechFocus(
+  query: string,
+  isBangla: boolean,
+  constraints: ParsedConstraints
+): { reply: string; cards: AiActionCard[]; suggestedQueries: string[] } | null {
+  return handleTechnologyInquiry(query, isBangla, constraints)
 }
 
 // ============================================================================
@@ -1853,7 +2563,13 @@ export function generateLocalResponse(
     return { ...hiringResult, provider: 'local-brain' }
   }
 
-  // ── 7. Work Experience & Appstick Internship ───────────────────────────────
+  // ── 7. Technology Inquiries (Multi-tech & Single-tech) ─────────────────────
+  const techResult = handleTechnologyInquiry(query, isBangla, constraints)
+  if (techResult) {
+    return { ...techResult, provider: 'local-brain' }
+  }
+
+  // ── 8. Work Experience & Appstick Internship ───────────────────────────────
   const expResult = handleExperienceInquiry(query, isBangla, constraints)
   if (expResult) {
     return { ...expResult, provider: 'local-brain' }

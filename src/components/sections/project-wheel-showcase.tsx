@@ -85,21 +85,7 @@ export function ProjectWheelShowcase() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  // Ensure #projects heading settles with 24-32px clearance below the sticky navbar
-  // on direct navigation and refresh without duplicate handlers or repeated jumping
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    if (window.location.hash !== '#projects') return
 
-    const el = document.getElementById('projects')
-    if (!el) return
-
-    const timer = setTimeout(() => {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }, 120)
-
-    return () => clearTimeout(timer)
-  }, [])
 
   // Responsive geometry parameters based on screen size
   const isMobile = windowWidth < 640
@@ -286,9 +272,6 @@ export function ProjectWheelShowcase() {
   return (
     <section
       id="projects"
-      style={{
-        scrollMarginTop: isMobile ? '64px' : '72px',
-      }}
       className="section relative overflow-hidden !pt-7 sm:!pt-8 pb-16"
     >
       {/* Background Ambience */}
@@ -512,9 +495,10 @@ export function ProjectWheelShowcase() {
                 {/* Card Content */}
                 {isActive ? (
                   /* Active Card Content — Perfectly balanced vertical layout with natural spacing */
-                  <div className="flex flex-1 flex-col justify-between p-5 sm:p-6">
-                    <div>
-                      <div className="flex items-center justify-between gap-2 mb-1.5">
+                  <div className="flex flex-1 flex-col justify-between p-5 sm:p-6 pb-5 sm:pb-6">
+                    {/* Top: Category, Role, Title, Summary */}
+                    <div className="flex flex-col gap-2 sm:gap-2.5">
+                      <div className="flex items-center justify-between gap-2">
                         <span className="font-mono text-xs font-semibold uppercase tracking-wider text-[#00f5ff]">
                           {project.category}
                         </span>
@@ -538,12 +522,18 @@ export function ProjectWheelShowcase() {
                         </Link>
                       </h3>
 
-                      <p className="muted mt-2 text-xs sm:text-[13px] leading-relaxed line-clamp-2 text-[#a4a9b6]">
+                      <p className="muted text-xs sm:text-[13px] leading-relaxed line-clamp-2 sm:line-clamp-3 text-[#a4a9b6]">
                         {project.summary}
                       </p>
+                    </div>
 
-                      {project.keyFeatures && project.keyFeatures.length > 0 && (
-                        <ul className="mt-3 hidden sm:flex flex-col gap-1.5 text-[11.5px] text-[#c4cad4]">
+                    {/* Middle: Key Architectural Highlights (flexibly absorbs vertical space) */}
+                    {project.keyFeatures && project.keyFeatures.length > 0 && (
+                      <div className="my-auto py-1 sm:py-2 hidden sm:flex flex-col gap-1.5">
+                        <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#7e8799]">
+                          Key Highlights
+                        </span>
+                        <ul className="flex flex-col gap-1.5 text-[11.5px] text-[#c4cad4]">
                           {project.keyFeatures.slice(0, 2).map((feature, fIdx) => (
                             <li key={fIdx} className="flex items-start gap-1.5 leading-snug">
                               <Check size={12} className="shrink-0 text-[#00f5ff] mt-0.5" />
@@ -551,10 +541,13 @@ export function ProjectWheelShowcase() {
                             </li>
                           ))}
                         </ul>
-                      )}
+                      </div>
+                    )}
 
-                      <div className="mt-3.5 flex flex-wrap gap-1.5 sm:gap-2">
-                        {project.technologies.slice(0, isMobile ? 3 : 4).map((tech) => (
+                    {/* Bottom: Tech Stack Badges directly above Button Bar with balanced compact spacing */}
+                    <div className="mt-auto flex flex-col gap-3 sm:gap-3.5">
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        {project.technologies.slice(0, isMobile ? 3 : 5).map((tech) => (
                           <span
                             key={tech}
                             className={`rounded-lg border px-2.5 py-1 text-[11px] font-medium ${getTechBadgeStyle(
@@ -565,45 +558,45 @@ export function ProjectWheelShowcase() {
                           </span>
                         ))}
                       </div>
-                    </div>
 
-                    <div className="mt-auto pt-4 border-t border-white/[0.08] flex items-center gap-2.5">
-                      <Link
-                        href={caseStudyHref}
-                        onClick={handleLinkClick}
-                        className="button primary flex-1 min-h-[44px] rounded-xl px-4 text-xs sm:text-[13px] font-semibold shadow-[0_0_20px_rgba(0,245,255,0.25)]"
-                      >
-                        <span>View Case Study</span>
-                        <ArrowUpRight size={14} />
-                      </Link>
-
-                      {project.liveUrl && (
-                        <a
-                          href={project.liveUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                      <div className="pt-3.5 border-t border-white/[0.08] flex items-center gap-2.5">
+                        <Link
+                          href={caseStudyHref}
                           onClick={handleLinkClick}
-                          className="grid size-[44px] place-items-center rounded-xl border border-emerald-500/40 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition shrink-0"
-                          aria-label={`Live Demo of ${project.title}`}
-                          title="Live Demo"
+                          className="button primary flex-1 min-h-[44px] rounded-xl px-4 text-xs sm:text-[13px] font-semibold shadow-[0_0_20px_rgba(0,245,255,0.25)]"
                         >
-                          <ExternalLink size={15} />
-                        </a>
-                      )}
+                          <span>View Case Study</span>
+                          <ArrowUpRight size={14} />
+                        </Link>
 
-                      {project.githubUrl && (
-                        <a
-                          href={project.githubUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={handleLinkClick}
-                          className="grid size-[44px] place-items-center rounded-xl border border-white/15 bg-white/[0.04] text-[#d9dee7] hover:border-white/30 hover:text-white transition shrink-0"
-                          aria-label={`GitHub repo of ${project.title}`}
-                          title="GitHub Repository"
-                        >
-                          <SiGithub size={15} />
-                        </a>
-                      )}
+                        {project.liveUrl && (
+                          <a
+                            href={project.liveUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={handleLinkClick}
+                            className="grid size-[44px] place-items-center rounded-xl border border-emerald-500/40 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition shrink-0"
+                            aria-label={`Live Demo of ${project.title}`}
+                            title="Live Demo"
+                          >
+                            <ExternalLink size={15} />
+                          </a>
+                        )}
+
+                        {project.githubUrl && (
+                          <a
+                            href={project.githubUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={handleLinkClick}
+                            className="grid size-[44px] place-items-center rounded-xl border border-white/15 bg-white/[0.04] text-[#d9dee7] hover:border-white/30 hover:text-white transition shrink-0"
+                            aria-label={`GitHub repo of ${project.title}`}
+                            title="GitHub Repository"
+                          >
+                            <SiGithub size={15} />
+                          </a>
+                        )}
+                      </div>
                     </div>
                   </div>
                 ) : (
