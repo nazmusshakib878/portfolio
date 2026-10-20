@@ -13,7 +13,7 @@ import { DevelopmentProcess } from '@/components/sections/development-process'
 import { ApplicationArchitecture } from '@/components/sections/application-architecture'
 import { AvailabilitySection } from '@/components/sections/availability-section'
 import { ContactSection } from '@/components/sections/contact-section'
-import { ProjectSlider } from '@/components/sections/project-slider'
+import { ProjectWheelShowcase } from '@/components/sections/project-wheel-showcase'
 import { SkillsExplorer } from '@/components/sections/skills-explorer'
 import { TechnicalWritingSection } from '@/components/sections/technical-writing'
 import { SiteHeader } from '@/components/layout/site-header'
@@ -30,7 +30,7 @@ export default function Home() {
       <main id="main-content">
         <Hero />
         <WhatIDo />
-        <ProjectSlider />
+        <ProjectWheelShowcase />
         <ExperienceSection />
 
         <section id="skills" className="section relative overflow-hidden">

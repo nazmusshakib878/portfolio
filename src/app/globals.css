@@ -67,6 +67,14 @@ p, h1, h2, h3, li, dd { overflow-wrap: anywhere }
 ::selection { color: #fff; background: var(--violet) }
 :focus-visible { outline: 2px solid var(--teal); outline-offset: 4px }
 [id] { scroll-margin-top: 6.5rem }
+#projects {
+  scroll-margin-top: 4.5rem;
+}
+@media (max-width: 640px) {
+  #projects {
+    scroll-margin-top: 4rem;
+  }
+}
 ::placeholder { color: rgba(174, 182, 195, .45); }
 
 .shell {
