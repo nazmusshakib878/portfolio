@@ -29,20 +29,23 @@ export function HeroVisual() {
     <div
       onPointerMove={handleMove}
       onPointerLeave={reset}
-      className="relative h-full w-full overflow-hidden rounded-[24px] border border-white/10 bg-[rgba(12,15,22,.65)]"
+      className="relative h-full w-full overflow-hidden rounded-[24px] border border-white/10 bg-[rgba(12,15,22,.65)] [transform:translateZ(0)] [-webkit-transform:translateZ(0)] [-webkit-mask-image:-webkit-radial-gradient(white,black)]"
       aria-label="Portrait of Md. Nazmus Shakib"
     >
       <motion.div
         aria-hidden
         style={{ x: lightX }}
-        className="absolute left-[16%] top-[15%] h-[62%] w-[68%] rounded-full bg-[#7c5cff]/22 blur-[80px]"
+        className="absolute left-[16%] top-[15%] h-[62%] w-[68%] rounded-full bg-[#7c5cff]/22 blur-[80px] pointer-events-none"
       />
-      <div aria-hidden className="absolute inset-x-[10%] bottom-[3%] top-[12%] border-x border-white/10" />
+      <div aria-hidden className="absolute inset-x-[10%] bottom-[3%] top-[12%] border-x border-white/10 pointer-events-none" />
       <div
         aria-hidden
-        className="absolute inset-x-[3%] bottom-[8%] h-px bg-gradient-to-r from-transparent via-[#2bd9b5]/50 to-transparent"
+        className="absolute inset-x-[3%] bottom-[8%] h-px bg-gradient-to-r from-transparent via-[#2bd9b5]/50 to-transparent pointer-events-none"
       />
-      <motion.div style={{ x: imageX, y: imageY }} className="absolute inset-0">
+      <motion.div
+        style={{ x: imageX, y: imageY }}
+        className="absolute inset-0 [transform:translateZ(0)] [-webkit-transform:translateZ(0)] [backface-visibility:hidden] [-webkit-backface-visibility:hidden]"
+      >
         <Image
           src="/images/nazmusshakib.png"
           alt="Md. Nazmus Shakib"
@@ -54,7 +57,7 @@ export function HeroVisual() {
       </motion.div>
       <div
         aria-hidden
-        className="absolute inset-0 bg-[linear-gradient(90deg,rgba(43,217,181,.06),transparent_28%,transparent_70%,rgba(124,92,255,.09))] mix-blend-screen"
+        className="absolute inset-0 bg-[linear-gradient(90deg,rgba(43,217,181,.06),transparent_28%,transparent_70%,rgba(124,92,255,.09))] mix-blend-screen pointer-events-none"
       />
     </div>
   )

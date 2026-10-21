@@ -15,10 +15,11 @@ export function SocialRail() {
     (link) => link.href && link.href.startsWith('http')
   )
 
+  // iOS Safari fix: translateZ(0) isolates backdrop-blur-xl into own compositing layer
   return (
     <aside
       aria-label="Social profiles"
-      className="fixed bottom-0 left-0 top-20 z-40 hidden w-16 flex-col items-center border-r border-white/10 bg-[#07070b]/72 backdrop-blur-xl lg:flex"
+      className="fixed bottom-0 left-0 top-20 z-40 hidden w-16 flex-col items-center border-r border-white/10 bg-[#07070b]/72 backdrop-blur-xl lg:flex [transform:translateZ(0)]"
     >
       <div className="mt-auto flex flex-col items-center gap-1 pb-7">
         {activeLinks.map((link) => {

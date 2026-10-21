@@ -83,7 +83,7 @@ export function SiteHeader() {
   }, [open])
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 px-3 pt-2.5 sm:px-4 sm:pt-3">
+    <header className="fixed inset-x-0 top-0 z-50 px-3 pt-2.5 sm:px-4 sm:pt-3 [transform:translateZ(0)]">
       <div className={`site-header-frame shell ${scrolled || open ? 'is-elevated' : ''}`}>
         {/* Logo / Monogram */}
         <a

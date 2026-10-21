@@ -28,6 +28,7 @@
 html {
   background: var(--bg);
   overflow-x: clip;
+  -webkit-overflow-scrolling: touch;
 }
 
 html[data-scroll-behavior="smooth"] {
@@ -44,6 +45,7 @@ body {
   font-family: var(--font-body), sans-serif;
   overflow-x: hidden;
   min-width: 320px;
+  -webkit-overflow-scrolling: touch;
 }
 
 body::before {
@@ -58,6 +60,10 @@ body::before {
     linear-gradient(90deg, var(--line) 1px, transparent 1px);
   background-size: 64px 64px;
   mask-image: linear-gradient(#000, transparent 92%);
+  -webkit-mask-image: linear-gradient(#000, transparent 92%);
+  /* iOS Safari fix: promote fixed background to its own layer so scrolling doesn't re-rasterize */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 a { color: inherit; text-decoration: none }
@@ -267,6 +273,8 @@ p, h1, h2, h3, li, dd { overflow-wrap: anywhere }
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(16px) saturate(140%);
   -webkit-backdrop-filter: blur(16px) saturate(140%);
+  /* iOS Safari fix: force own compositing layer to prevent backdrop-filter repaint bugs */
+  transform: translateZ(0);
   transition: border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -347,6 +355,8 @@ p, h1, h2, h3, li, dd { overflow-wrap: anywhere }
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+  /* iOS Safari fix: own compositing layer for backdrop-filter */
+  transform: translateZ(0);
 }
 
 @keyframes availability-pulse {
@@ -381,6 +391,8 @@ p, h1, h2, h3, li, dd { overflow-wrap: anywhere }
   display: flex;
   align-items: center;
   justify-content: center;
+  /* iOS Safari fix: own compositing layer prevents glow/filter effects from forcing full-page repaints */
+  transform: translateZ(0);
 }
 
 @media (max-width: 640px) {

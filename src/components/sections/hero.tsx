@@ -156,7 +156,7 @@ export function Hero() {
           <HeroVisual />
 
           {/* Floating Status / Core Stack Badge - Visible on tablet/desktop to avoid obstructing portrait on mobile */}
-          <div className="hidden sm:block absolute right-3 top-3 max-w-[calc(100%-1.5rem)] rounded-xl border border-white/10 bg-[#090d15]/80 px-3.5 py-2.5 text-right backdrop-blur-md shadow-[0_12px_32px_rgba(0,0,0,0.35)] sm:max-w-none">
+          <div className="hidden sm:block absolute right-3 top-3 max-w-[calc(100%-1.5rem)] rounded-xl border border-white/10 bg-[#090d15]/80 px-3.5 py-2.5 text-right backdrop-blur-md shadow-[0_12px_32px_rgba(0,0,0,0.35)] sm:max-w-none [transform:translateZ(0)]">
             <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#aeb6c3]">Core Stack</p>
             <p className="mt-1 flex items-center justify-end gap-1.5 text-xs font-medium text-[#f2f3f7] sm:text-sm">
               <span className="text-[#ff9c90]">Laravel</span>
@@ -170,7 +170,7 @@ export function Hero() {
           </div>
 
           {/* Engineering Focus Badge */}
-          <div className="absolute bottom-3 left-3 right-3 sm:right-auto sm:max-w-none rounded-xl border border-white/10 bg-[#090d15]/85 px-3 py-2 sm:px-3.5 sm:py-2.5 backdrop-blur-md shadow-[0_12px_32px_rgba(0,0,0,0.35)]">
+          <div className="absolute bottom-3 left-3 right-3 sm:right-auto sm:max-w-none rounded-xl border border-white/10 bg-[#090d15]/85 px-3 py-2 sm:px-3.5 sm:py-2.5 backdrop-blur-md shadow-[0_12px_32px_rgba(0,0,0,0.35)] [transform:translateZ(0)]">
             <p className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.14em] text-[#2bd9b5]">Engineering Focus</p>
             <p className="mt-0.5 sm:mt-1 text-xs font-medium text-[#f2f3f7] sm:text-sm">
               Backend Systems &middot; Full Stack

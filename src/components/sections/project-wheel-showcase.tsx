@@ -60,6 +60,8 @@ export function ProjectWheelShowcase() {
   const [isPaused, setIsPaused] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
   const [windowWidth, setWindowWidth] = useState(1200)
+  // iOS Safari: safety timer to auto-release drag if pointerup is missed
+  const dragSafetyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Physics & Animation Refs (decoupled from React re-renders for maximum smoothness)
   const posRef = useRef(0)
@@ -95,6 +97,15 @@ export function ProjectWheelShowcase() {
     handleResize()
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  // iOS Safari fix: cleanup drag safety timer on unmount
+  useEffect(() => {
+    return () => {
+      if (dragSafetyTimerRef.current) {
+        clearTimeout(dragSafetyTimerRef.current)
+      }
+    }
   }, [])
 
   // Responsive geometry parameters based on screen size
@@ -184,9 +195,11 @@ export function ProjectWheelShowcase() {
   }, [animateTo, holdAutoplay])
 
   // Continuous frame-time-aware physics & animation loop
+  // iOS Safari fix: only call setPos when value changes to avoid unnecessary re-renders
   useEffect(() => {
     let lastFrameTime = performance.now()
     let rafId: number
+    let lastSetPos = posRef.current
 
     const tick = (now: number) => {
       const dtMs = Math.min(50, Math.max(1, now - lastFrameTime))
@@ -194,6 +207,7 @@ export function ProjectWheelShowcase() {
       lastFrameTime = now
 
       let newPos = posRef.current
+      let changed = false
 
       if (isDraggingRef.current && dragRef.current) {
         // DRAGGING: Follow pointer directly with critically damped high-frequency filter
@@ -202,7 +216,7 @@ export function ProjectWheelShowcase() {
         const followFactor = 1 - Math.exp(-45 * dt)
         newPos += (targetDragPos - newPos) * followFactor
         posRef.current = newPos
-        setPos(newPos)
+        changed = true
       } else if (tweenRef.current) {
         // TWEENING (inertia / settling / navigation / autoplay):
         const { startPos, targetPos, startTime, duration } = tweenRef.current
@@ -213,13 +227,20 @@ export function ProjectWheelShowcase() {
         const ease = 1 - Math.pow(1 - progress, 3)
         newPos = startPos + (targetPos - startPos) * ease
         posRef.current = newPos
-        setPos(newPos)
+        changed = true
 
         if (progress >= 1) {
           posRef.current = targetPos
-          setPos(targetPos)
+          newPos = targetPos
           tweenRef.current = null
         }
+      }
+
+      // iOS Safari: only trigger React re-render when position actually changed
+      // to reduce compositor pressure from unnecessary repaints
+      if (changed && Math.abs(newPos - lastSetPos) > 0.0001) {
+        lastSetPos = newPos
+        setPos(newPos)
       }
 
       rafId = requestAnimationFrame(tick)
@@ -309,6 +330,22 @@ export function ProjectWheelShowcase() {
     tweenRef.current = null
     holdAutoplay(6000)
 
+    // iOS Safari fix: clear any existing safety timer or stuck drag state from a previous gesture
+    if (dragSafetyTimerRef.current) {
+      clearTimeout(dragSafetyTimerRef.current)
+      dragSafetyTimerRef.current = null
+    }
+
+    if (dragRef.current && stageRef.current?.hasPointerCapture(dragRef.current.pointerId)) {
+      try {
+        stageRef.current.releasePointerCapture(dragRef.current.pointerId)
+      } catch {
+        // Safe fallback
+      }
+    }
+    isDraggingRef.current = false
+    setIsDragging(false)
+
     dragRef.current = {
       pointerId: e.pointerId,
       startX: e.clientX,
@@ -321,6 +358,19 @@ export function ProjectWheelShowcase() {
       captured: false,
     }
     hasDraggedRef.current = false
+
+    // iOS Safari fix: safety timeout to auto-release drag if pointerup/cancel is missed
+    dragSafetyTimerRef.current = setTimeout(() => {
+      if (isDraggingRef.current) {
+        isDraggingRef.current = false
+        setIsDragging(false)
+        if (dragRef.current) {
+          animateTo(Math.round(posRef.current), 0.45)
+          dragRef.current = null
+        }
+      }
+      dragSafetyTimerRef.current = null
+    }, 2000)
   }
 
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -335,7 +385,13 @@ export function ProjectWheelShowcase() {
 
       // On touch devices: if vertical movement dominates, let native page scroll proceed
       if (e.pointerType === 'touch' && Math.abs(dy) > Math.abs(dx)) {
+        if (dragSafetyTimerRef.current) {
+          clearTimeout(dragSafetyTimerRef.current)
+          dragSafetyTimerRef.current = null
+        }
         dragRef.current = null
+        isDraggingRef.current = false
+        setIsDragging(false)
         return
       }
 
@@ -362,33 +418,39 @@ export function ProjectWheelShowcase() {
   }
 
   const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!dragRef.current || dragRef.current.pointerId !== e.pointerId) return
+    // iOS Safari fix: always clear safety timer
+    if (dragSafetyTimerRef.current) {
+      clearTimeout(dragSafetyTimerRef.current)
+      dragSafetyTimerRef.current = null
+    }
 
     const drag = dragRef.current
-    if (drag.captured && stageRef.current?.hasPointerCapture(e.pointerId)) {
-      try {
-        stageRef.current.releasePointerCapture(e.pointerId)
-      } catch {
-        // Safe fallback
+    if (drag && drag.pointerId === e.pointerId) {
+      if (drag.captured && stageRef.current?.hasPointerCapture(e.pointerId)) {
+        try {
+          stageRef.current.releasePointerCapture(e.pointerId)
+        } catch {
+          // Safe fallback
+        }
       }
+
+      if (drag.captured) {
+        holdAutoplay(5000)
+
+        // If held stationary before release (>80ms), zero out momentum
+        const timeSinceMove = performance.now() - drag.lastTime
+        const effectiveVelocity = timeSinceMove > 80 ? 0 : drag.velocity
+
+        // Momentum step: projects landing index in direction of drag
+        const momentumCards = (-effectiveVelocity * 220) / arcPerCard
+        const target = Math.round(posRef.current + momentumCards)
+        const distance = Math.abs(target - posRef.current)
+        const duration = Math.min(1.1, 0.42 + distance * 0.12)
+        animateTo(target, duration)
+      }
+      dragRef.current = null
     }
 
-    if (drag.captured) {
-      holdAutoplay(5000)
-
-      // If held stationary before release (>80ms), zero out momentum
-      const timeSinceMove = performance.now() - drag.lastTime
-      const effectiveVelocity = timeSinceMove > 80 ? 0 : drag.velocity
-
-      // Momentum step: projects landing index in direction of drag
-      const momentumCards = (-effectiveVelocity * 220) / arcPerCard
-      const target = Math.round(posRef.current + momentumCards)
-      const distance = Math.abs(target - posRef.current)
-      const duration = Math.min(1.1, 0.42 + distance * 0.12)
-      animateTo(target, duration)
-    }
-
-    dragRef.current = null
     isDraggingRef.current = false
     setIsDragging(false)
 
@@ -515,6 +577,7 @@ export function ProjectWheelShowcase() {
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
+        onLostPointerCapture={handlePointerUp}
         onClickCapture={handleStageClickCapture}
         onMouseEnter={() => {
           setIsHovered(true)
@@ -563,7 +626,8 @@ export function ProjectWheelShowcase() {
         </div>
 
         {/* Fanned 3D Project Cards */}
-        <div className="absolute inset-0 z-10 [perspective:1400px]">
+        {/* iOS Safari fix: -webkit-transform-style:preserve-3d ensures child 3D transforms render correctly */}
+        <div className="absolute inset-0 z-10 [perspective:1400px] [transform-style:preserve-3d] [-webkit-transform-style:preserve-3d]">
           {projects.map((project, i) => {
             const rawOffset = wrapN(i - pos)
             const dist = Math.abs(rawOffset)
@@ -599,6 +663,8 @@ export function ProjectWheelShowcase() {
                   left: '50%',
                   width: `${cardWidth}px`,
                   height: `${cardHeight}px`,
+                  // iOS Safari fix: translateZ(0) promotes each card to its own compositing layer;
+                  // -webkit-backface-visibility:hidden prevents blank/unpainted areas during 3D transforms
                   transform: `translate(-50%, -50%) rotate(${angle.toFixed(
                     2
                   )}deg) translateY(${(-radius - 16 * k).toFixed(1)}px) rotateY(${rotateY.toFixed(
@@ -606,15 +672,20 @@ export function ProjectWheelShowcase() {
                   )}deg) translateZ(${translateZ.toFixed(1)}px) scale(${scale.toFixed(3)})`,
                   opacity: opacity.toFixed(3),
                   zIndex,
+                  WebkitBackfaceVisibility: 'hidden',
+                  backfaceVisibility: 'hidden',
+                  // iOS Safari fix: only apply will-change on active card to limit compositing layer count
+                  willChange: isActive ? 'transform' : 'auto',
                 }}
-                className={`group absolute flex flex-col rounded-[24px] text-left transition-[box-shadow,border-color,background-color] duration-300 will-change-transform ${
+                className={`group absolute flex flex-col rounded-[24px] text-left transition-[box-shadow,border-color,background-color] duration-300 touch-pan-y ${
                   isActive
                     ? 'border border-[rgba(0,245,255,0.48)] bg-[rgba(13,17,26,0.96)] shadow-[0_28px_70px_rgba(0,0,0,0.85),0_0_42px_rgba(0,245,255,0.22)] backdrop-blur-xl ring-1 ring-[#00f5ff]/20'
-                    : 'cursor-pointer border border-white/12 bg-[rgba(12,16,25,0.9)] shadow-[0_18px_45px_rgba(0,0,0,0.6)] backdrop-blur-md hover:border-[#00f5ff]/40 hover:bg-[rgba(14,19,30,0.95)]'
+                    : 'cursor-pointer border border-white/12 bg-[rgba(12,16,25,0.95)] shadow-[0_18px_45px_rgba(0,0,0,0.6)] sm:backdrop-blur-sm hover:border-[#00f5ff]/40 hover:bg-[rgba(14,19,30,0.95)]'
                 }`}
               >
                 {/* Visual Cover Thumbnail */}
-                <div className="relative aspect-[16/11] w-full shrink-0 overflow-hidden rounded-t-[23px] border-b border-white/[0.08] bg-[#080b12]">
+                {/* iOS Safari fix: translateZ(0) and -webkit-mask-image prevent blank repaint areas on overflow-hidden + border-radius */}
+                <div className="relative aspect-[16/11] w-full shrink-0 overflow-hidden rounded-t-[23px] border-b border-white/[0.08] bg-[#080b12] [transform:translateZ(0)] [-webkit-transform:translateZ(0)] [-webkit-mask-image:-webkit-radial-gradient(white,black)]">
                   {isActive ? (
                     <Link
                       href={caseStudyHref}
@@ -626,8 +697,8 @@ export function ProjectWheelShowcase() {
                         src={cover}
                         alt={`${project.title} thumbnail`}
                         fill
-                        sizes="(max-width: 640px) 300px, 420px"
-                        priority={isActive}
+                        sizes="(max-width: 640px) 80vw, 400px"
+                        priority={false}
                         draggable={false}
                         className="object-cover transition duration-500 group-hover:scale-[1.03] select-none pointer-events-none"
                       />
@@ -637,7 +708,7 @@ export function ProjectWheelShowcase() {
                       src={cover}
                       alt={`${project.title} thumbnail`}
                       fill
-                      sizes="(max-width: 640px) 300px, 420px"
+                      sizes="(max-width: 640px) 80vw, 400px"
                       priority={false}
                       draggable={false}
                       className="object-cover transition duration-500 group-hover:scale-[1.03] select-none pointer-events-none"
