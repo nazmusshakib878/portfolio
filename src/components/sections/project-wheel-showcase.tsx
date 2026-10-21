@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, memo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { animate } from 'motion/react'
 import {
   ArrowLeft,
   ArrowRight,
@@ -19,6 +20,9 @@ import { Reveal } from '@/components/ui/reveal'
 import { portfolioData, projectSlug } from '@/data/portfolio'
 import { projectCovers } from '@/data/project-covers'
 
+/**
+ * Returns tailored color tokens for technology badges based on category/brand
+ */
 function getTechBadgeStyle(tech: string) {
   if (tech.includes('Laravel')) {
     return 'border-[rgba(240,83,64,0.28)] text-[#ff9c90] bg-[rgba(240,83,64,0.06)]'
@@ -50,71 +54,329 @@ function getTechBadgeStyle(tech: string) {
   return 'border-white/10 text-[#d9dee7] bg-white/[0.025]'
 }
 
+interface ProjectCardProps {
+  project: (typeof portfolioData.projects)[number]
+  index: number
+  isActive: boolean
+  cover: string
+  cardWidth: number
+  cardHeight: number
+  isMobile: boolean
+  onSelect: (index: number) => void
+  onLinkClick: (e: React.MouseEvent) => void
+  setCardRef: (el: HTMLDivElement | null) => void
+}
+
+/**
+ * Memoized Project Card:
+ * Lightened side/inactive cards render only cover thumbnail + index badge + title + select hint.
+ * Heavy details (full summary, key highlights, tech badges, action buttons) render ONLY for the active card.
+ * Inactive cards omit backdrop-filter and heavy box-shadows to ensure butter-smooth GPU compositing.
+ */
+const ProjectCard = memo(function ProjectCard({
+  project,
+  index,
+  isActive,
+  cover,
+  cardWidth,
+  cardHeight,
+  isMobile,
+  onSelect,
+  onLinkClick,
+  setCardRef,
+}: ProjectCardProps) {
+  const caseStudyHref = `/projects/${projectSlug(project.title)}`
+
+  return (
+    <div
+      ref={setCardRef}
+      tabIndex={isActive ? 0 : -1}
+      aria-hidden={!isActive ? 'true' : undefined}
+      onClick={(e) => {
+        if (!isActive) {
+          e.preventDefault()
+          onSelect(index)
+        }
+      }}
+      style={{
+        position: 'absolute',
+        left: '50%',
+        top: '50%',
+        width: `${cardWidth}px`,
+        height: `${cardHeight}px`,
+        willChange: isActive ? 'transform' : 'auto',
+        transformStyle: 'flat',
+        backfaceVisibility: 'hidden',
+        WebkitBackfaceVisibility: 'hidden',
+      }}
+      className={`group absolute flex flex-col rounded-[24px] text-left select-none touch-pan-y pointer-events-auto transition-[border-color,background-color] duration-300 ${
+        isActive
+          ? 'border border-[rgba(0,245,255,0.48)] bg-[rgba(13,17,26,0.98)] shadow-[0_24px_60px_rgba(0,0,0,0.85),0_0_36px_rgba(0,245,255,0.18)]'
+          : 'cursor-pointer border border-white/10 bg-[#0c1019] hover:border-[#00f5ff]/35'
+      }`}
+    >
+      {/* Static Active Card Glow — Mounted strictly on the active card */}
+      {isActive && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -inset-0.5 rounded-[25px] bg-gradient-to-b from-[#00f5ff]/20 via-transparent to-transparent blur-md -z-10"
+        />
+      )}
+
+      {/* Mouse-Follow Active Sheen — rAF-throttled via CSS variables on active card only */}
+      {isActive && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 rounded-[24px] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          style={{
+            background:
+              'radial-gradient(400px circle at var(--mx, 50%) var(--my, 50%), rgba(0,245,255,0.08), transparent 70%)',
+          }}
+        />
+      )}
+
+      {/* Visual Cover Thumbnail — Optimized Next/Image with responsive sizes & lazy loading */}
+      <div className="relative aspect-[16/9] w-full shrink-0 overflow-hidden rounded-t-[23px] border-b border-white/[0.08] bg-[#080b12]">
+        <Image
+          src={cover}
+          alt={`${project.title} thumbnail`}
+          fill
+          sizes="(max-width: 768px) 70vw, 420px"
+          quality={70}
+          draggable={false}
+          decoding="async"
+          loading={isActive || index === 0 ? 'eager' : 'lazy'}
+          className="object-cover select-none pointer-events-none transition-transform duration-500 group-hover:scale-[1.02]"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#090d15] via-transparent to-transparent" />
+
+        {/* Active card overlay link for thumbnail click */}
+        {isActive && (
+          <Link
+            href={caseStudyHref}
+            onClick={onLinkClick}
+            className="absolute inset-0 z-10"
+            aria-label={`View ${project.title} case study`}
+          />
+        )}
+
+        {/* Top Bar Badges */}
+        <div className="pointer-events-none absolute left-3.5 top-3.5 flex items-center gap-1.5 z-20">
+          <span className="rounded-full border border-white/15 bg-black/80 px-2.5 py-0.5 font-mono text-[10px] font-bold text-white shadow-sm">
+            0{index + 1}
+          </span>
+          {isActive && (
+            <span className="rounded-full border border-[#00f5ff]/35 bg-[#00f5ff]/12 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#00f5ff]">
+              {project.category}
+            </span>
+          )}
+        </div>
+
+        {isActive && project.liveUrl && (
+          <span className="pointer-events-none absolute right-3.5 top-3.5 inline-flex items-center gap-1 rounded-full border border-emerald-500/35 bg-black/80 px-2.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-emerald-400 z-20">
+            <span className="size-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]" />
+            Live
+          </span>
+        )}
+      </div>
+
+      {/* Card Content: Full Details for Active Card vs Lightened Inactive Card */}
+      {isActive ? (
+        <div className="flex flex-1 flex-col justify-between p-4 sm:p-5 pb-4 sm:pb-5">
+          {/* Top: Category, Role, Title, Summary */}
+          <div className="flex flex-col gap-2 sm:gap-2.5">
+            <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0.5">
+              <span className="font-mono text-xs font-semibold uppercase tracking-wider text-[#00f5ff] shrink-0">
+                {project.category}
+              </span>
+              {project.role && (
+                <span className="text-[11.5px] font-medium text-[#c4cad4] text-right">
+                  {project.role}
+                </span>
+              )}
+            </div>
+
+            <h3 className="display text-base sm:text-[19px] font-bold tracking-tight text-white leading-snug">
+              <Link
+                href={caseStudyHref}
+                onClick={onLinkClick}
+                data-action-button="true"
+                className="hover:text-[#00f5ff] transition-colors"
+              >
+                {project.title}
+              </Link>
+            </h3>
+
+            <p className="text-xs sm:text-[13px] leading-relaxed text-[#c4cad4]">
+              {project.summary}
+            </p>
+          </div>
+
+          {/* Middle: Key Architectural Highlights */}
+          {project.keyFeatures && project.keyFeatures.length > 0 && (
+            <div className="my-auto py-1 sm:py-2 hidden sm:flex flex-col gap-1.5">
+              <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#9aa6b7]">
+                Key Highlights
+              </span>
+              <ul className="flex flex-col gap-1.5 text-[11.5px] text-[#c4cad4]">
+                {project.keyFeatures.slice(0, 2).map((feature, fIdx) => (
+                  <li key={fIdx} className="flex items-start gap-1.5 leading-snug">
+                    <Check size={12} className="shrink-0 text-[#00f5ff] mt-0.5" />
+                    <span className="line-clamp-1">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Bottom: Tech Stack Badges directly above Button Bar */}
+          <div className="mt-auto flex flex-col gap-3 sm:gap-3.5">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2">
+              {project.technologies.slice(0, isMobile ? 3 : 5).map((tech) => (
+                <span
+                  key={tech}
+                  className={`rounded-lg border px-2.5 py-1 text-[11px] font-medium ${getTechBadgeStyle(
+                    tech
+                  )}`}
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
+
+            <div className="pt-3.5 border-t border-white/[0.08] flex items-center gap-2.5 relative z-20">
+              <Link
+                href={caseStudyHref}
+                onClick={onLinkClick}
+                data-action-button="true"
+                className="button primary flex-1 min-h-[44px] rounded-xl px-4 text-xs sm:text-[13px] font-semibold shadow-[0_0_20px_rgba(0,245,255,0.25)]"
+              >
+                <span>View Case Study</span>
+                <ArrowUpRight size={14} />
+              </Link>
+
+              {project.liveUrl && (
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={onLinkClick}
+                  data-action-button="true"
+                  className="grid size-[44px] place-items-center rounded-xl border border-emerald-500/40 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition shrink-0"
+                  aria-label={`Live Demo of ${project.title}`}
+                  title="Live Demo"
+                >
+                  <ExternalLink size={15} />
+                </a>
+              )}
+
+              {project.githubUrl && (
+                <a
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={onLinkClick}
+                  data-action-button="true"
+                  className="grid size-[44px] place-items-center rounded-xl border border-white/15 bg-white/[0.04] text-[#d9dee7] hover:border-white/30 hover:text-white transition shrink-0"
+                  aria-label={`GitHub repo of ${project.title}`}
+                  title="GitHub Repository"
+                >
+                  <SiGithub size={15} />
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* Lightened side/inactive card */
+        <div className="flex flex-1 flex-col p-4 sm:p-5">
+          <div className="flex items-center justify-between">
+            <span className="font-mono text-[11px] font-medium uppercase tracking-wider text-[#9aa6b7]">
+              {project.category}
+            </span>
+            <span className="font-mono text-[11px] text-[#aeb6c3]">
+              0{index + 1}
+            </span>
+          </div>
+
+          <h3 className="display mt-2 text-sm sm:text-base font-semibold text-[#f2f3f7] group-hover:text-white leading-snug transition-colors line-clamp-2">
+            {project.title}
+          </h3>
+
+          <div className="mt-auto pt-3 flex items-center justify-between text-xs font-medium text-[#aeb6c3] group-hover:text-[#00f5ff] transition-colors border-t border-white/[0.06]">
+            <span>Click to select</span>
+            <ArrowRight size={13} className="transition group-hover:translate-x-1" />
+          </div>
+        </div>
+      )}
+    </div>
+  )
+})
+
 export function ProjectWheelShowcase() {
   const projects = portfolioData.projects
   const total = projects.length
 
-  // Infrequent React state: updated only on card-index boundary crossing or explicit UI toggles
+  // React state updated strictly on card boundary change (zero per-frame state churn)
   const [activeIndex, setActiveIndex] = useState(0)
-  const [isHovered, setIsHovered] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
-  const [isDragging, setIsDragging] = useState(false)
   const [windowWidth, setWindowWidth] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth : 1200
   )
 
-  // One Animation Owner — Authoritative physics & position refs decoupled from React reconciliation
+  // Authoritative animation position & interaction tracking refs
   const posRef = useRef(0)
   const activeIndexRef = useRef(0)
+  const isPausedRef = useRef(false)
+  const isHoveredRef = useRef(false)
   const isDraggingRef = useRef(false)
   const hasDraggedRef = useRef(false)
-  const holdUntilRef = useRef(0)
-  const inViewRef = useRef(true)
   const isFocusedRef = useRef(false)
+  const inViewRef = useRef(true)
+  const holdUntilRef = useRef(0)
 
-  // DOM node refs for direct compositor-level transform updates
-  const stageRef = useRef<HTMLDivElement>(null)
-  const dialRef = useRef<HTMLDivElement>(null)
-  const cardRefs = useRef<(HTMLDivElement | null)[]>([])
-  const rafIdRef = useRef<number | null>(null)
+  // Active tween reference (Motion's animate controls)
+  const tweenRef = useRef<{ stop: () => void } | null>(null)
 
-  // Active smooth tween descriptor (cubic-out easing)
-  const tweenRef = useRef<{
-    startPos: number
-    targetPos: number
-    startTime: number
-    duration: number
-  } | null>(null)
-
-  // Kinematic pointer tracking ref
+  // Kinematic pointer drag tracker
   const dragRef = useRef<{
     pointerId: number
+    pointerType: string
     startX: number
     startY: number
     startPos: number
-    currentX: number
     lastX: number
     lastTime: number
     velocity: number
     captured: boolean
   } | null>(null)
 
-  // Responsive geometry parameters based on screen size
+  // DOM node references for direct compositor-level transform and property manipulation
+  const stageRef = useRef<HTMLDivElement>(null)
+  const stackRef = useRef<HTMLDivElement>(null)
+  const dialRef = useRef<HTMLDivElement>(null)
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([])
+
+  // Responsive geometry parameters stored in a ref for zero-reconciliation access
+  const dimsRef = useRef({
+    cardWidth: 410,
+    cardHeight: 660,
+    radius: 1353,
+    step: 0.3274,
+    gap: 33,
+    perspective: 2870,
+    stageHeight: 740,
+  })
+
+  // Responsive geometry calculations based on current window width
   const isMobile = windowWidth < 640
   const isTablet = windowWidth >= 640 && windowWidth < 1024
+  const cardWidth = isMobile ? Math.min(320, Math.max(280, windowWidth - 32)) : isTablet ? 360 : 410
+  const cardHeight = isMobile ? 580 : isTablet ? 620 : 660
+  const stageHeight = isMobile ? 640 : isTablet ? 700 : 740
+  const perspective = Math.round(cardWidth * 7)
 
-  // Radius, angular step, and card dimensions
-  const radius = isMobile ? 660 : isTablet ? 860 : 1020
-  const stepDeg = isMobile ? 27 : isTablet ? 23 : 21
-  const cardWidth = isMobile ? Math.min(320, Math.max(285, windowWidth - 28)) : isTablet ? 365 : 410
-  const cardHeight = isMobile ? 585 : isTablet ? 650 : 710
-  const centerOffsetY = radius + (isMobile ? 335 : isTablet ? 370 : 410)
-  const stageHeight = isMobile ? 745 : isTablet ? 870 : 990
-
-  // Arc length in pixels per card step
-  const arcPerCard = (radius * stepDeg * Math.PI) / 180
-
-  // Modulo wrap helper for symmetric distance calculation [-total/2, total/2]
+  // Symmetric modulo wrap helper for continuous looping [-total/2, total/2]
   const wrapN = useCallback(
     (val: number) => {
       let v = val % total
@@ -125,90 +387,106 @@ export function ProjectWheelShowcase() {
     [total]
   )
 
-  // Direct DOM transform writer (One Animation Owner: updates elements with ZERO React reconciliation)
-  const renderTransforms = useCallback(() => {
+  // Direct compositor render function: writes transform, opacity, visibility & zIndex directly to card refs
+  const render = useCallback(() => {
     const pos = posRef.current
+    const { radius, step } = dimsRef.current
 
-    // Update rotary dial rotation
+    // 1. Update background decorative rotary dial track
     if (dialRef.current) {
+      const stepDeg = (step * 180) / Math.PI
       dialRef.current.style.transform = `translate(-50%, -50%) rotate(${(-pos * stepDeg).toFixed(2)}deg)`
     }
 
-    // Check if active index changed; update React state only on whole project transitions
-    const currentInt = ((Math.round(pos) % total) + total) % total
-    if (currentInt !== activeIndexRef.current) {
-      activeIndexRef.current = currentInt
-      setActiveIndex(currentInt)
+    // 2. Active index check: update React state ONLY when nearest integer changes
+    const near = ((Math.round(pos) % total) + total) % total
+    if (near !== activeIndexRef.current) {
+      activeIndexRef.current = near
+      setActiveIndex(near)
     }
 
-    // Update each project card with lightweight, 2D hardware-accelerated transforms
-    // Eliminates rotateY/translateZ/preserve-3d that trigger iOS Safari blank renders
+    // 3. Update each project card with 3D arc position and culling
     for (let i = 0; i < total; i++) {
       const card = cardRefs.current[i]
       if (!card) continue
 
-      const rawOffset = wrapN(i - pos)
-      const dist = Math.abs(rawOffset)
-      const k = Math.max(0, 1 - dist) // 1 at center, 0 at 1 step out
+      const off = wrapN(i - pos)
+      const a = off * step
+      const d = Math.abs(off)
 
-      // High-performance 2D wheel geometry (rotate + translateY + scale)
-      const angle = rawOffset * stepDeg
-      const scale = 1 + 0.12 * k - dist * 0.06
-      const translateY = -radius - 20 * k
-      const opacity = dist <= 2.2 ? 1 : Math.max(0, 1 - (dist - 2.2) * 0.8)
-      const isVisible = opacity > 0.01
+      // Culling: cards farther than 2.6 steps fade to 0, hidden, and pointer-events: none (only ~5 painted)
+      const op = d <= 2.6 ? 1 : Math.max(0, 1 - (d - 2.6) / 0.8)
+      const isVisible = op > 0.005
 
-      card.style.transform = `translate(-50%, -50%) rotate(${angle.toFixed(2)}deg) translateY(${translateY.toFixed(
-        1
-      )}px) scale(${scale.toFixed(3)})`
-      card.style.opacity = opacity.toFixed(3)
+      // Inner-cylinder 3D arc formula: translate3d(sin(a)*R, 0, R*(1-cos(a))) rotateY(-a)
+      const tx = (Math.sin(a) * radius).toFixed(1)
+      const tz = (radius * (1 - Math.cos(a))).toFixed(1)
+      const rotY = (-a * (180 / Math.PI)).toFixed(2)
+
+      card.style.transform = `translate(-50%, -50%) translate3d(${tx}px, 0, ${tz}px) rotateY(${rotY}deg)`
+      card.style.opacity = op.toFixed(3)
       card.style.visibility = isVisible ? 'visible' : 'hidden'
-      card.style.pointerEvents = dist < 0.6 ? 'auto' : dist <= 1.8 ? 'auto' : 'none'
-      card.style.zIndex = String(100 - Math.round(dist * 20))
+      card.style.pointerEvents = op > 0.5 ? 'auto' : 'none'
+      card.style.zIndex = String(100 - Math.round(d * 10))
     }
-  }, [stepDeg, total, wrapN, radius])
+  }, [total, wrapN])
 
-  // Pause autoplay on manual interactions for a specified duration
+  // Temporarily pause autoplay following manual user interactions
   const holdAutoplay = useCallback((ms = 4500) => {
     holdUntilRef.current = performance.now() + ms
   }, [])
 
-  // Smooth tween animation using cubic-out easing
+  // Smooth position tween using Motion's animate() with power3.out easing (~0.9s duration)
   const animateTo = useCallback(
     (target: number, customDuration?: number) => {
+      // Kill any in-flight tween
+      if (tweenRef.current) {
+        tweenRef.current.stop()
+        tweenRef.current = null
+      }
+
       const current = posRef.current
       const dist = Math.abs(target - current)
-      if (dist < 0.0001) {
+      if (dist < 0.001) {
         posRef.current = target
-        renderTransforms()
-        tweenRef.current = null
+        render()
         return
       }
 
-      // Respect prefers-reduced-motion
-      if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      // Check prefers-reduced-motion
+      if (
+        typeof window !== 'undefined' &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      ) {
         posRef.current = target
-        renderTransforms()
-        tweenRef.current = null
+        render()
         return
       }
 
-      const duration = customDuration ?? Math.min(1.2, 0.45 + dist * 0.12)
-      tweenRef.current = {
-        startPos: current,
-        targetPos: target,
-        startTime: performance.now(),
-        duration: duration * 1000,
-      }
+      // GSAP power3.out equivalent cubic-bezier: [0.215, 0.61, 0.355, 1]
+      const duration = customDuration ?? Math.min(1.2, 0.55 + dist * 0.12)
+      const anim = animate(current, target, {
+        duration,
+        ease: [0.215, 0.61, 0.355, 1],
+        onUpdate: (latest) => {
+          posRef.current = latest
+          render()
+        },
+        onComplete: () => {
+          tweenRef.current = null
+        },
+      })
+
+      tweenRef.current = anim
     },
-    [renderTransforms]
+    [render]
   )
 
-  // Navigation handlers — rapid clicks advance predictably without resetting or snapping back
+  // Navigation handlers — rapid clicks advance predictably
   const goTo = useCallback(
     (index: number) => {
-      holdAutoplay(4500)
-      const base = tweenRef.current ? tweenRef.current.targetPos : posRef.current
+      holdAutoplay(5000)
+      const base = posRef.current
       const offset = wrapN(index - base)
       animateTo(base + offset)
     },
@@ -216,123 +494,201 @@ export function ProjectWheelShowcase() {
   )
 
   const next = useCallback(() => {
-    holdAutoplay(4500)
-    const base = tweenRef.current ? tweenRef.current.targetPos : posRef.current
-    animateTo(Math.round(base) + 1)
+    holdAutoplay(5000)
+    animateTo(Math.round(posRef.current) + 1)
   }, [animateTo, holdAutoplay])
 
   const prev = useCallback(() => {
-    holdAutoplay(4500)
-    const base = tweenRef.current ? tweenRef.current.targetPos : posRef.current
-    animateTo(Math.round(base) - 1)
+    holdAutoplay(5000)
+    animateTo(Math.round(posRef.current) - 1)
   }, [animateTo, holdAutoplay])
 
-  // Track window width with debounced resize handler
+  // Measure geometry and update perspective
+  const measure = useCallback(() => {
+    if (typeof window === 'undefined') return
+    const w = window.innerWidth
+    const mobile = w < 640
+    const tablet = w >= 640 && w < 1024
+
+    const cw = mobile ? Math.min(320, Math.max(280, w - 32)) : tablet ? 360 : 410
+    const ch = mobile ? 580 : tablet ? 620 : 660
+    const gap = Math.round(cw * 0.08)
+    const rad = cw * 3.3
+    const stp = (cw + gap) / rad
+    const persp = Math.round(cw * 7)
+    const stgH = mobile ? 640 : tablet ? 700 : 740
+
+    dimsRef.current = {
+      cardWidth: cw,
+      cardHeight: ch,
+      radius: rad,
+      step: stp,
+      gap,
+      perspective: persp,
+      stageHeight: stgH,
+    }
+
+    if (stackRef.current) {
+      stackRef.current.style.perspective = `${persp}px`
+    }
+  }, [])
+
+  // Window resize handler debounced by 150ms
   useEffect(() => {
-    let resizeTimer: NodeJS.Timeout | null = null
+    measure()
+    render()
+
+    let timer: NodeJS.Timeout | null = null
     const handleResize = () => {
-      if (resizeTimer) clearTimeout(resizeTimer)
-      resizeTimer = setTimeout(() => {
+      if (timer) clearTimeout(timer)
+      timer = setTimeout(() => {
         setWindowWidth(window.innerWidth)
-        requestAnimationFrame(() => renderTransforms())
-      }, 100)
+        measure()
+        render()
+      }, 150)
     }
 
     window.addEventListener('resize', handleResize)
     return () => {
       window.removeEventListener('resize', handleResize)
-      if (resizeTimer) clearTimeout(resizeTimer)
+      if (timer) clearTimeout(timer)
     }
-  }, [renderTransforms])
+  }, [measure, render])
 
-  // Viewport intersection observer: pause animation when wheel section is offscreen
-  useEffect(() => {
-    const stage = stageRef.current
-    if (!stage) return
+  // Drag interaction: pointerdown on stage, pointermove/pointerup on window with 6px threshold & smoothed velocity
+  const handleStagePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.button !== 0 && e.pointerType === 'mouse') return
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        inViewRef.current = entry.isIntersecting
-        if (entry.isIntersecting) {
-          holdAutoplay(2500)
-        }
-      },
-      { threshold: 0.1 }
-    )
-
-    observer.observe(stage)
-    return () => observer.disconnect()
-  }, [holdAutoplay])
-
-  // Reset autoplay delay on tab visibility change
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (!document.hidden) {
-        holdAutoplay(3500)
-      }
+    // Do not initiate drag if user interacted with a button, link, or action control
+    const target = e.target as HTMLElement | null
+    if (target?.closest('button, .button, a, [data-action-button="true"]')) {
+      holdAutoplay(5000)
+      return
     }
-    document.addEventListener('visibilitychange', handleVisibilityChange)
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
-  }, [holdAutoplay])
 
-  // Continuous frame loop (One Animation Owner: handles continuous drift, drag, and tweens)
+    // Kill any in-flight tween immediately
+    if (tweenRef.current) {
+      tweenRef.current.stop()
+      tweenRef.current = null
+    }
+    holdAutoplay(5000)
+
+    dragRef.current = {
+      pointerId: e.pointerId,
+      pointerType: e.pointerType,
+      startX: e.clientX,
+      startY: e.clientY,
+      startPos: posRef.current,
+      lastX: e.clientX,
+      lastTime: performance.now(),
+      velocity: 0,
+      captured: false,
+    }
+    hasDraggedRef.current = false
+  }
+
+  // Window pointer event listeners for seamless drag tracking outside stage boundaries
   useEffect(() => {
-    let lastFrameTime = performance.now()
-    const driftSpeed = 0.24 // Gentle continuous drift ~0.24 positions/sec
+    const onPointerMove = (e: PointerEvent) => {
+      const drag = dragRef.current
+      if (!drag || drag.pointerId !== e.pointerId) return
 
-    const tick = (now: number) => {
-      const dtMs = Math.min(50, Math.max(1, now - lastFrameTime))
-      const dt = dtMs / 1000
-      lastFrameTime = now
+      const dx = e.clientX - drag.startX
+      const dy = e.clientY - drag.startY
 
-      const isReducedMotion =
-        typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      if (!drag.captured) {
+        // 6px drag threshold
+        if (Math.hypot(dx, dy) < 6) return
 
-      if (isDraggingRef.current && dragRef.current) {
-        // 1. DRAGGING: Direct 1:1 kinematic tracking with zero latency
-        const dx = dragRef.current.currentX - dragRef.current.startX
-        posRef.current = dragRef.current.startPos - dx / arcPerCard
-      } else if (tweenRef.current) {
-        // 2. TWEENING (inertia / settling / navigation / dot clicks):
-        const { startPos, targetPos, startTime, duration } = tweenRef.current
-        const elapsed = now - startTime
-        const progress = Math.min(1, elapsed / duration)
-
-        // Silky power3.out easing: 1 - (1 - p)^3
-        const ease = 1 - Math.pow(1 - progress, 3)
-        posRef.current = startPos + (targetPos - startPos) * ease
-
-        if (progress >= 1) {
-          posRef.current = targetPos
-          tweenRef.current = null
+        // On touch: if vertical movement dominates, allow native vertical page scroll and cancel wheel drag
+        if (drag.pointerType === 'touch' && Math.abs(dy) > Math.abs(dx)) {
+          dragRef.current = null
+          isDraggingRef.current = false
+          return
         }
-      } else if (
-        !isPaused &&
-        !isHovered &&
-        !isFocusedRef.current &&
-        now >= holdUntilRef.current &&
-        inViewRef.current &&
-        typeof document !== 'undefined' &&
-        !document.hidden &&
-        !isReducedMotion
-      ) {
-        // 3. CONTINUOUS AUTOPLAY: Gentle drift without stop/start jerking
-        posRef.current += driftSpeed * dt
+
+        drag.captured = true
+        hasDraggedRef.current = true
+        isDraggingRef.current = true
+        if (stageRef.current) {
+          stageRef.current.classList.add('cursor-grabbing')
+          stageRef.current.classList.remove('cursor-grab')
+        }
       }
 
-      // Render updated positions directly to DOM refs
-      renderTransforms()
+      const now = performance.now()
+      const dt = Math.max(1, now - drag.lastTime)
+      const instV = (e.clientX - drag.lastX) / dt
 
-      rafIdRef.current = requestAnimationFrame(tick)
+      // Smoothed velocity: v = v * 0.6 + new * 0.4
+      drag.velocity = drag.velocity * 0.6 + instV * 0.4
+      drag.lastX = e.clientX
+      drag.lastTime = now
+
+      const stepPx = dimsRef.current.cardWidth + dimsRef.current.gap
+      posRef.current = drag.startPos - dx / stepPx
+      render()
     }
 
-    rafIdRef.current = requestAnimationFrame(tick)
+    const onPointerUp = (e: PointerEvent) => {
+      const drag = dragRef.current
+      if (!drag || drag.pointerId !== e.pointerId) return
+
+      if (drag.captured) {
+        holdAutoplay(4500)
+        if (stageRef.current) {
+          stageRef.current.classList.remove('cursor-grabbing')
+          stageRef.current.classList.add('cursor-grab')
+        }
+
+        // If held stationary before releasing (>100ms), zero out momentum
+        const timeSinceMove = performance.now() - drag.lastTime
+        const effectiveVelocity = timeSinceMove > 100 ? 0 : drag.velocity
+
+        const stepPx = dimsRef.current.cardWidth + dimsRef.current.gap
+        const momentumCards = (-effectiveVelocity * 180) / stepPx
+        const target = Math.round(posRef.current + momentumCards)
+        animateTo(target)
+      }
+
+      dragRef.current = null
+      isDraggingRef.current = false
+
+      // Keep hasDraggedRef active for 80ms to suppress accidental navigation on drag release
+      if (drag.captured) {
+        setTimeout(() => {
+          hasDraggedRef.current = false
+        }, 80)
+      }
+    }
+
+    const onPointerCancel = (e: PointerEvent) => {
+      const drag = dragRef.current
+      if (!drag || drag.pointerId !== e.pointerId) return
+      if (drag.captured) {
+        animateTo(Math.round(posRef.current), 0.4)
+      }
+      dragRef.current = null
+      isDraggingRef.current = false
+      hasDraggedRef.current = false
+      if (stageRef.current) {
+        stageRef.current.classList.remove('cursor-grabbing')
+        stageRef.current.classList.add('cursor-grab')
+      }
+    }
+
+    window.addEventListener('pointermove', onPointerMove, { passive: true })
+    window.addEventListener('pointerup', onPointerUp, { passive: true })
+    window.addEventListener('pointercancel', onPointerCancel, { passive: true })
+
     return () => {
-      if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current)
+      window.removeEventListener('pointermove', onPointerMove)
+      window.removeEventListener('pointerup', onPointerUp)
+      window.removeEventListener('pointercancel', onPointerCancel)
     }
-  }, [arcPerCard, isPaused, isHovered, renderTransforms])
+  }, [animateTo, holdAutoplay, render])
 
-  // Horizontal wheel / touchpad swipe scrubbing
+  // Horizontal wheel / trackpad swipe scrubbing
   useEffect(() => {
     const stage = stageRef.current
     if (!stage) return
@@ -344,11 +700,15 @@ export function ProjectWheelShowcase() {
       if (!dx || Math.abs(dx) < 2) return
 
       e.preventDefault()
-      holdAutoplay(4000)
-      tweenRef.current = null
+      holdAutoplay(4500)
+      if (tweenRef.current) {
+        tweenRef.current.stop()
+        tweenRef.current = null
+      }
 
-      posRef.current += dx / arcPerCard
-      renderTransforms()
+      const stepPx = dimsRef.current.cardWidth + dimsRef.current.gap
+      posRef.current += dx / stepPx
+      render()
 
       if (wheelTimeout) clearTimeout(wheelTimeout)
       wheelTimeout = setTimeout(() => {
@@ -361,144 +721,133 @@ export function ProjectWheelShowcase() {
       stage.removeEventListener('wheel', handleWheel)
       if (wheelTimeout) clearTimeout(wheelTimeout)
     }
-  }, [arcPerCard, holdAutoplay, animateTo, renderTransforms])
+  }, [animateTo, holdAutoplay, render])
 
-  // Pointer Drag Interaction
-  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (e.button !== 0 && e.pointerType === 'mouse') return
+  // Autoplay management: IntersectionObserver, fine-pointer hover pause, visibilitychange, and reduced motion
+  useEffect(() => {
+    const stage = stageRef.current
+    if (!stage) return
 
-    // If clicking an interactive button or explicit link, DO NOT initiate drag
-    const target = e.target as HTMLElement | null
-    if (target?.closest('button, .button, a, [data-action-button="true"]')) {
-      holdAutoplay(5000)
-      return
-    }
-
-    // Stop active tween on press
-    tweenRef.current = null
-    holdAutoplay(5000)
-
-    dragRef.current = {
-      pointerId: e.pointerId,
-      startX: e.clientX,
-      startY: e.clientY,
-      startPos: posRef.current,
-      currentX: e.clientX,
-      lastX: e.clientX,
-      lastTime: performance.now(),
-      velocity: 0,
-      captured: false,
-    }
-    hasDraggedRef.current = false
-  }
-
-  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    const drag = dragRef.current
-    if (!drag || drag.pointerId !== e.pointerId) return
-
-    const dx = e.clientX - drag.startX
-    const dy = e.clientY - drag.startY
-
-    // Only engage drag if movement exceeds 6px threshold
-    if (!drag.captured) {
-      if (Math.hypot(dx, dy) < 6) return
-
-      // On touch devices: if vertical movement dominates, let native vertical page scroll proceed
-      if (e.pointerType === 'touch' && Math.abs(dy) > Math.abs(dx)) {
-        dragRef.current = null
-        isDraggingRef.current = false
-        setIsDragging(false)
-        return
-      }
-
-      drag.captured = true
-      hasDraggedRef.current = true
-      isDraggingRef.current = true
-      setIsDragging(true)
-
-      try {
-        stageRef.current?.setPointerCapture(e.pointerId)
-      } catch {
-        // Safe fallback
-      }
-    }
-
-    const now = performance.now()
-    const dt = Math.max(1, now - drag.lastTime)
-    const instV = (e.clientX - drag.lastX) / dt
-
-    drag.velocity = drag.velocity * 0.6 + instV * 0.4
-    drag.lastX = e.clientX
-    drag.currentX = e.clientX
-    drag.lastTime = now
-  }
-
-  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
-    const drag = dragRef.current
-    if (drag && drag.pointerId === e.pointerId) {
-      if (drag.captured && stageRef.current?.hasPointerCapture(e.pointerId)) {
-        try {
-          stageRef.current.releasePointerCapture(e.pointerId)
-        } catch {
-          // Safe fallback
+    // 1. IntersectionObserver
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        inViewRef.current = entry.isIntersecting
+        if (entry.isIntersecting) {
+          holdAutoplay(2500)
         }
+      },
+      { threshold: 0.15 }
+    )
+    observer.observe(stage)
+
+    // 2. Hover detection for fine pointer devices only
+    const isFinePointer = () =>
+      typeof window !== 'undefined' &&
+      window.matchMedia('(hover: hover) and (pointer: fine)').matches
+
+    const handlePointerEnter = (e: PointerEvent) => {
+      if (e.pointerType === 'mouse' && isFinePointer()) {
+        isHoveredRef.current = true
+        holdAutoplay(4000)
       }
-
-      if (drag.captured) {
-        holdAutoplay(4500)
-
-        // If held stationary before release (>80ms), zero out momentum
-        const timeSinceMove = performance.now() - drag.lastTime
-        const effectiveVelocity = timeSinceMove > 80 ? 0 : drag.velocity
-
-        // Momentum step: projects landing index in direction of drag
-        const momentumCards = (-effectiveVelocity * 220) / arcPerCard
-        const target = Math.round(posRef.current + momentumCards)
-        const distance = Math.abs(target - posRef.current)
-        const duration = Math.min(1.2, 0.42 + distance * 0.12)
-        animateTo(target, duration)
-      }
-      dragRef.current = null
     }
 
-    isDraggingRef.current = false
-    setIsDragging(false)
-
-    // Keep hasDraggedRef active for the ensuing click cycle to suppress unintended navigation
-    requestAnimationFrame(() => {
-      setTimeout(() => {
-        hasDraggedRef.current = false
-      }, 50)
-    })
-  }
-
-  const handlePointerCancel = (e: React.PointerEvent<HTMLDivElement>) => {
-    const drag = dragRef.current
-    if (drag && drag.pointerId === e.pointerId) {
-      if (drag.captured && stageRef.current?.hasPointerCapture(e.pointerId)) {
-        try {
-          stageRef.current.releasePointerCapture(e.pointerId)
-        } catch {
-          // Safe fallback
-        }
+    const handlePointerLeave = (e: PointerEvent) => {
+      if (e.pointerType === 'mouse') {
+        isHoveredRef.current = false
+        holdAutoplay(3500)
       }
-      if (drag.captured) {
-        // Cancelled gesture: snap to nearest integer card
-        animateTo(Math.round(posRef.current), 0.4)
-      }
-      dragRef.current = null
     }
-    isDraggingRef.current = false
-    setIsDragging(false)
-    hasDraggedRef.current = false
-  }
 
-  // Intercept click on the stage container in capture phase to suppress accidental clicks after real drags
+    stage.addEventListener('pointerenter', handlePointerEnter)
+    stage.addEventListener('pointerleave', handlePointerLeave)
+
+    // 3. Document visibility change
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        holdAutoplay(4000)
+      } else {
+        holdAutoplay(3500)
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    // 4. Autoplay interval (periodic gentle advancement every 4.2 seconds)
+    const interval = setInterval(() => {
+      const now = performance.now()
+      const isReducedMotion =
+        typeof window !== 'undefined' &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+      if (
+        !isPausedRef.current &&
+        !isHoveredRef.current &&
+        !isDraggingRef.current &&
+        !isFocusedRef.current &&
+        inViewRef.current &&
+        !document.hidden &&
+        !isReducedMotion &&
+        now >= holdUntilRef.current &&
+        !tweenRef.current
+      ) {
+        animateTo(Math.round(posRef.current) + 1, 0.9)
+      }
+    }, 4200)
+
+    return () => {
+      observer.disconnect()
+      stage.removeEventListener('pointerenter', handlePointerEnter)
+      stage.removeEventListener('pointerleave', handlePointerLeave)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      clearInterval(interval)
+    }
+  }, [animateTo, holdAutoplay])
+
+  // Mouse-follow subtle highlight: rAF-throttled, active card only, fine pointer only
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+    if (!finePointer) return
+
+    const stage = stageRef.current
+    if (!stage) return
+
+    let rafId = 0
+    const handlePointerMove = (e: PointerEvent) => {
+      if (rafId) return
+      const activeEl = cardRefs.current[activeIndexRef.current]
+      if (!activeEl) return
+
+      rafId = requestAnimationFrame(() => {
+        rafId = 0
+        const rect = activeEl.getBoundingClientRect()
+        const mx = (((e.clientX - rect.left) / rect.width) * 100).toFixed(1) + '%'
+        const my = (((e.clientY - rect.top) / rect.height) * 100).toFixed(1) + '%'
+        activeEl.style.setProperty('--mx', mx)
+        activeEl.style.setProperty('--my', my)
+      })
+    }
+
+    stage.addEventListener('pointermove', handlePointerMove, { passive: true })
+    return () => {
+      stage.removeEventListener('pointermove', handlePointerMove)
+      if (rafId) cancelAnimationFrame(rafId)
+    }
+  }, [])
+
+  // Suppress clicks that immediately follow drag gestures
   const handleStageClickCapture = (e: React.MouseEvent) => {
     if (hasDraggedRef.current) {
       e.preventDefault()
       e.stopPropagation()
       hasDraggedRef.current = false
+    }
+  }
+
+  const handleLinkClick = (e: React.MouseEvent) => {
+    if (hasDraggedRef.current) {
+      e.preventDefault()
+      e.stopPropagation()
     }
   }
 
@@ -510,14 +859,6 @@ export function ProjectWheelShowcase() {
     } else if (e.key === 'ArrowLeft') {
       e.preventDefault()
       prev()
-    }
-  }
-
-  // Link click handler: only suppresses if an actual drag gesture occurred
-  const handleLinkClick = (e: React.MouseEvent) => {
-    if (hasDraggedRef.current) {
-      e.preventDefault()
-      e.stopPropagation()
     }
   }
 
@@ -555,7 +896,11 @@ export function ProjectWheelShowcase() {
                 type="button"
                 onClick={() => {
                   holdAutoplay(5000)
-                  setIsPaused((prev) => !prev)
+                  setIsPaused((prev) => {
+                    const nextVal = !prev
+                    isPausedRef.current = nextVal
+                    return nextVal
+                  })
                 }}
                 className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-medium text-[#d9dee7] backdrop-blur-md transition hover:border-[#00f5ff]/40 hover:text-white"
                 aria-label={isPaused ? 'Resume auto rotation' : 'Pause auto rotation'}
@@ -599,26 +944,13 @@ export function ProjectWheelShowcase() {
         </Reveal>
       </div>
 
-      {/* Circular Rotary Stage */}
+      {/* Circular Rotary 3D Stage with touch-action: pan-y for natural iOS page scroll */}
       <div
         ref={stageRef}
         tabIndex={0}
         onKeyDown={handleKeyDown}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        onPointerCancel={handlePointerCancel}
-        onLostPointerCapture={handlePointerCancel}
+        onPointerDown={handleStagePointerDown}
         onClickCapture={handleStageClickCapture}
-        onMouseEnter={() => {
-          setIsHovered(true)
-          holdAutoplay(4000)
-          animateTo(Math.round(posRef.current), 0.4)
-        }}
-        onMouseLeave={() => {
-          setIsHovered(false)
-          holdAutoplay(3500)
-        }}
         onFocus={() => {
           isFocusedRef.current = true
           holdAutoplay(5000)
@@ -629,10 +961,9 @@ export function ProjectWheelShowcase() {
         }}
         style={{
           height: `${stageHeight}px`,
+          touchAction: 'pan-y',
         }}
-        className={`relative mt-6 sm:mt-8 w-full select-none overflow-hidden touch-pan-y focus:outline-none ${
-          isDragging ? 'cursor-grabbing' : 'cursor-grab'
-        }`}
+        className="relative mt-6 sm:mt-8 w-full select-none overflow-hidden touch-pan-y focus:outline-none cursor-grab"
         aria-label="Rotating Project Wheel — drag, swipe, or use arrow keys"
       >
         {/* Curved Horizon Dial Track (Decorative Background Wheel) */}
@@ -640,15 +971,14 @@ export function ProjectWheelShowcase() {
           ref={dialRef}
           aria-hidden="true"
           style={{
-            top: `${centerOffsetY}px`,
+            top: '50%',
             left: '50%',
-            width: `${radius * 2}px`,
-            height: `${radius * 2}px`,
+            width: `${Math.round(stageHeight * 1.5)}px`,
+            height: `${Math.round(stageHeight * 1.5)}px`,
             transform: 'translate(-50%, -50%)',
           }}
           className="pointer-events-none absolute rounded-full border border-dashed border-white/10 [box-shadow:0_0_60px_rgba(0,245,255,0.06),inset_0_0_60px_rgba(124,92,255,0.04)]"
         >
-          {/* Concentric inner rings */}
           <div className="absolute inset-[10%] rounded-full border border-white/[0.04]" />
           <div className="absolute inset-[24%] rounded-full border border-white/[0.03]" />
         </div>
@@ -666,225 +996,35 @@ export function ProjectWheelShowcase() {
           </div>
         </div>
 
-        {/* Fanned Project Cards (Pure 2D GPU compositor transforms: zero preserve-3d overhead) */}
-        <div className="absolute inset-0 z-10 pointer-events-none">
+        {/* 3D Stack Container with Perspective Set */}
+        <div
+          ref={stackRef}
+          style={{
+            perspective: `${perspective}px`,
+            perspectiveOrigin: '50% 50%',
+          }}
+          className="relative w-full h-full select-none pointer-events-none"
+        >
           {projects.map((project, i) => {
             const isActive = i === activeIndex
             const cover = projectCovers[i]
-            const caseStudyHref = `/projects/${projectSlug(project.title)}`
 
             return (
-              <div
+              <ProjectCard
                 key={project.title}
-                ref={(el) => {
+                project={project}
+                index={i}
+                isActive={isActive}
+                cover={cover}
+                cardWidth={cardWidth}
+                cardHeight={cardHeight}
+                isMobile={isMobile}
+                onSelect={goTo}
+                onLinkClick={handleLinkClick}
+                setCardRef={(el) => {
                   cardRefs.current[i] = el
                 }}
-                onClick={(e) => {
-                  if (hasDraggedRef.current) return
-                  if (!isActive) {
-                    e.preventDefault()
-                    goTo(i)
-                  }
-                }}
-                tabIndex={isActive ? 0 : -1}
-                aria-hidden={!isActive ? 'true' : undefined}
-                style={{
-                  top: `${centerOffsetY}px`,
-                  left: '50%',
-                  width: `${cardWidth}px`,
-                  height: `${cardHeight}px`,
-                }}
-                className={`group absolute flex flex-col rounded-[24px] text-left transition-[box-shadow,border-color,background-color] duration-300 touch-pan-y pointer-events-auto ${
-                  isActive
-                    ? 'border border-[rgba(0,245,255,0.48)] bg-[rgba(13,17,26,0.98)] shadow-[0_24px_60px_rgba(0,0,0,0.85),0_0_36px_rgba(0,245,255,0.18)] backdrop-blur-md'
-                    : 'cursor-pointer border border-white/10 bg-[rgba(12,16,25,0.95)] shadow-[0_12px_35px_rgba(0,0,0,0.6)] hover:border-[#00f5ff]/40 hover:bg-[rgba(14,19,30,0.95)]'
-                }`}
-              >
-                {/* Visual Cover Thumbnail — Stable Image Node */}
-                <div className="relative aspect-[16/9] w-full shrink-0 overflow-hidden rounded-t-[23px] border-b border-white/[0.08] bg-[#080b12]">
-                  <Image
-                    src={cover}
-                    alt={`${project.title} thumbnail`}
-                    fill
-                    sizes="(max-width: 640px) 80vw, 400px"
-                    priority={i === 0}
-                    draggable={false}
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03] select-none pointer-events-none"
-                  />
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#090d15] via-transparent to-transparent" />
-
-                  {/* Active card overlay link for thumbnail click */}
-                  {isActive && (
-                    <Link
-                      href={caseStudyHref}
-                      onClick={handleLinkClick}
-                      className="absolute inset-0 z-10"
-                      aria-label={`View ${project.title} case study`}
-                    />
-                  )}
-
-                  {/* Top Bar Badges */}
-                  <div className="pointer-events-none absolute left-3.5 top-3.5 flex items-center gap-1.5 z-20">
-                    <span className="rounded-full border border-white/15 bg-black/80 px-2.5 py-0.5 font-mono text-[10px] font-bold text-white shadow-sm backdrop-blur-md">
-                      0{i + 1}
-                    </span>
-                    <span className="rounded-full border border-[#00f5ff]/35 bg-[#00f5ff]/12 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#00f5ff] backdrop-blur-md">
-                      {project.category}
-                    </span>
-                  </div>
-
-                  {project.liveUrl && (
-                    <span className="pointer-events-none absolute right-3.5 top-3.5 inline-flex items-center gap-1 rounded-full border border-emerald-500/35 bg-black/80 px-2.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-emerald-400 backdrop-blur-md z-20">
-                      <span className="size-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]" />
-                      Live
-                    </span>
-                  )}
-                </div>
-
-                {/* Card Content */}
-                {isActive ? (
-                  /* Active Card Content */
-                  <div className="flex flex-1 flex-col justify-between p-4 sm:p-5 pb-4 sm:pb-5">
-                    {/* Top: Category, Role, Title, Summary */}
-                    <div className="flex flex-col gap-2 sm:gap-2.5">
-                      <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0.5">
-                        <span className="font-mono text-xs font-semibold uppercase tracking-wider text-[#00f5ff] shrink-0">
-                          {project.category}
-                        </span>
-                        {project.role && (
-                          <span className="text-[11.5px] font-medium text-[#c4cad4] text-right">
-                            {project.role}
-                          </span>
-                        )}
-                      </div>
-
-                      <h3 className="display text-base sm:text-[19px] font-bold tracking-tight text-white leading-snug">
-                        <Link
-                          href={caseStudyHref}
-                          onClick={handleLinkClick}
-                          data-action-button="true"
-                          className="hover:text-[#00f5ff] transition-colors"
-                        >
-                          {project.title}
-                        </Link>
-                      </h3>
-
-                      <p className="text-xs sm:text-[13px] leading-relaxed text-[#c4cad4]">
-                        {project.summary}
-                      </p>
-                    </div>
-
-                    {/* Middle: Key Architectural Highlights */}
-                    {project.keyFeatures && project.keyFeatures.length > 0 && (
-                      <div className="my-auto py-1 sm:py-2 hidden sm:flex flex-col gap-1.5">
-                        <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#9aa6b7]">
-                          Key Highlights
-                        </span>
-                        <ul className="flex flex-col gap-1.5 text-[11.5px] text-[#c4cad4]">
-                          {project.keyFeatures.slice(0, 2).map((feature, fIdx) => (
-                            <li key={fIdx} className="flex items-start gap-1.5 leading-snug">
-                              <Check size={12} className="shrink-0 text-[#00f5ff] mt-0.5" />
-                              <span className="line-clamp-1">{feature}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-
-                    {/* Bottom: Tech Stack Badges directly above Button Bar */}
-                    <div className="mt-auto flex flex-col gap-3 sm:gap-3.5">
-                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                        {project.technologies.slice(0, isMobile ? 3 : 5).map((tech) => (
-                          <span
-                            key={tech}
-                            className={`rounded-lg border px-2.5 py-1 text-[11px] font-medium ${getTechBadgeStyle(
-                              tech
-                            )}`}
-                          >
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-
-                      <div className="pt-3.5 border-t border-white/[0.08] flex items-center gap-2.5 relative z-20">
-                        <Link
-                          href={caseStudyHref}
-                          onClick={handleLinkClick}
-                          data-action-button="true"
-                          className="button primary flex-1 min-h-[44px] rounded-xl px-4 text-xs sm:text-[13px] font-semibold shadow-[0_0_20px_rgba(0,245,255,0.25)]"
-                        >
-                          <span>View Case Study</span>
-                          <ArrowUpRight size={14} />
-                        </Link>
-
-                        {project.liveUrl && (
-                          <a
-                            href={project.liveUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={handleLinkClick}
-                            data-action-button="true"
-                            className="grid size-[44px] place-items-center rounded-xl border border-emerald-500/40 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition shrink-0"
-                            aria-label={`Live Demo of ${project.title}`}
-                            title="Live Demo"
-                          >
-                            <ExternalLink size={15} />
-                          </a>
-                        )}
-
-                        {project.githubUrl && (
-                          <a
-                            href={project.githubUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={handleLinkClick}
-                            data-action-button="true"
-                            className="grid size-[44px] place-items-center rounded-xl border border-white/15 bg-white/[0.04] text-[#d9dee7] hover:border-white/30 hover:text-white transition shrink-0"
-                            aria-label={`GitHub repo of ${project.title}`}
-                            title="GitHub Repository"
-                          >
-                            <SiGithub size={15} />
-                          </a>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  /* Side Card Content */
-                  <div className="flex flex-1 flex-col p-4 sm:p-5">
-                    <div className="flex items-center justify-between">
-                      <span className="font-mono text-[11px] font-medium uppercase tracking-wider text-[#9aa6b7]">
-                        {project.category}
-                      </span>
-                      <span className="font-mono text-[11px] text-[#aeb6c3]">
-                        0{i + 1}
-                      </span>
-                    </div>
-
-                    <h3 className="display mt-2 text-sm sm:text-base font-semibold text-[#f2f3f7] group-hover:text-white leading-snug transition-colors">
-                      {project.title}
-                    </h3>
-
-                    <div className="mt-3 flex flex-wrap gap-1.5">
-                      {project.technologies.slice(0, 3).map((tech) => (
-                        <span
-                          key={tech}
-                          className={`rounded-md border px-2 py-0.5 text-[10px] font-medium ${getTechBadgeStyle(
-                            tech
-                          )}`}
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-
-                    <div className="mt-auto pt-3 flex items-center justify-between text-xs font-medium text-[#aeb6c3] group-hover:text-[#00f5ff] transition-colors border-t border-white/[0.06]">
-                      <span>Click to select</span>
-                      <ArrowRight size={13} className="transition group-hover:translate-x-1" />
-                    </div>
-                  </div>
-                )}
-              </div>
+              />
             )
           })}
         </div>
@@ -942,10 +1082,10 @@ export function ProjectWheelShowcase() {
 
           <div className="mt-3">
             <h3 className="display text-lg font-semibold text-[#f2f3f7]">
-              Full-Stack &amp; AI Systems
+              Full-Stack & AI Systems
             </h3>
             <p className="muted mt-1.5 text-xs sm:text-sm leading-relaxed">
-              Architecting high-throughput Laravel &amp; MySQL backends connected to Next.js 16 App Router interfaces with real-time AI reasoning workflows.
+              Architecting high-throughput Laravel & MySQL backends connected to Next.js 16 App Router interfaces with real-time AI reasoning workflows.
             </p>
           </div>
 
