@@ -580,3 +580,30 @@ html.is-touch {
   scroll-behavior: auto !important;
 }
 
+/* Scrollbar hiding utility for horizontal snap decks */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Currently Learning Deck Responsive Sizing */
+.learning-deck-container {
+  --card-w: min(78vw, 340px);
+  --deck-gap: 14px;
+}
+@media (min-width: 640px) {
+  .learning-deck-container {
+    --card-w: 360px;
+    --deck-gap: 20px;
+  }
+}
+@media (min-width: 1024px) {
+  .learning-deck-container {
+    --card-w: 380px;
+    --deck-gap: 20px;
+  }
+}
+
