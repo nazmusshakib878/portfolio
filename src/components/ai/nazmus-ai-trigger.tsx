@@ -148,7 +148,7 @@ export function NazmusAiTrigger({ isOpen, onClick }: TriggerProps) {
           aria-label="Open Shakib AI Assistant (Ctrl+J)"
           aria-expanded={false}
         >
-          <div className="relative">
+          <div className="ai-robot-visual relative">
             <Image
               src="/ai-robot-clean.png"
               alt="Shakib AI Assistant"
@@ -157,6 +157,23 @@ export function NazmusAiTrigger({ isOpen, onClick }: TriggerProps) {
               priority
               className="ai-robot-img select-none pointer-events-none"
             />
+            <Image
+              src="/ai-robot-clean.png"
+              alt=""
+              aria-hidden="true"
+              width={257}
+              height={327}
+              className="ai-robot-head select-none pointer-events-none"
+            />
+            <Image
+              src="/ai-robot-clean.png"
+              alt=""
+              aria-hidden="true"
+              width={257}
+              height={327}
+              className="ai-robot-arm select-none pointer-events-none"
+            />
+            <span className="ai-robot-wave-lines" aria-hidden="true" />
           </div>
         </motion.button>
       </AnimatePresence>
