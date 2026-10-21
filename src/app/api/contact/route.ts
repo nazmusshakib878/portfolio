@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: 'Please check the form fields and try again.' }, { status: 400 })
   }
 
-  const key = (process.env.WEB3FORMS_ACCESS_KEY || process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY)?.trim()
+  const key = process.env.WEB3FORMS_ACCESS_KEY?.trim()
   if (!key) {
     return NextResponse.json(
       { message: 'Contact delivery is not configured yet. Please use the email link instead.' },
@@ -59,20 +59,15 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    // Web3Forms free-tier enforces client-side submissions.
-    // If the server call is blocked or flagged (e.g. 403 / Pro plan required),
-    // provide the verified key to the validated client session for direct browser dispatch.
-    return NextResponse.json({
-      success: false,
-      clientFallback: true,
-      key,
-    })
+    return NextResponse.json(
+      { message: result.message || 'Message delivery failed. Please use the email link instead.' },
+      { status: 502 }
+    )
   } catch {
-    return NextResponse.json({
-      success: false,
-      clientFallback: true,
-      key,
-    })
+    return NextResponse.json(
+      { message: 'Message delivery timed out. Please use the email link instead.' },
+      { status: 504 }
+    )
   }
 }
 

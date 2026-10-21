@@ -251,8 +251,6 @@ function ContactFormDetailed() {
       const body = (await response.json().catch(() => ({}))) as {
         success?: boolean
         message?: string
-        clientFallback?: boolean
-        key?: string
       }
 
       if (!response.ok) {
@@ -261,37 +259,6 @@ function ContactFormDetailed() {
             ? body.message.trim()
             : 'Message could not be sent. Please try again.'
         )
-      }
-
-      if (body.clientFallback && body.key) {
-        const web3Response = await fetch('https://api.web3forms.com/submit', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-          },
-          body: JSON.stringify({
-            name: values.name,
-            email: values.email,
-            subject: `Portfolio Contact: ${values.projectType}`,
-            message: `[Inquiry Topic: ${values.projectType}]\n\n${values.message}`,
-            access_key: body.key,
-            from_name: 'Md. Nazmus Shakib Portfolio',
-          }),
-        })
-
-        const web3Result = (await web3Response.json().catch(() => ({}))) as {
-          success?: boolean
-          message?: string
-        }
-
-        if (!web3Response.ok || !web3Result.success) {
-          throw new Error(
-            typeof web3Result.message === 'string' && web3Result.message.trim()
-              ? web3Result.message.trim()
-              : 'Delivery failed. Please use the direct email button.'
-          )
-        }
       }
 
       setStatus({

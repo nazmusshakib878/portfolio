@@ -86,6 +86,7 @@ export function NazmusAiAssistant() {
         const res = await fetch('/api/ai/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          signal: AbortSignal.timeout(15_000),
           body: JSON.stringify({
             message: text,
             history: updated.slice(-6).map((m) => ({ role: m.role, content: m.content })),

@@ -3,7 +3,6 @@
 import { useState, useId } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
-import { X } from 'lucide-react'
 
 interface TriggerProps {
   isOpen: boolean
@@ -97,6 +96,11 @@ export function NazmusAiTrigger({ isOpen, onClick }: TriggerProps) {
   const [isHovered, setIsHovered] = useState(false)
   const shouldReduceMotion = useReducedMotion()
 
+  // The dialog has its own close control in the header. Keeping a second
+  // floating close button while it is open overlaps the composer on smaller
+  // viewports and creates two competing dismissal actions.
+  if (isOpen) return null
+
   return (
     <div className="shakib-ai-button">
       {/* Floating Hover Tooltip */}
@@ -128,50 +132,33 @@ export function NazmusAiTrigger({ isOpen, onClick }: TriggerProps) {
         )}
       </AnimatePresence>
 
-      {/* Main AI Button: Robot when closed, Sleek close button when open */}
+      {/* Main AI button */}
       <AnimatePresence mode="wait">
-        {isOpen ? (
-          <motion.button
-            key="ai-close-trigger"
-            type="button"
-            onClick={onClick}
-            initial={{ scale: 0.7, opacity: 0, rotate: -90 }}
-            animate={{ scale: 1, opacity: 1, rotate: 0 }}
-            exit={{ scale: 0.7, opacity: 0, rotate: 90 }}
-            transition={{ duration: 0.2 }}
-            className="size-14 sm:size-16 rounded-full bg-[#080c1a]/95 border border-[rgba(0,245,255,0.45)] shadow-[0_0_24px_rgba(0,245,255,0.35),0_8px_24px_rgba(0,0,0,0.6)] flex items-center justify-center text-white hover:scale-105 active:scale-95 transition-all focus-visible:outline-2 focus-visible:outline-[#00f5ff]"
-            aria-label="Close Shakib AI"
-            aria-expanded={true}
-          >
-            <X size={26} className="text-white" />
-          </motion.button>
-        ) : (
-          <motion.button
-            key="ai-robot-trigger"
-            type="button"
-            onClick={onClick}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.8, opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            className="ai-robot-trigger focus-visible:outline-2 focus-visible:outline-[#00f5ff] focus-visible:outline-offset-4"
-            aria-label="Open Shakib AI Assistant (Ctrl+J)"
-            aria-expanded={false}
-          >
-            <div className="relative">
-              <Image
-                src="/ai-robot-clean.png"
-                alt="Shakib AI Assistant"
-                width={257}
-                height={327}
-                priority
-                className="ai-robot-img select-none pointer-events-none"
-              />
-            </div>
-          </motion.button>
-        )}
+        <motion.button
+          key="ai-robot-trigger"
+          type="button"
+          onClick={onClick}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.8, opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          className="ai-robot-trigger focus-visible:outline-2 focus-visible:outline-[#00f5ff] focus-visible:outline-offset-4"
+          aria-label="Open Shakib AI Assistant (Ctrl+J)"
+          aria-expanded={false}
+        >
+          <div className="relative">
+            <Image
+              src="/ai-robot-clean.png"
+              alt="Shakib AI Assistant"
+              width={257}
+              height={327}
+              priority
+              className="ai-robot-img select-none pointer-events-none"
+            />
+          </div>
+        </motion.button>
       </AnimatePresence>
     </div>
   )

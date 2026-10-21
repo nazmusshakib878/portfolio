@@ -129,6 +129,7 @@ export function NazmusAiPanel({
     <AnimatePresence>
       {/* Mobile Backdrop Overlay */}
       <motion.div
+        key="ai-panel-backdrop"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -138,6 +139,7 @@ export function NazmusAiPanel({
       />
 
       <motion.div
+        key="ai-panel-dialog"
         initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.95, y: 18 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 18 }}
