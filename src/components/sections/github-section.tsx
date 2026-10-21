@@ -208,52 +208,69 @@ export function GitHubSection() {
           </div>
 
           <Reveal>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
               {pinnedRepositories.map((repo, idx) => {
+                const isFeatured = idx < 2
                 return (
                   <article
                     key={repo.fullName}
-                    className={`group flex h-full flex-col justify-between rounded-[22px] border bg-[rgba(15,18,25,0.74)] p-6 backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:bg-[rgba(17,22,32,0.88)] ${
+                    className={`group relative isolate flex min-h-[310px] h-full flex-col justify-between overflow-hidden rounded-[24px] border bg-[rgba(15,18,25,0.78)] p-5 backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:bg-[rgba(17,22,32,0.92)] focus-within:border-[#69e6cd]/55 focus-within:shadow-[0_0_0_3px_rgba(43,217,181,0.12)] sm:p-6 ${
+                      isFeatured ? 'lg:col-span-3' : 'lg:col-span-2'
+                    } ${
                       repo.isPrimary
-                        ? 'border-white/15 hover:border-[rgba(124,92,255,0.4)] shadow-[0_12px_40px_rgba(0,0,0,0.25)]'
+                        ? 'border-[rgba(124,92,255,0.28)] shadow-[0_16px_44px_rgba(0,0,0,0.28)] hover:border-[rgba(124,92,255,0.55)]'
                         : 'border-white/10 hover:border-white/25'
                     }`}
                   >
+                    <div
+                      aria-hidden="true"
+                      className={`pointer-events-none absolute -right-16 -top-20 size-48 rounded-full blur-3xl transition duration-500 group-hover:scale-125 ${
+                        repo.isPrimary ? 'bg-[#7c5cff]/15' : 'bg-[#2bd9b5]/[0.08]'
+                      }`}
+                    />
+
                     <div>
-                      {/* Top Row: Badge + Index */}
-                      <div className="flex items-center justify-between gap-3">
+                      {/* Repository identity */}
+                      <div className="relative flex flex-col items-start justify-between gap-3 sm:flex-row sm:gap-4">
+                        <div className="flex min-w-0 items-center gap-3">
+                          <span className="grid size-10 shrink-0 place-items-center rounded-xl border border-white/10 bg-[#090c14]/75 font-mono text-xs font-semibold text-[#69e6cd] shadow-inner shadow-black/30">
+                            {String(idx + 1).padStart(2, '0')}
+                          </span>
+                          <div className="min-w-0">
+                            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#747b8b]">
+                              Repository
+                            </p>
+                            <p className="mt-0.5 truncate font-mono text-[10px] text-[#8e95a5]">
+                              {repo.fullName}
+                            </p>
+                          </div>
+                        </div>
                         <span
-                          className={`rounded-full border px-2.5 py-0.5 text-[9.5px] font-semibold uppercase tracking-wider ${repo.badgeColor}`}
+                          className={`shrink-0 rounded-full border px-2.5 py-1 text-[9px] font-semibold uppercase tracking-wider ${repo.badgeColor}`}
                         >
                           {repo.badge}
-                        </span>
-                        <span className="font-mono text-xs text-[#747b8b]">
-                          0{idx + 1}
                         </span>
                       </div>
 
                       {/* Repo Name */}
-                      <h4 className="display mt-4 text-lg font-bold text-[#f2f3f7] group-hover:text-white transition">
+                      <h4 className={`display mt-7 font-semibold leading-tight text-[#f2f3f7] transition group-hover:text-white ${
+                        isFeatured ? 'text-2xl sm:text-[1.7rem]' : 'text-xl'
+                      }`}>
                         {repo.name}
                       </h4>
 
-                      <p className="font-mono text-[11px] text-[#747b8b] mt-0.5">
-                        {repo.fullName}
-                      </p>
-
-                      {/* Description */}
-                      <p className="muted mt-3 text-xs leading-relaxed">
+                      <p className={`muted mt-3 leading-relaxed ${isFeatured ? 'max-w-xl text-sm' : 'text-xs'}`}>
                         {repo.description}
                       </p>
                     </div>
 
-                    <div>
+                    <div className="relative mt-7">
                       {/* Tech Badges */}
-                      <div className="mt-6 flex flex-wrap gap-1.5 border-t border-white/[0.07] pt-4">
+                      <div className="flex flex-wrap gap-1.5 border-t border-white/[0.08] pt-4">
                         {repo.technologies.map((tech) => (
                           <span
                             key={tech}
-                            className="rounded-md border border-white/[0.08] bg-white/[0.025] px-2 py-0.5 text-[10.5px] font-medium text-[#d9dee7]"
+                            className="rounded-md border border-white/[0.1] bg-white/[0.035] px-2 py-1 text-[10px] font-medium text-[#d9dee7] transition group-hover:border-white/[0.16]"
                           >
                             {tech}
                           </span>
@@ -261,7 +278,7 @@ export function GitHubSection() {
                       </div>
 
                       {/* Action Links */}
-                      <div className="mt-4 flex flex-wrap items-center gap-2">
+                      <div className="mt-5 flex flex-wrap items-center gap-2">
                         {repo.liveUrl && (
                           <a
                             className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-400 transition hover:bg-emerald-500/20"

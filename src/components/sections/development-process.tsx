@@ -1,4 +1,8 @@
+ 'use client'
+
+import { useState } from 'react'
 import {
+  ArrowLeft,
   ArrowRight,
   CheckCircle2,
   Code2,
@@ -133,7 +137,7 @@ const processSteps: ProcessStep[] = [
   },
 ]
 
-export function DevelopmentProcess() {
+export function LegacyDevelopmentProcess() {
   return (
     <section id="process" className="section section-cv relative overflow-hidden">
       <div className="shell relative">
@@ -220,6 +224,85 @@ export function DevelopmentProcess() {
                 </article>
               )
             })}
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  )
+}
+
+export function DevelopmentProcess() {
+  const [activeIndex, setActiveIndex] = useState(0)
+  const activeStep = processSteps[activeIndex]
+  const ActiveIcon = activeStep.icon
+  const selectStep = (index: number) => setActiveIndex((index + processSteps.length) % processSteps.length)
+
+  return (
+    <section id="process" className="section section-cv relative overflow-hidden">
+      <div className="shell relative">
+        <Reveal>
+          <div className="grid gap-7 lg:grid-cols-[.32fr_1fr] lg:items-end">
+            <div>
+              <p className="eyebrow">09 / Engineering Lifecycle</p>
+              <p className="muted mt-4 max-w-[14rem] text-sm leading-6">A structured 6-stage engineering workflow from discovery to production maintenance.</p>
+            </div>
+            <div>
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs font-semibold text-[#d9dee7]">
+                <Workflow size={13} /> <span>Structured Software Workflow</span>
+              </div>
+              <h2 className="display max-w-[900px] text-[clamp(2.6rem,4.8vw,4.8rem)] font-semibold text-[#f2f3f7]">My development <span className="text-[#9aa6b7]">process.</span></h2>
+            </div>
+          </div>
+        </Reveal>
+
+        <Reveal className="mt-14 lg:mt-16">
+          <div className="overflow-hidden rounded-[30px] border border-white/10 bg-[rgba(15,18,25,0.82)] shadow-[0_24px_72px_rgba(0,0,0,0.34)] backdrop-blur-xl">
+            <div className="grid lg:grid-cols-[1.08fr_.82fr_104px]">
+              <article className="relative overflow-hidden p-6 sm:p-9 lg:p-11">
+                <div aria-hidden="true" className="absolute -left-28 -top-32 size-72 rounded-full bg-[#7c5cff]/10 blur-3xl" />
+                <div className="relative">
+                  <div className="flex items-center justify-between gap-4">
+                    <span className={`flex size-12 items-center justify-center rounded-2xl border ${activeStep.accent.iconBorder} ${activeStep.accent.iconBg} ${activeStep.accent.iconColor}`}><ActiveIcon size={22} aria-hidden="true" /></span>
+                    <span className="font-mono text-xs font-semibold tracking-[0.16em] text-[#747b8b]">STAGE {activeStep.number} / 06</span>
+                  </div>
+                  <span className={`mt-10 inline-flex rounded-full border px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] ${activeStep.accent.badgeColor}`}>{activeStep.phase}</span>
+                  <h3 className="display mt-5 text-[clamp(2rem,4vw,3.65rem)] font-semibold leading-[1.02] text-[#f2f3f7]">{activeStep.title}<span className="text-[#7f8b98]">, with intent.</span></h3>
+                  <p className="mt-6 max-w-xl text-base leading-8 text-[#c4cad4] sm:text-lg">{activeStep.description}</p>
+                  <div className="mt-10 flex items-center gap-3 border-t border-white/[0.08] pt-5">
+                    <span className="flex size-8 shrink-0 items-center justify-center rounded-full border border-[rgba(43,217,181,0.26)] bg-[rgba(43,217,181,0.08)] text-[#2bd9b5]"><CheckCircle2 size={15} aria-hidden="true" /></span>
+                    <div><p className="text-[10px] font-semibold uppercase tracking-[0.13em] text-[#747b8b]">Key deliverable</p><p className="mt-0.5 text-sm font-semibold text-[#e2e6ed]">{activeStep.keyDeliverable}</p></div>
+                  </div>
+                </div>
+              </article>
+
+              <div className="relative min-h-[310px] overflow-hidden border-y border-white/[0.08] bg-[radial-gradient(circle_at_58%_28%,rgba(43,217,181,0.18),transparent_38%),linear-gradient(145deg,rgba(13,18,30,.96),rgba(8,11,18,.92))] lg:min-h-0 lg:border-x lg:border-y-0">
+                <div aria-hidden="true" className="absolute inset-0 opacity-30 [background-image:linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] [background-size:34px_34px]" />
+                <div className="absolute inset-7 rounded-[28px] border border-white/[0.08] bg-[#0b101b]/45" />
+                <div className="absolute left-1/2 top-1/2 grid size-28 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-[28px] border border-white/15 bg-[#0c1320]/90 shadow-[0_0_0_12px_rgba(43,217,181,.04),0_22px_50px_rgba(0,0,0,.42)]"><ActiveIcon size={38} className={activeStep.accent.iconColor} aria-hidden="true" /></div>
+                <span className="absolute left-[18%] top-[22%] size-2 rounded-full bg-[#2bd9b5] shadow-[0_0_16px_#2bd9b5]" />
+                <span className="absolute right-[18%] top-[30%] size-1.5 rounded-full bg-[#aa96ff] shadow-[0_0_14px_#aa96ff]" />
+                <span className="absolute bottom-[22%] left-[27%] size-1.5 rounded-full bg-[#7dd3fc] shadow-[0_0_14px_#7dd3fc]" />
+                <p className="absolute bottom-8 left-8 right-8 border-t border-white/[0.1] pt-4 text-center font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#aeb6c3]">Engineering workflow / {activeStep.number}</p>
+              </div>
+
+              <div className="flex gap-2 overflow-x-auto border-t border-white/[0.08] bg-[#090c14]/85 p-3 no-scrollbar lg:flex-col lg:overflow-visible lg:border-l lg:border-t-0">
+                {processSteps.map((step, index) => {
+                  const Icon = step.icon
+                  const isActive = index === activeIndex
+                  return <button key={step.id} type="button" onClick={() => selectStep(index)} aria-label={`Show stage ${step.number}: ${step.title}`} aria-pressed={isActive} className={`relative flex h-14 min-w-14 flex-1 items-center justify-center overflow-hidden rounded-xl border transition focus-visible:outline-2 focus-visible:outline-[#00f5ff] focus-visible:outline-offset-2 lg:min-h-0 lg:flex-auto ${isActive ? `${step.accent.iconBorder} ${step.accent.iconBg} ${step.accent.iconColor}` : 'border-white/[0.08] bg-white/[0.02] text-[#747b8b] hover:border-white/20 hover:text-[#d9dee7]'}`}><Icon size={18} aria-hidden="true" /><span className="sr-only">{step.title}</span><span className="absolute bottom-1.5 right-1.5 font-mono text-[8px] opacity-70">{step.number}</span></button>
+                })}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between border-t border-white/[0.08] bg-[#0a0d15]/75 px-5 py-4 sm:px-7">
+              <div className="flex items-center gap-2" aria-label="Process stage navigation">
+                {processSteps.map((step, index) => <button key={step.id} type="button" onClick={() => selectStep(index)} aria-label={`Go to ${step.title}`} aria-current={index === activeIndex ? 'step' : undefined} className={`h-2 rounded-full transition-all focus-visible:outline-2 focus-visible:outline-[#00f5ff] ${index === activeIndex ? 'w-8 bg-[#2bd9b5]' : 'w-2 bg-white/20 hover:bg-white/45'}`} />)}
+              </div>
+              <div className="flex items-center gap-2">
+                <button type="button" onClick={() => selectStep(activeIndex - 1)} aria-label="Previous process stage" className="grid size-9 place-items-center rounded-full border border-white/10 text-[#aeb6c3] transition hover:border-white/25 hover:bg-white/[0.06] hover:text-white focus-visible:outline-2 focus-visible:outline-[#00f5ff]"><ArrowLeft size={15} aria-hidden="true" /></button>
+                <button type="button" onClick={() => selectStep(activeIndex + 1)} aria-label="Next process stage" className="grid size-9 place-items-center rounded-full border border-white/10 text-[#aeb6c3] transition hover:border-white/25 hover:bg-white/[0.06] hover:text-white focus-visible:outline-2 focus-visible:outline-[#00f5ff]"><ArrowRight size={15} aria-hidden="true" /></button>
+              </div>
+            </div>
           </div>
         </Reveal>
       </div>
