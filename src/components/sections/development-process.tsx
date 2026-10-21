@@ -1,6 +1,6 @@
  'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   ArrowLeft,
   ArrowRight,
@@ -137,31 +137,20 @@ const processSteps: ProcessStep[] = [
   },
 ]
 
-function ProcessGlyph({
-  step,
-  size = 'default',
-}: {
-  step: ProcessStep
-  size?: 'default' | 'hero' | 'compact'
-}) {
-  const Icon = step.icon
-  const sizing = {
-    default: 'size-12 rounded-2xl',
-    hero: 'size-28 rounded-[28px]',
-    compact: 'size-10 rounded-xl',
-  }[size]
-  const iconSize = size === 'hero' ? 34 : size === 'compact' ? 16 : 21
+const stageColors = ['#38bdf8', '#2bd9b5', '#fb7185', '#a78bfa', '#fbbf24', '#69e6cd']
 
-  return (
-    <span
-      className={`relative inline-flex shrink-0 items-center justify-center border ${sizing} ${step.accent.iconBorder} ${step.accent.iconBg} ${step.accent.iconColor} shadow-[inset_0_1px_rgba(255,255,255,.08)]`}
-    >
-      <span aria-hidden="true" className="absolute inset-1 rounded-[inherit] border border-white/[0.07]" />
-      <span aria-hidden="true" className="absolute left-2 top-2 size-1 rounded-full bg-current opacity-80 shadow-[0_0_10px_currentColor]" />
-      <span aria-hidden="true" className="absolute bottom-2 right-2 size-1 rounded-full bg-current opacity-45" />
-      <Icon size={iconSize} className="relative z-10 drop-shadow-[0_0_8px_currentColor]" aria-hidden="true" />
-    </span>
-  )
+function StageIllustration({ step, hero = false }: { step: ProcessStep; hero?: boolean }) {
+  const color = stageColors[Number(step.number) - 1]
+  const common = { fill: 'none', stroke: color, strokeWidth: 2, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
+  const art = {
+    understand: <><circle cx="50" cy="50" r="22" {...common}/><circle cx="50" cy="50" r="11" {...common}/><path d="M50 22v10M78 50H68M50 78V68M22 50h10" {...common}/><circle cx="25" cy="31" r="3" fill={color}/><circle cx="76" cy="32" r="3" fill={color}/><circle cx="71" cy="75" r="3" fill={color}/></>,
+    plan: <><path d="m50 18 27 14-27 14-27-14 27-14Z" {...common}/><path d="m23 50 27 14 27-14M23 68l27 14 27-14" {...common}/><circle cx="50" cy="32" r="3" fill={color}/></>,
+    develop: <><path d="M37 31 23 50l14 19M63 31l14 19-14 19M55 26 45 74" {...common}/><path d="M43 44h14M43 56h10" {...common}/></>,
+    test: <><path d="M50 18 75 28v19c0 17-11 28-25 35-14-7-25-18-25-35V28l25-10Z" {...common}/><path d="m38 50 8 8 17-18" {...common}/></>,
+    deploy: <><path d="M57 22c13 8 17 22 13 35L53 74 39 60l17-17c13-4 21 0 21 0Z" {...common}/><path d="m45 66-14 11 5-16M62 35h.01" {...common}/><path d="M30 78c8-2 15-1 21 3" {...common}/></>,
+    maintain: <><path d="M72 42a24 24 0 0 0-40-8M28 58a24 24 0 0 0 40 8" {...common}/><path d="m72 28 1 14-14-1M28 72l-1-14 14 1" {...common}/><circle cx="50" cy="50" r="8" {...common}/><path d="M50 38v-4M50 66v-4M38 50h-4M66 50h-4" {...common}/></>,
+  }[step.id]
+  return <svg key={step.id} viewBox="0 0 100 100" aria-hidden="true" className={hero ? 'process-hero-scene size-[min(52vw,230px)] sm:size-[230px]' : 'size-9'}>{art}</svg>
 }
 
 export function LegacyDevelopmentProcess() {
@@ -260,11 +249,29 @@ export function LegacyDevelopmentProcess() {
 
 export function DevelopmentProcess() {
   const [activeIndex, setActiveIndex] = useState(0)
+  const [isInView, setIsInView] = useState(false)
+  const sectionRef = useRef<HTMLElement>(null)
   const activeStep = processSteps[activeIndex]
   const selectStep = (index: number) => setActiveIndex((index + processSteps.length) % processSteps.length)
 
+  useEffect(() => {
+    const section = sectionRef.current
+    if (!section) return
+    const observer = new IntersectionObserver(([entry]) => setIsInView(entry.isIntersecting), { threshold: 0.25 })
+    observer.observe(section)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    if (!isInView || document.hidden || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const timer = window.setInterval(() => setActiveIndex((index) => (index + 1) % processSteps.length), 6500)
+    const pauseOnHidden = () => { if (document.hidden) window.clearInterval(timer) }
+    document.addEventListener('visibilitychange', pauseOnHidden)
+    return () => { window.clearInterval(timer); document.removeEventListener('visibilitychange', pauseOnHidden) }
+  }, [isInView])
+
   return (
-    <section id="process" className="section section-cv relative overflow-hidden">
+    <section ref={sectionRef} id="process" className="section section-cv relative overflow-hidden">
       <div className="shell relative">
         <Reveal>
           <div className="grid gap-7 lg:grid-cols-[.32fr_1fr] lg:items-end">
@@ -288,7 +295,7 @@ export function DevelopmentProcess() {
                 <div aria-hidden="true" className="absolute -left-28 -top-32 size-72 rounded-full bg-[#7c5cff]/10 blur-3xl" />
                 <div className="relative">
                   <div className="flex items-center justify-between gap-4">
-                    <ProcessGlyph step={activeStep} />
+                    <span className={`grid size-14 place-items-center rounded-2xl border ${activeStep.accent.iconBorder} ${activeStep.accent.iconBg}`}><StageIllustration step={activeStep} /></span>
                     <span className="font-mono text-xs font-semibold tracking-[0.16em] text-[#747b8b]">STAGE {activeStep.number} / 06</span>
                   </div>
                   <span className={`mt-10 inline-flex rounded-full border px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] ${activeStep.accent.badgeColor}`}>{activeStep.phase}</span>
@@ -304,17 +311,17 @@ export function DevelopmentProcess() {
               <div className="relative min-h-[310px] overflow-hidden border-y border-white/[0.08] bg-[radial-gradient(circle_at_58%_28%,rgba(43,217,181,0.18),transparent_38%),linear-gradient(145deg,rgba(13,18,30,.96),rgba(8,11,18,.92))] lg:min-h-0 lg:border-x lg:border-y-0">
                 <div aria-hidden="true" className="absolute inset-0 opacity-30 [background-image:linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] [background-size:34px_34px]" />
                 <div className="absolute inset-7 rounded-[28px] border border-white/[0.08] bg-[#0b101b]/45" />
-                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-[34px] bg-[#0c1320]/90 p-2 shadow-[0_0_0_12px_rgba(43,217,181,.04),0_22px_50px_rgba(0,0,0,.42)]"><ProcessGlyph step={activeStep} size="hero" /></div>
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-[34px] border border-white/10 bg-[#0c1320]/90 p-4"><StageIllustration step={activeStep} hero /></div>
                 <span className="absolute left-[18%] top-[22%] size-2 rounded-full bg-[#2bd9b5] shadow-[0_0_16px_#2bd9b5]" />
                 <span className="absolute right-[18%] top-[30%] size-1.5 rounded-full bg-[#aa96ff] shadow-[0_0_14px_#aa96ff]" />
                 <span className="absolute bottom-[22%] left-[27%] size-1.5 rounded-full bg-[#7dd3fc] shadow-[0_0_14px_#7dd3fc]" />
                 <p className="absolute bottom-8 left-8 right-8 border-t border-white/[0.1] pt-4 text-center font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#aeb6c3]">Engineering workflow / {activeStep.number}</p>
               </div>
 
-              <div className="flex gap-2 overflow-x-auto border-t border-white/[0.08] bg-[#090c14]/85 p-3 no-scrollbar lg:flex-col lg:overflow-visible lg:border-l lg:border-t-0">
+              <div role="tablist" aria-label="Process stages" className="process-stage-rail flex gap-2 overflow-x-auto border-t border-white/[0.08] bg-[#090c14]/85 p-3 no-scrollbar lg:flex-col lg:overflow-visible lg:border-l lg:border-t-0">
                 {processSteps.map((step, index) => {
                   const isActive = index === activeIndex
-                  return <button key={step.id} type="button" onClick={() => selectStep(index)} aria-label={`Show stage ${step.number}: ${step.title}`} aria-pressed={isActive} className={`relative flex h-14 min-w-14 flex-1 items-center justify-center overflow-hidden rounded-xl border transition focus-visible:outline-2 focus-visible:outline-[#00f5ff] focus-visible:outline-offset-2 lg:min-h-0 lg:flex-auto ${isActive ? `${step.accent.iconBorder} bg-white/[0.04]` : 'border-white/[0.08] bg-white/[0.02] hover:border-white/20'}`}><ProcessGlyph step={step} size="compact" /><span className="sr-only">{step.title}</span><span className={`absolute bottom-1.5 right-1.5 font-mono text-[8px] ${isActive ? step.accent.iconColor : 'text-[#747b8b]'}`}>{step.number}</span></button>
+                  return <button key={step.id} role="tab" type="button" onClick={() => selectStep(index)} aria-label={`Show stage ${step.number}: ${step.title}`} aria-selected={isActive} className={`process-rail-item relative flex h-16 min-w-16 flex-1 items-center justify-center overflow-hidden rounded-2xl border transition focus-visible:outline-2 focus-visible:outline-[#00f5ff] focus-visible:outline-offset-2 lg:min-h-[76px] lg:flex-auto ${isActive ? `${step.accent.iconBorder} bg-white/[0.05]` : 'border-white/[0.08] bg-white/[0.02] hover:-translate-y-0.5 hover:border-white/25'}`}><StageIllustration step={step} /><span className="sr-only">{step.title}</span><span className={`absolute bottom-1.5 right-2 font-mono text-[10px] font-semibold ${isActive ? step.accent.iconColor : 'text-[#aeb6c3]'}`}>{step.number}</span>{index < activeIndex && <CheckCircle2 size={11} className="absolute left-2 top-2 text-[#2bd9b5]" aria-hidden="true" />}<span className="process-rail-tooltip">{step.title}</span></button>
                 })}
               </div>
             </div>

@@ -395,6 +395,61 @@ p, h1, h2, h3, li, dd { overflow-wrap: anywhere }
   scrollbar-width: none;
 }
 
+/* Development process: static blueprint treatment with one-time SVG line draw. */
+.process-hero-scene path,
+.process-hero-scene circle {
+  stroke-dasharray: 180;
+  stroke-dashoffset: 180;
+  animation: process-stroke-draw 620ms ease-out forwards;
+}
+
+.process-stage-rail {
+  scrollbar-width: none;
+}
+
+.process-stage-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.process-rail-tooltip {
+  pointer-events: none;
+  position: absolute;
+  right: calc(100% + 10px);
+  top: 50%;
+  z-index: 10;
+  transform: translateY(-50%) translateX(4px);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 8px;
+  background: #101521;
+  padding: 5px 8px;
+  color: #e2e6ed;
+  font-size: 10px;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity .18s ease, transform .18s ease;
+  white-space: nowrap;
+}
+
+.process-rail-item:hover .process-rail-tooltip,
+.process-rail-item:focus-visible .process-rail-tooltip {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+@keyframes process-stroke-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+@media (max-width: 1023px) {
+  .process-rail-tooltip { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .process-hero-scene path,
+  .process-hero-scene circle { animation: none !important; stroke-dashoffset: 0; }
+  .process-rail-item { transition: none !important; }
+}
+
 /* ======================== */
 /*   Shakib AI Robot Button */
 /* ======================== */
