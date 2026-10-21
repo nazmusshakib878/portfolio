@@ -143,7 +143,7 @@ const learningAreas: LearningArea[] = [
 
 export function CurrentlyLearning() {
   return (
-    <section id="learning" className="section relative overflow-hidden">
+    <section id="learning" className="section section-cv relative overflow-hidden">
       <div className="shell relative">
         {/* Section Header */}
         <Reveal>
@@ -167,71 +167,73 @@ export function CurrentlyLearning() {
         </Reveal>
 
         {/* 7 Learning Cards Grid (3-column balanced desktop layout) */}
-        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:mt-16">
-          {learningAreas.map((area, idx) => {
-            const Icon = area.icon
-            const isLast = idx === learningAreas.length - 1
+        <Reveal className="mt-14 lg:mt-16">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {learningAreas.map((area, idx) => {
+              const Icon = area.icon
+              const isLast = idx === learningAreas.length - 1
 
-            return (
-              <Reveal
-                key={area.id}
-                className={isLast ? 'sm:col-span-2 sm:max-w-md sm:mx-auto lg:max-w-none lg:mx-0 lg:col-span-1 lg:col-start-2 w-full' : ''}
-              >
-                <article
-                  className={`group flex h-full flex-col justify-between rounded-[22px] border border-white/10 bg-[rgba(15,18,25,0.74)] p-6 backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:bg-[rgba(17,22,30,0.88)] ${area.accent.border}`}
+              return (
+                <div
+                  key={area.id}
+                  className={isLast ? 'sm:col-span-2 sm:max-w-md sm:mx-auto lg:max-w-none lg:mx-0 lg:col-span-1 lg:col-start-2 w-full' : ''}
                 >
-                  <div>
-                    {/* Top Row: Icon + Number */}
-                    <div className="flex items-center justify-between gap-3">
-                      <span
-                        className={`flex size-10 items-center justify-center rounded-xl border ${area.accent.iconBg} ${area.accent.iconColor} transition duration-300 group-hover:scale-105`}
-                      >
-                        <Icon size={18} aria-hidden="true" />
-                      </span>
-                      <span className="display text-lg font-semibold text-white/20 transition group-hover:text-white/35">
-                        {area.id}
-                      </span>
-                    </div>
-
-                    {/* Status Pill */}
-                    <div className="mt-4">
-                      <span
-                        className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[9.5px] font-semibold uppercase tracking-wider ${area.statusColor}`}
-                      >
-                        <span className="size-1.5 rounded-full bg-current animate-pulse" />
-                        <span>{area.status}</span>
-                      </span>
-                    </div>
-
-                    {/* Title */}
-                    <h3 className="display mt-3 text-lg font-semibold text-[#f2f3f7] group-hover:text-white transition">
-                      {area.title}
-                    </h3>
-
-                    {/* Description */}
-                    <p className="muted mt-2 text-xs leading-relaxed">
-                      {area.description}
-                    </p>
-                  </div>
-
-                  {/* Topics List */}
-                  <div className="mt-6 border-t border-white/[0.07] pt-4">
-                    <ul aria-label={`${area.title} topics`} className="flex flex-wrap gap-1.5">
-                      {area.topics.map((topic) => (
-                        <li
-                          key={topic}
-                          className="rounded-md border border-white/[0.08] bg-white/[0.025] px-2 py-0.5 text-[10.5px] font-medium text-[#d9dee7]"
+                  <article
+                    className={`group flex h-full flex-col justify-between rounded-[22px] border border-white/10 bg-[rgba(15,18,25,0.74)] p-6 backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:bg-[rgba(17,22,30,0.88)] ${area.accent.border}`}
+                  >
+                    <div>
+                      {/* Top Row: Icon + Number */}
+                      <div className="flex items-center justify-between gap-3">
+                        <span
+                          className={`flex size-10 items-center justify-center rounded-xl border ${area.accent.iconBg} ${area.accent.iconColor} transition duration-300 group-hover:scale-105`}
                         >
-                          {topic}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </article>
-              </Reveal>
-            )
-          })}
-        </div>
+                          <Icon size={18} aria-hidden="true" />
+                        </span>
+                        <span className="display text-lg font-semibold text-white/20 transition group-hover:text-white/35">
+                          {area.id}
+                        </span>
+                      </div>
+
+                      {/* Status Pill */}
+                      <div className="mt-4">
+                        <span
+                          className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[9.5px] font-semibold uppercase tracking-wider ${area.statusColor}`}
+                        >
+                          <span className="size-1.5 rounded-full bg-current animate-pulse" />
+                          <span>{area.status}</span>
+                        </span>
+                      </div>
+
+                      {/* Title */}
+                      <h3 className="display mt-3 text-lg font-semibold text-[#f2f3f7] group-hover:text-white transition">
+                        {area.title}
+                      </h3>
+
+                      {/* Description */}
+                      <p className="muted mt-2 text-xs leading-relaxed">
+                        {area.description}
+                      </p>
+                    </div>
+
+                    {/* Topics List */}
+                    <div className="mt-6 border-t border-white/[0.07] pt-4">
+                      <ul aria-label={`${area.title} topics`} className="flex flex-wrap gap-1.5">
+                        {area.topics.map((topic) => (
+                          <li
+                            key={topic}
+                            className="rounded-md border border-white/[0.08] bg-white/[0.025] px-2 py-0.5 text-[10.5px] font-medium text-[#d9dee7]"
+                          >
+                            {topic}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </article>
+                </div>
+              )
+            })}
+          </div>
+        </Reveal>
       </div>
     </section>
   )

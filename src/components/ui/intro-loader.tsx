@@ -60,7 +60,7 @@ export function IntroLoader() {
             transition: { duration: 0.25, ease: 'easeOut' },
           }}
           onClick={() => setShow(false)}
-          className="fixed inset-0 z-[200] flex cursor-pointer select-none items-center justify-center bg-[#05070b] will-change-opacity"
+          className="fixed inset-0 z-[200] flex cursor-pointer select-none items-center justify-center bg-[#05070b]"
           aria-hidden="true"
         >
           {/* Subtle Ambient Radial Lighting (clean hardware-accelerated CSS gradient, 0 blur filters) */}

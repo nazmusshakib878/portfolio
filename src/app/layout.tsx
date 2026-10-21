@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Manrope, Space_Grotesk } from 'next/font/google'
 import './globals.css'
 import { portfolioData } from '@/data/portfolio'
@@ -6,11 +6,19 @@ import { CustomCursor } from '@/components/ui/custom-cursor'
 import { SocialRail } from '@/components/layout/social-rail'
 import { NazmusAiAssistant } from '@/components/ai/nazmus-ai-assistant'
 import { NavigationTracker } from '@/components/providers/navigation-tracker'
+import { DebugFlagsProvider } from '@/components/providers/debug-flags-provider'
 import { getSiteUrl } from '@/lib/site-url'
 
 const body = Manrope({ subsets: ['latin'], variable: '--font-body', display: 'swap' })
 const display = Space_Grotesk({ subsets: ['latin'], variable: '--font-display', display: 'swap' })
 const siteUrl = getSiteUrl()
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#06070b',
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -107,6 +115,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(person).replace(/</g, '\\u003c') }}
         />
+        <DebugFlagsProvider />
         <CustomCursor />
         <NavigationTracker />
         <SocialRail />

@@ -141,7 +141,7 @@ const ProjectCard = memo(function ProjectCard({
           src={cover}
           alt={`${project.title} thumbnail`}
           fill
-          sizes="(max-width: 768px) 70vw, 420px"
+          sizes="(max-width: 768px) 78vw, 420px"
           quality={70}
           draggable={false}
           decoding="async"
@@ -303,7 +303,7 @@ const ProjectCard = memo(function ProjectCard({
             {project.title}
           </h3>
 
-          <div className="mt-auto pt-3 flex items-center justify-between text-xs font-medium text-[#aeb6c3] group-hover:text-[#00f5ff] transition-colors border-t border-white/[0.06]">
+          <div className="mt-auto pt-3 hidden sm:flex items-center justify-between text-xs font-medium text-[#aeb6c3] group-hover:text-[#00f5ff] transition-colors border-t border-white/[0.06]">
             <span>Click to select</span>
             <ArrowRight size={13} className="transition group-hover:translate-x-1" />
           </div>
@@ -366,15 +366,20 @@ export function ProjectWheelShowcase() {
     gap: 33,
     perspective: 2870,
     stageHeight: 740,
+    isMobile: false,
   })
 
-  // Responsive geometry calculations based on current window width
+  // Responsive geometry calculations based on current window width (size cards ~80vw on phones)
   const isMobile = windowWidth < 640
   const isTablet = windowWidth >= 640 && windowWidth < 1024
-  const cardWidth = isMobile ? Math.min(320, Math.max(280, windowWidth - 32)) : isTablet ? 360 : 410
-  const cardHeight = isMobile ? 580 : isTablet ? 620 : 660
-  const stageHeight = isMobile ? 640 : isTablet ? 700 : 740
-  const perspective = Math.round(cardWidth * 7)
+  const cardWidth = isMobile
+    ? Math.min(320, Math.max(270, Math.round(windowWidth * 0.80)))
+    : isTablet
+    ? 360
+    : 410
+  const cardHeight = isMobile ? 560 : isTablet ? 620 : 660
+  const stageHeight = isMobile ? 620 : isTablet ? 700 : 740
+  const perspective = Math.round(cardWidth * (isMobile ? 5.5 : 7))
 
   // Symmetric modulo wrap helper for continuous looping [-total/2, total/2]
   const wrapN = useCallback(
@@ -390,7 +395,7 @@ export function ProjectWheelShowcase() {
   // Direct compositor render function: writes transform, opacity, visibility & zIndex directly to card refs
   const render = useCallback(() => {
     const pos = posRef.current
-    const { radius, step } = dimsRef.current
+    const { radius, step, isMobile: isMobileDevice } = dimsRef.current
 
     // 1. Update background decorative rotary dial track
     if (dialRef.current) {
@@ -406,6 +411,10 @@ export function ProjectWheelShowcase() {
     }
 
     // 3. Update each project card with 3D arc position and culling
+    // On phones reduce visible neighbours to 3 total (d <= 1.4); on desktop ~5 cards (d <= 2.6)
+    const maxDist = isMobileDevice ? 1.4 : 2.6
+    const fadeRange = isMobileDevice ? 0.3 : 0.8
+
     for (let i = 0; i < total; i++) {
       const card = cardRefs.current[i]
       if (!card) continue
@@ -414,8 +423,10 @@ export function ProjectWheelShowcase() {
       const a = off * step
       const d = Math.abs(off)
 
-      // Culling: cards farther than 2.6 steps fade to 0, hidden, and pointer-events: none (only ~5 painted)
-      const op = d <= 2.6 ? 1 : Math.max(0, 1 - (d - 2.6) / 0.8)
+      const op =
+        d <= maxDist - fadeRange
+          ? 1
+          : Math.max(0, 1 - (d - (maxDist - fadeRange)) / fadeRange)
       const isVisible = op > 0.005
 
       // Inner-cylinder 3D arc formula: translate3d(sin(a)*R, 0, R*(1-cos(a))) rotateY(-a)
@@ -510,13 +521,17 @@ export function ProjectWheelShowcase() {
     const mobile = w < 640
     const tablet = w >= 640 && w < 1024
 
-    const cw = mobile ? Math.min(320, Math.max(280, w - 32)) : tablet ? 360 : 410
-    const ch = mobile ? 580 : tablet ? 620 : 660
-    const gap = Math.round(cw * 0.08)
-    const rad = cw * 3.3
+    const cw = mobile
+      ? Math.min(320, Math.max(270, Math.round(w * 0.80)))
+      : tablet
+      ? 360
+      : 410
+    const ch = mobile ? 560 : tablet ? 620 : 660
+    const gap = Math.round(cw * (mobile ? 0.06 : 0.08))
+    const rad = cw * (mobile ? 3.0 : 3.3)
     const stp = (cw + gap) / rad
-    const persp = Math.round(cw * 7)
-    const stgH = mobile ? 640 : tablet ? 700 : 740
+    const persp = Math.round(cw * (mobile ? 5.5 : 7))
+    const stgH = mobile ? 620 : tablet ? 700 : 740
 
     dimsRef.current = {
       cardWidth: cw,
@@ -526,6 +541,7 @@ export function ProjectWheelShowcase() {
       gap,
       perspective: persp,
       stageHeight: stgH,
+      isMobile: mobile,
     }
 
     if (stackRef.current) {
@@ -983,10 +999,10 @@ export function ProjectWheelShowcase() {
           <div className="absolute inset-[24%] rounded-full border border-white/[0.03]" />
         </div>
 
-        {/* Top Active Indicator Beacon */}
+        {/* Top Active Indicator Beacon — Desktop only to prevent stacking over cards on mobile */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 z-20 flex flex-col items-center gap-1 opacity-90"
+          className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 z-20 hidden sm:flex flex-col items-center gap-1 opacity-90"
         >
           <div className="flex items-center gap-1.5 rounded-full border border-[#00f5ff]/35 bg-[#080c18]/90 px-3.5 py-1 shadow-[0_0_24px_rgba(0,245,255,0.28)] backdrop-blur-md">
             <span className="size-1.5 rounded-full bg-[#00f5ff] shadow-[0_0_8px_#00f5ff] animate-pulse" />

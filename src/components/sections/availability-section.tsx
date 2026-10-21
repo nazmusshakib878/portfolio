@@ -84,7 +84,7 @@ const opportunityCards: OpportunityCard[] = [
 
 export function AvailabilitySection() {
   return (
-    <section id="availability" className="section relative overflow-hidden">
+    <section id="availability" className="section section-cv relative overflow-hidden">
       <div className="shell relative">
         {/* Section Header */}
         <Reveal>
@@ -108,13 +108,14 @@ export function AvailabilitySection() {
         </Reveal>
 
         {/* 3 Opportunity Cards */}
-        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:mt-16">
-          {opportunityCards.map((card) => {
-            const Icon = card.icon
+        <Reveal className="mt-14 lg:mt-16">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {opportunityCards.map((card) => {
+              const Icon = card.icon
 
-            return (
-              <Reveal key={card.id}>
+              return (
                 <article
+                  key={card.id}
                   className={`group flex h-full flex-col justify-between rounded-[24px] border border-white/10 bg-[rgba(15,18,25,0.78)] p-6 sm:p-7 backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:bg-[rgba(17,22,32,0.9)] ${card.accent.hoverBorder}`}
                 >
                   <div>
@@ -166,10 +167,10 @@ export function AvailabilitySection() {
                     </div>
                   </div>
                 </article>
-              </Reveal>
-            )
-          })}
-        </div>
+              )
+            })}
+          </div>
+        </Reveal>
 
         {/* Action / CTA Bar */}
         <Reveal className="mt-8 lg:mt-10">

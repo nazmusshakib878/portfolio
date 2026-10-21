@@ -72,15 +72,31 @@ img, svg { max-width: 100% }
 p, h1, h2, h3, li, dd { overflow-wrap: anywhere }
 ::selection { color: #fff; background: var(--violet) }
 :focus-visible { outline: 2px solid var(--teal); outline-offset: 4px }
-[id] { scroll-margin-top: 6.5rem }
-#projects {
-  scroll-margin-top: 6.5rem;
+[id] {
+  scroll-margin-top: calc(5.5rem + env(safe-area-inset-top, 0px));
+}
+#projects, #skills, #about, #experience, #contact {
+  scroll-margin-top: calc(6.5rem + env(safe-area-inset-top, 0px));
 }
 @media (max-width: 640px) {
-  #projects {
-    scroll-margin-top: 5.5rem;
+  [id] {
+    scroll-margin-top: calc(5rem + env(safe-area-inset-top, 0px));
+  }
+  #projects, #skills, #about, #experience, #contact {
+    scroll-margin-top: calc(5.8rem + env(safe-area-inset-top, 0px));
   }
 }
+
+/* Off-screen section optimization: prevents GPU memory exhaustion on long pages */
+.section-cv {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 750px;
+}
+
+.card-surface, .project-card {
+  contain: layout paint style;
+}
+
 ::placeholder { color: rgba(174, 182, 195, .45); }
 
 .shell {
@@ -462,3 +478,105 @@ p, h1, h2, h3, li, dd { overflow-wrap: anywhere }
     transform: none !important;
   }
 }
+
+/* ======================================================== */
+/*   iOS Safari / Touch Lite Mode & Performance Diet        */
+/* ======================================================== */
+
+@media (hover: none) and (pointer: coarse) {
+  /* 1. Eliminate expensive offscreen framebuffer compositing layers */
+  [class*="backdrop-blur"],
+  .card-surface,
+  .project-card,
+  .site-header-frame,
+  .site-mobile-panel,
+  article,
+  aside {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Solid, crisp, high-contrast semi-transparent surfaces */
+  .site-header-frame {
+    background: rgba(8, 10, 16, 0.95) !important;
+  }
+  .site-mobile-panel {
+    background: rgba(8, 10, 16, 0.98) !important;
+  }
+  .card-surface {
+    background: rgba(14, 18, 26, 0.96) !important;
+  }
+
+  /* 2. Remove fixed body grid overlay on touch to stop full-viewport redraws */
+  body::before {
+    display: none !important;
+  }
+
+  /* 3. Strip large blurred ambient auras from memory */
+  .ambient-aura,
+  [class*="blur-[120px]"],
+  [class*="blur-[100px]"],
+  [class*="blur-[80px]"],
+  [class*="blur-[60px]"] {
+    display: none !important;
+  }
+
+  /* 4. Strip floating animation and multi-layer drop-shadow on AI robot */
+  .ai-robot-trigger {
+    animation: none !important;
+  }
+  .ai-robot-img {
+    filter: none !important;
+  }
+
+  /* 5. Pure native scroll for 100% smooth momentum scrolling on iOS */
+  html, html[data-scroll-behavior="smooth"], body {
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ======================================================== */
+/*   Debug Switch Flags for Real-Device Bisecting           */
+/*   ?lite=1 | ?off=bg,blur,reveal,carousel,robot,cursor    */
+/* ======================================================== */
+
+html.lite-mode [class*="backdrop-blur"],
+html.off-blur [class*="backdrop-blur"],
+html.lite-mode .site-header-frame,
+html.off-blur .site-header-frame,
+html.lite-mode article,
+html.off-blur article {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+html.lite-mode body::before,
+html.off-bg body::before {
+  display: none !important;
+}
+
+html.lite-mode .ambient-aura,
+html.off-bg .ambient-aura,
+html.lite-mode [class*="blur-[120px]"],
+html.off-bg [class*="blur-[120px]"],
+html.lite-mode [class*="blur-[100px]"],
+html.off-bg [class*="blur-[100px]"],
+html.lite-mode [class*="blur-[80px]"],
+html.off-bg [class*="blur-[80px]"] {
+  display: none !important;
+}
+
+html.lite-mode .ai-robot-trigger,
+html.off-robot .ai-robot-trigger {
+  animation: none !important;
+}
+html.lite-mode .ai-robot-img,
+html.off-robot .ai-robot-img {
+  filter: none !important;
+}
+
+html.lite-mode,
+html.is-touch {
+  scroll-behavior: auto !important;
+}
+

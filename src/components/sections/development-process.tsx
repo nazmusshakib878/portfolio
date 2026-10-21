@@ -135,7 +135,7 @@ const processSteps: ProcessStep[] = [
 
 export function DevelopmentProcess() {
   return (
-    <section id="process" className="section relative overflow-hidden">
+    <section id="process" className="section section-cv relative overflow-hidden">
       <div className="shell relative">
         {/* Section Header */}
         <Reveal>
@@ -159,14 +159,15 @@ export function DevelopmentProcess() {
         </Reveal>
 
         {/* 3x2 Process Flow Grid */}
-        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:mt-16">
-          {processSteps.map((step, idx) => {
-            const Icon = step.icon
-            const isLast = idx === processSteps.length - 1
+        <Reveal className="mt-14 lg:mt-16">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {processSteps.map((step, idx) => {
+              const Icon = step.icon
+              const isLast = idx === processSteps.length - 1
 
-            return (
-              <Reveal key={step.id}>
+              return (
                 <article
+                  key={step.id}
                   className={`group flex h-full flex-col justify-between rounded-[24px] border border-white/10 bg-[rgba(15,18,25,0.76)] p-6 sm:p-7 backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:bg-[rgba(17,22,32,0.88)] ${step.accent.hoverBorder}`}
                 >
                   <div>
@@ -217,10 +218,10 @@ export function DevelopmentProcess() {
                     )}
                   </div>
                 </article>
-              </Reveal>
-            )
-          })}
-        </div>
+              )
+            })}
+          </div>
+        </Reveal>
       </div>
     </section>
   )

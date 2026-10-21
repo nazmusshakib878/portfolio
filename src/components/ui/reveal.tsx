@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
+import { useDebugFlags } from '@/lib/debug-flags'
 
 export function Reveal({
   children,
@@ -11,34 +12,34 @@ export function Reveal({
   className?: string
 }) {
   const reduce = useReducedMotion()
+  const flags = useDebugFlags()
   const [revealed, setRevealed] = useState(false)
 
-  // iOS Safari safety: Ensure content is never permanently hidden if IntersectionObserver stalls
+  const skipMotion = Boolean(reduce || flags.isLite || flags.offReveal || flags.isTouch)
+
   useEffect(() => {
-    if (reduce) return
+    if (skipMotion) return
+
+    // iOS Safari safety fallback: Ensure content is never stuck at opacity 0
     const timer = setTimeout(() => {
       setRevealed(true)
-    }, 1200)
+    }, 600)
     return () => clearTimeout(timer)
-  }, [reduce])
+  }, [skipMotion])
 
-  if (reduce) {
+  if (skipMotion) {
     return <div className={className}>{children}</div>
   }
 
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: 22 }}
+      initial={{ opacity: 0, y: 14 }}
       animate={revealed ? { opacity: 1, y: 0 } : undefined}
       whileInView={{ opacity: 1, y: 0 }}
       onViewportEnter={() => setRevealed(true)}
-      viewport={{ once: true, amount: 'some', margin: '0px 0px -30px 0px' }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      style={{
-        WebkitBackfaceVisibility: 'hidden',
-        backfaceVisibility: 'hidden',
-      }}
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>

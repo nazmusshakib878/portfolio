@@ -82,7 +82,7 @@ export function EducationTimeline() {
   ]
 
   return (
-    <section id="education" className="section relative overflow-hidden">
+    <section id="education" className="section section-cv relative overflow-hidden">
       <div className="shell relative">
         {/* Section Header */}
         <Reveal>

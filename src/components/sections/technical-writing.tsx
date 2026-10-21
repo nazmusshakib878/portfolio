@@ -14,7 +14,7 @@ export function TechnicalWritingSection() {
   const featuredPosts = getFeaturedBlogPosts(3)
 
   return (
-    <section id="writing" className="section relative overflow-hidden">
+    <section id="writing" className="section section-cv relative overflow-hidden">
       <div className="shell relative">
         {/* Section Header */}
         <Reveal>
@@ -41,10 +41,13 @@ export function TechnicalWritingSection() {
         </Reveal>
 
         {/* 3 Featured Article Cards Grid */}
-        <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3 lg:mt-16">
-          {featuredPosts.map((post, idx) => (
-            <Reveal key={post.slug}>
-              <article className="group flex h-full flex-col justify-between rounded-[24px] border border-white/10 bg-[rgba(15,18,25,0.78)] p-6 sm:p-7 backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-[rgba(124,92,255,0.35)] hover:bg-[rgba(17,22,32,0.9)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.35)]">
+        <Reveal className="mt-14 lg:mt-16">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {featuredPosts.map((post, idx) => (
+              <article
+                key={post.slug}
+                className="group flex h-full flex-col justify-between rounded-[24px] border border-white/10 bg-[rgba(15,18,25,0.78)] p-6 sm:p-7 backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-[rgba(124,92,255,0.35)] hover:bg-[rgba(17,22,32,0.9)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.35)]"
+              >
                 <div>
                   {/* Top Metadata Row: Category Badge + Reading Time + Draft Review Indicator */}
                   <div className="flex items-center justify-between gap-3">
@@ -114,9 +117,9 @@ export function TechnicalWritingSection() {
                   </div>
                 </div>
               </article>
-            </Reveal>
-          ))}
-        </div>
+            ))}
+          </div>
+        </Reveal>
 
         {/* View All Articles Bar */}
         <Reveal className="mt-8 lg:mt-10">

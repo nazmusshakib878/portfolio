@@ -26,7 +26,7 @@ export function AchievementsSection() {
   const publications = portfolioData.publications
 
   return (
-    <section id="achievements" className="section relative overflow-hidden">
+    <section id="achievements" className="section section-cv relative overflow-hidden">
       <div className="shell relative">
         {/* Section Header */}
         <Reveal>
@@ -48,9 +48,9 @@ export function AchievementsSection() {
         {/* 6 Achievement Cards Grid */}
         <div className="mt-14 space-y-6 lg:mt-16">
           {/* Top Row: 2 Major Featured Pillars (Undergraduate BSc + 80h Laravel Training) */}
-          <div className="grid gap-6 lg:grid-cols-2">
-            {/* 01: Current CGPA (BSc CSE) */}
-            <Reveal>
+          <Reveal>
+            <div className="grid gap-6 lg:grid-cols-2">
+              {/* 01: Current CGPA (BSc CSE) */}
               <article className="group flex h-full flex-col justify-between rounded-[26px] border border-[rgba(43,217,181,0.25)] bg-[rgba(15,22,25,0.75)] p-6 sm:p-8 backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-[rgba(43,217,181,0.45)] hover:shadow-[0_20px_50px_rgba(43,217,181,0.12)]">
                 <div>
                   <div className="flex items-center justify-between gap-4">
@@ -96,10 +96,8 @@ export function AchievementsSection() {
                   ))}
                 </div>
               </article>
-            </Reveal>
 
-            {/* 04: Professional Laravel Training */}
-            <Reveal>
+              {/* 04: Professional Laravel Training */}
               <article className="group flex h-full flex-col justify-between rounded-[26px] border border-[rgba(240,83,64,0.25)] bg-[rgba(25,16,18,0.75)] p-6 sm:p-8 backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-[rgba(240,83,64,0.45)] hover:shadow-[0_20px_50px_rgba(240,83,64,0.12)]">
                 <div>
                   <div className="flex items-center justify-between gap-4">
@@ -160,13 +158,13 @@ export function AchievementsSection() {
                   </button>
                 </div>
               </article>
-            </Reveal>
-          </div>
+            </div>
+          </Reveal>
 
           {/* Bottom Row: 4 Milestone Cards (SSC + HSC + Technical Publications + PH Bootcamp) */}
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {/* 02: SSC Academic Achievement */}
-            <Reveal>
+          <Reveal>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+              {/* 02: SSC Academic Achievement */}
               <article className="group flex h-full flex-col justify-between rounded-[22px] border border-white/10 bg-[rgba(15,18,25,0.72)] p-6 backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:border-[rgba(97,218,251,0.35)] hover:bg-[rgba(17,22,30,0.85)]">
                 <div>
                   <div className="flex items-center justify-between gap-4">
@@ -201,10 +199,8 @@ export function AchievementsSection() {
                   </span>
                 </div>
               </article>
-            </Reveal>
 
-            {/* 03: HSC Academic Achievement */}
-            <Reveal>
+              {/* 03: HSC Academic Achievement */}
               <article className="group flex h-full flex-col justify-between rounded-[22px] border border-white/10 bg-[rgba(15,18,25,0.72)] p-6 backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:border-[rgba(124,92,255,0.35)] hover:bg-[rgba(17,22,30,0.85)]">
                 <div>
                   <div className="flex items-center justify-between gap-4">
@@ -239,10 +235,8 @@ export function AchievementsSection() {
                   </span>
                 </div>
               </article>
-            </Reveal>
 
-            {/* 05: Technical Publications & Research */}
-            <Reveal>
+              {/* 05: Technical Publications & Research */}
               <article className="group flex h-full flex-col justify-between rounded-[22px] border border-white/10 bg-[rgba(15,18,25,0.72)] p-6 backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:border-[rgba(168,130,255,0.35)] hover:bg-[rgba(17,22,30,0.85)]">
                 <div>
                   <div className="flex items-center justify-between gap-4">
@@ -285,10 +279,8 @@ export function AchievementsSection() {
                   </a>
                 </div>
               </article>
-            </Reveal>
 
-            {/* 06: Programming Hero Bootcamp Certificate */}
-            <Reveal>
+              {/* 06: Programming Hero Bootcamp Certificate */}
               <article className="group flex h-full flex-col justify-between rounded-[22px] border border-white/10 bg-[rgba(15,18,25,0.72)] p-6 backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:border-[rgba(251,191,36,0.35)] hover:bg-[rgba(17,22,30,0.85)]">
                 <div>
                   <div className="flex items-center justify-between gap-4">
@@ -341,8 +333,8 @@ export function AchievementsSection() {
                   </button>
                 </div>
               </article>
-            </Reveal>
-          </div>
+            </div>
+          </Reveal>
         </div>
       </div>
 

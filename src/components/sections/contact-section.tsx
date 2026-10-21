@@ -42,7 +42,7 @@ type FormValues = z.infer<typeof schema>
 
 export function ContactSection() {
   return (
-    <section id="contact" className="section relative overflow-hidden">
+    <section id="contact" className="section section-cv relative overflow-hidden">
       <div className="shell relative">
         {/* Section Header */}
         <Reveal>

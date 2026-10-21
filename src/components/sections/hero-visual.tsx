@@ -2,19 +2,23 @@
 
 import Image from 'next/image'
 import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from 'motion/react'
+import { useDebugFlags } from '@/lib/debug-flags'
 
 export function HeroVisual() {
   const reduce = useReducedMotion()
+  const flags = useDebugFlags()
+  const isTouchOrLite = flags.isLite || flags.isTouch
+
   const pointerX = useMotionValue(0)
   const pointerY = useMotionValue(0)
   const x = useSpring(pointerX, { stiffness: 90, damping: 20 })
   const y = useSpring(pointerY, { stiffness: 90, damping: 20 })
-  const imageX = useTransform(x, [-1, 1], [-10, 10])
-  const imageY = useTransform(y, [-1, 1], [-6, 6])
-  const lightX = useTransform(x, [-1, 1], [-22, 22])
+  const imageX = useTransform(x, [-1, 1], [-8, 8])
+  const imageY = useTransform(y, [-1, 1], [-5, 5])
+  const lightX = useTransform(x, [-1, 1], [-16, 16])
 
   const handleMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (reduce) return
+    if (reduce || isTouchOrLite) return
     const rect = event.currentTarget.getBoundingClientRect()
     pointerX.set(((event.clientX - rect.left) / rect.width) * 2 - 1)
     pointerY.set(((event.clientY - rect.top) / rect.height) * 2 - 1)
@@ -29,22 +33,25 @@ export function HeroVisual() {
     <div
       onPointerMove={handleMove}
       onPointerLeave={reset}
-      className="relative h-full w-full overflow-hidden rounded-[24px] border border-white/10 bg-[rgba(12,15,22,.65)] [transform:translateZ(0)] [-webkit-transform:translateZ(0)] [-webkit-mask-image:-webkit-radial-gradient(white,black)]"
+      className="relative h-full w-full overflow-hidden rounded-[24px] border border-white/10 bg-[#0c0f16] [transform:translateZ(0)]"
       aria-label="Portrait of Md. Nazmus Shakib"
     >
-      <motion.div
-        aria-hidden
-        style={{ x: lightX }}
-        className="absolute left-[16%] top-[15%] h-[62%] w-[68%] rounded-full bg-[#7c5cff]/22 blur-[80px] pointer-events-none"
-      />
+      {/* Subtle lighting glow without excessive blur filters */}
+      {!isTouchOrLite && (
+        <motion.div
+          aria-hidden
+          style={{ x: lightX }}
+          className="ambient-aura absolute left-[16%] top-[15%] h-[62%] w-[68%] rounded-full bg-[#7c5cff]/15 blur-2xl pointer-events-none"
+        />
+      )}
       <div aria-hidden className="absolute inset-x-[10%] bottom-[3%] top-[12%] border-x border-white/10 pointer-events-none" />
       <div
         aria-hidden
         className="absolute inset-x-[3%] bottom-[8%] h-px bg-gradient-to-r from-transparent via-[#2bd9b5]/50 to-transparent pointer-events-none"
       />
       <motion.div
-        style={{ x: imageX, y: imageY }}
-        className="absolute inset-0 [transform:translateZ(0)] [-webkit-transform:translateZ(0)] [backface-visibility:hidden] [-webkit-backface-visibility:hidden]"
+        style={!reduce && !isTouchOrLite ? { x: imageX, y: imageY } : undefined}
+        className="absolute inset-0 [transform:translateZ(0)] [backface-visibility:hidden]"
       >
         <Image
           src="/images/nazmusshakib.png"
@@ -52,16 +59,13 @@ export function HeroVisual() {
           fill
           priority
           sizes="(max-width: 640px) 90vw, (max-width: 1024px) 440px, 460px"
-          className="object-cover object-[center_10%] [filter:saturate(.94)_contrast(1.04)_drop-shadow(0_24px_50px_rgba(0,0,0,.6))] [-webkit-mask-image:linear-gradient(to_bottom,#000_82%,transparent_100%)] [mask-image:linear-gradient(to_bottom,#000_82%,transparent_100%)]"
+          className="object-cover object-[center_10%] select-none pointer-events-none [mask-image:linear-gradient(to_bottom,#000_84%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,#000_84%,transparent_100%)]"
         />
       </motion.div>
       <div
         aria-hidden
-        className="absolute inset-0 bg-[linear-gradient(90deg,rgba(43,217,181,.06),transparent_28%,transparent_70%,rgba(124,92,255,.09))] mix-blend-screen pointer-events-none"
+        className="absolute inset-0 bg-[linear-gradient(90deg,rgba(43,217,181,.05),transparent_28%,transparent_70%,rgba(124,92,255,.07))] pointer-events-none"
       />
     </div>
   )
 }
-
-
-

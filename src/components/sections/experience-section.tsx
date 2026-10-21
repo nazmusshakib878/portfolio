@@ -152,7 +152,7 @@ export function ExperienceSection() {
   const logisticaSlug = projectSlug('Logistica')
 
   return (
-    <section id="experience" className="section relative overflow-hidden">
+    <section id="experience" className="section section-cv relative overflow-hidden">
       <div className="shell relative">
         {/* Section Header */}
         <Reveal>

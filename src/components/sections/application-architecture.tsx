@@ -163,7 +163,7 @@ const engineeringPrinciples = [
 
 export function ApplicationArchitecture() {
   return (
-    <section id="architecture" className="section relative overflow-hidden">
+    <section id="architecture" className="section section-cv relative overflow-hidden">
       <div className="shell relative">
         {/* Section Header */}
         <Reveal>

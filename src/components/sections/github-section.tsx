@@ -89,7 +89,7 @@ const pinnedRepositories: PinnedRepo[] = [
 
 export function GitHubSection() {
   return (
-    <section id="opensource" className="section relative overflow-hidden">
+    <section id="opensource" className="section section-cv relative overflow-hidden">
       <div className="shell relative">
         {/* Section Header */}
         <Reveal>
@@ -207,11 +207,12 @@ export function GitHubSection() {
             <span className="font-mono text-xs text-[#69e6cd]">05 Repositories</span>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {pinnedRepositories.map((repo, idx) => {
-              return (
-                <Reveal key={repo.fullName}>
+          <Reveal>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {pinnedRepositories.map((repo, idx) => {
+                return (
                   <article
+                    key={repo.fullName}
                     className={`group flex h-full flex-col justify-between rounded-[22px] border bg-[rgba(15,18,25,0.74)] p-6 backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:bg-[rgba(17,22,32,0.88)] ${
                       repo.isPrimary
                         ? 'border-white/15 hover:border-[rgba(124,92,255,0.4)] shadow-[0_12px_40px_rgba(0,0,0,0.25)]'
@@ -297,10 +298,10 @@ export function GitHubSection() {
                       </div>
                     </div>
                   </article>
-                </Reveal>
-              )
-            })}
-          </div>
+                )
+              })}
+            </div>
+          </Reveal>
         </div>
       </div>
     </section>

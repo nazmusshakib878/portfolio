@@ -33,7 +33,7 @@ export default function Home() {
         <ProjectWheelShowcase />
         <ExperienceSection />
 
-        <section id="skills" className="section relative overflow-hidden">
+        <section id="skills" className="section section-cv relative overflow-hidden">
           <div className="shell relative">
             <Reveal>
               <div className="grid gap-7 lg:grid-cols-[.32fr_1fr] lg:items-end">
@@ -54,7 +54,7 @@ export default function Home() {
           <SkillsExplorer />
         </section>
 
-        <section id="about" className="section relative overflow-hidden">
+        <section id="about" className="section section-cv relative overflow-hidden">
           <div className="shell relative">
             <Reveal>
               <div className="grid gap-7 lg:grid-cols-[.32fr_1fr] lg:items-start">
@@ -126,7 +126,7 @@ export default function Home() {
 
         <ApplicationArchitecture />
 
-        <section id="publications" className="section relative overflow-hidden py-12 lg:py-16">
+        <section id="publications" className="section section-cv relative overflow-hidden py-12 lg:py-16">
           <div className="shell relative">
             <Reveal>
               <div className="flex flex-col justify-between gap-4 border-b border-white/10 pb-6 sm:flex-row sm:items-end">
@@ -142,10 +142,13 @@ export default function Home() {
               </div>
             </Reveal>
 
-            <div className="mt-8 grid gap-5 sm:grid-cols-2">
-              {portfolioData.publications.map((publication, index) => (
-                <Reveal key={publication.doi}>
-                  <article className="group flex h-full flex-col justify-between rounded-2xl border border-[rgba(124,92,255,0.2)] bg-[rgba(17,15,27,0.65)] p-5 backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:border-[rgba(124,92,255,0.4)] hover:shadow-[0_16px_40px_rgba(0,0,0,0.3)] sm:p-6">
+            <Reveal className="mt-8">
+              <div className="grid gap-5 sm:grid-cols-2">
+                {portfolioData.publications.map((publication, index) => (
+                  <article
+                    key={publication.doi}
+                    className="group flex h-full flex-col justify-between rounded-2xl border border-[rgba(124,92,255,0.2)] bg-[rgba(17,15,27,0.65)] p-5 backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:border-[rgba(124,92,255,0.4)] hover:shadow-[0_16px_40px_rgba(0,0,0,0.3)] sm:p-6"
+                  >
                     <div>
                       <div className="flex items-center justify-between gap-3">
                         <div className="flex items-center gap-2">
@@ -184,9 +187,9 @@ export default function Home() {
                       </a>
                     </div>
                   </article>
-                </Reveal>
-              ))}
-            </div>
+                ))}
+              </div>
+            </Reveal>
           </div>
         </section>
 
