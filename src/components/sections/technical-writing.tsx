@@ -20,7 +20,7 @@ export function TechnicalWritingSection() {
         <Reveal>
           <div className="grid gap-7 lg:grid-cols-[.32fr_1fr] lg:items-end">
             <div>
-              <p className="eyebrow">11 / Technical Writing</p>
+              <p className="eyebrow">12 / Technical Writing</p>
               <p className="muted mt-4 max-w-[14rem] text-sm leading-6">
                 Practical notes and engineering insights from building real-world software.
               </p>
@@ -51,7 +51,7 @@ export function TechnicalWritingSection() {
                     <span className="rounded-full border border-[rgba(168,130,255,0.3)] bg-[rgba(168,130,255,0.08)] px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#c4b5fd]">
                       {post.category}
                     </span>
-                    <span className="font-mono text-xs text-[#747b8b]">
+                    <span className="font-mono text-xs text-[#aeb6c3]">
                       0{idx + 1}
                     </span>
                   </div>
@@ -98,7 +98,7 @@ export function TechnicalWritingSection() {
                   {/* Read Article Button */}
                   <div className="mt-5 flex items-center justify-between">
                     {post.isDraft && (
-                      <span className="inline-flex items-center gap-1 text-[10px] font-mono text-[#747b8b]">
+                      <span className="inline-flex items-center gap-1 text-[10px] font-mono text-[#aeb6c3]">
                         <span className="size-1.5 rounded-full bg-[#f59e0b]" />
                         <span>Draft for Review</span>
                       </span>
@@ -129,7 +129,7 @@ export function TechnicalWritingSection() {
                 <p className="text-xs font-semibold text-[#f2f3f7]">
                   Looking for more engineering insights and tutorials?
                 </p>
-                <p className="text-[11px] text-[#747b8b] mt-0.5">
+                <p className="text-[11px] text-[#aeb6c3] mt-0.5">
                   Browse the complete technical writing index and categories.
                 </p>
               </div>

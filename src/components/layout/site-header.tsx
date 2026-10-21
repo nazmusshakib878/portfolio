@@ -13,7 +13,12 @@ export function SiteHeader() {
   const mobileNav = useRef<HTMLElement>(null)
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20)
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20)
+      if (window.scrollY < 80) {
+        setActiveSection('hero')
+      }
+    }
     handleScroll()
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
@@ -27,19 +32,32 @@ export function SiteHeader() {
 
     if (!elements.length) return
 
+    const visibleMap = new Map<string, IntersectionObserverEntry>()
+
     const observer = new IntersectionObserver(
       (entries) => {
-        const visible = entries.filter((e) => e.isIntersecting)
-        if (visible.length > 0) {
-          const topMost = visible.reduce((prev, curr) =>
-            Math.abs(curr.boundingClientRect.top) < Math.abs(prev.boundingClientRect.top) ? curr : prev
-          )
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            visibleMap.set(entry.target.id, entry)
+          } else {
+            visibleMap.delete(entry.target.id)
+          }
+        })
+
+        if (visibleMap.size > 0) {
+          const visible = Array.from(visibleMap.values())
+          const targetLine = window.innerHeight * 0.2
+          const topMost = visible.reduce((prev, curr) => {
+            const prevDist = Math.abs(prev.boundingClientRect.top - targetLine)
+            const currDist = Math.abs(curr.boundingClientRect.top - targetLine)
+            return currDist < prevDist ? curr : prev
+          })
           setActiveSection(topMost.target.id)
         }
       },
       {
-        rootMargin: '-15% 0px -65% 0px',
-        threshold: [0, 0.25, 0.5],
+        rootMargin: '-10% 0px -50% 0px',
+        threshold: [0, 0.1, 0.25, 0.5],
       }
     )
 

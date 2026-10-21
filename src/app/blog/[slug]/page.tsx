@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!post) return {}
 
   return {
-    title: `${post.title} | Md. Nazmus Shakib`,
+    title: post.title,
     description: post.summary,
     alternates: {
       canonical: `/blog/${post.slug}`,

@@ -8,7 +8,7 @@ import { getAllBlogPosts, getAllBlogCategories } from '@/data/blog-posts'
 import { portfolioData } from '@/data/portfolio'
 
 export const metadata: Metadata = {
-  title: 'Technical Writing & Engineering Articles | Md. Nazmus Shakib',
+  title: 'Technical Writing & Engineering Articles',
   description:
     'Practical engineering notes, architectural patterns, and deep dives into Laravel REST APIs, Sanctum authentication, Next.js Server Components, and relational database systems.',
   alternates: {

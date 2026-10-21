@@ -90,7 +90,7 @@ export function AvailabilitySection() {
         <Reveal>
           <div className="grid gap-7 lg:grid-cols-[.32fr_1fr] lg:items-end">
             <div>
-              <p className="eyebrow">12 / Availability &amp; Roles</p>
+              <p className="eyebrow">13 / Availability &amp; Roles</p>
               <p className="muted mt-4 max-w-[14rem] text-sm leading-6">
                 Current availability, target engineering roles, and engagement models.
               </p>
@@ -132,7 +132,7 @@ export function AvailabilitySection() {
 
                     {/* Subtitle Pill */}
                     <div className="mt-5">
-                      <span className="text-[10px] font-semibold uppercase tracking-wider text-[#747b8b]">
+                      <span className="text-[10px] font-semibold uppercase tracking-wider text-[#aeb6c3]">
                         {card.subtitle}
                       </span>
                     </div>
@@ -150,7 +150,7 @@ export function AvailabilitySection() {
 
                   {/* Target Role Badges */}
                   <div className="mt-6 border-t border-white/[0.07] pt-4">
-                    <p className="text-[10px] font-semibold uppercase tracking-wider text-[#747b8b] mb-2 flex items-center gap-1.5">
+                    <p className="text-[10px] font-semibold uppercase tracking-wider text-[#aeb6c3] mb-2 flex items-center gap-1.5">
                       <CheckCircle2 size={11} className="text-[#2bd9b5]" />
                       <span>Focus Areas</span>
                     </p>

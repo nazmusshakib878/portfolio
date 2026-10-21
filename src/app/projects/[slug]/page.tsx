@@ -95,7 +95,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     projectCaseStudies[Object.keys(projectCaseStudies)[index]]
 
   return {
-    title: `${project.title} — Case Study | Md. Nazmus Shakib`,
+    title: `${project.title} — Case Study`,
     description: caseStudy?.subtitle ?? project.summary,
     alternates: {
       canonical: `/projects/${projectSlug(project.title)}`,
@@ -161,6 +161,37 @@ export default async function ProjectPage({ params }: Props) {
   }
 
   const screenshots = caseStudy?.screenshots
+
+  // Dynamic sequential section numbering based on actually rendered sections
+  let sectionCounter = 2 // 01 is Problem, 02 is Solution
+
+  const numWorkflowArch = isWorkflow ? String(++sectionCounter).padStart(2, '0') : null
+  const numWorkflowPipeline = isWorkflow ? String(++sectionCounter).padStart(2, '0') : null
+  const numWorkflowNotification = isWorkflow ? String(++sectionCounter).padStart(2, '0') : null
+
+  const numPlatformShowcase = (!isWorkflow && screenshots?.platformShowcase) ? String(++sectionCounter).padStart(2, '0') : null
+  const numKeyFeatures = String(++sectionCounter).padStart(2, '0')
+  const numDashboards = (screenshots?.dashboards && screenshots.dashboards.length > 0) ? String(++sectionCounter).padStart(2, '0') : null
+  const numWorkflowShowcase = (!isWorkflow && screenshots?.workflowShowcase) ? String(++sectionCounter).padStart(2, '0') : null
+  const numAiIntelligence = (screenshots?.aiIntelligence && screenshots.aiIntelligence.length > 0) ? String(++sectionCounter).padStart(2, '0') : null
+  const numMobileExperience = (screenshots?.mobileExperience) ? String(++sectionCounter).padStart(2, '0') : null
+
+  const numEngineeringContribution = String(++sectionCounter).padStart(2, '0')
+  const numTechArchitecture = String(++sectionCounter).padStart(2, '0')
+  const numDataLayer = String(++sectionCounter).padStart(2, '0')
+  const numSystemFlow = String(++sectionCounter).padStart(2, '0')
+  const numProblemSolving = String(++sectionCounter).padStart(2, '0')
+  const numResults = String(++sectionCounter).padStart(2, '0')
+
+  // Showcase header URL and link resolution (source of truth: project.githubUrl)
+  const showcaseHref = project.liveUrl || project.githubUrl || undefined
+  const showcaseDisplay = project.liveUrl
+    ? project.liveUrl.replace(/^https?:\/\//, '')
+    : project.githubUrl
+      ? project.githubUrl.replace(/^https?:\/\//, '')
+      : isWorkflow
+        ? 'localhost:5678/workflow/cv-payment-reminder'
+        : `github.com/nazmusshakib878/${canonicalSlug}`
 
   return (
     <main id="main-content" className="min-h-screen pb-24">
@@ -253,22 +284,22 @@ export default async function ProjectPage({ params }: Props) {
         {/* Meta Specs Grid */}
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="rounded-2xl border border-white/[0.08] bg-white/[0.025] p-4 backdrop-blur-sm">
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-[#747b8b]">My Role</p>
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-[#aeb6c3]">My Role</p>
             <p className="mt-1.5 text-sm font-semibold text-[#f2f3f7]">{project.role ?? 'Developer'}</p>
           </div>
 
           <div className="rounded-2xl border border-white/[0.08] bg-white/[0.025] p-4 backdrop-blur-sm">
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-[#747b8b]">Category</p>
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-[#aeb6c3]">Category</p>
             <p className="mt-1.5 text-sm font-semibold text-[#f2f3f7]">{project.category}</p>
           </div>
 
           <div className="rounded-2xl border border-white/[0.08] bg-white/[0.025] p-4 backdrop-blur-sm">
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-[#747b8b]">Timeline / Date</p>
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-[#aeb6c3]">Timeline / Date</p>
             <p className="mt-1.5 text-sm font-semibold text-[#f2f3f7]">{project.date}</p>
           </div>
 
           <div className="rounded-2xl border border-white/[0.08] bg-white/[0.025] p-4 backdrop-blur-sm">
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-[#747b8b]">
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-[#aeb6c3]">
               {isWorkflow ? 'Runtime Environment' : project.supervisor ? 'Supervisor' : 'Primary Stack'}
             </p>
             <p className="mt-1.5 text-sm font-semibold text-[#f2f3f7]">
@@ -333,15 +364,21 @@ export default async function ProjectPage({ params }: Props) {
               <span className="size-2.5 sm:size-3 rounded-full bg-[#ffbd2e]/80" />
               <span className="size-2.5 sm:size-3 rounded-full bg-[#27c93f]/80" />
             </div>
-            <div className="flex max-w-[170px] xs:max-w-[240px] sm:max-w-md items-center justify-center truncate rounded-md border border-white/[0.08] bg-black/40 px-2 sm:px-3 py-0.5 sm:py-1 font-mono text-[10px] sm:text-[11px] text-[#747b8b]">
-              <span className="truncate">
-                {project.liveUrl
-                  ? project.liveUrl
-                  : isWorkflow
-                    ? 'localhost:5678/workflow/cv-payment-reminder'
-                    : `github.com/nazmusshakib878/${canonicalSlug}`}
-              </span>
-            </div>
+            {showcaseHref ? (
+              <a
+                href={showcaseHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex max-w-[170px] xs:max-w-[240px] sm:max-w-md items-center justify-center truncate rounded-md border border-white/[0.08] bg-black/40 px-2 sm:px-3 py-0.5 sm:py-1 font-mono text-[10px] sm:text-[11px] text-[#aeb6c3] transition hover:border-white/20 hover:text-white"
+                title={showcaseHref}
+              >
+                <span className="truncate">{showcaseDisplay}</span>
+              </a>
+            ) : (
+              <div className="flex max-w-[170px] xs:max-w-[240px] sm:max-w-md items-center justify-center truncate rounded-md border border-white/[0.08] bg-black/40 px-2 sm:px-3 py-0.5 sm:py-1 font-mono text-[10px] sm:text-[11px] text-[#aeb6c3]">
+                <span className="truncate">{showcaseDisplay}</span>
+              </div>
+            )}
             <div className="w-8 sm:w-12 text-right shrink-0">
               <span className={`size-2 inline-block rounded-full ${isWorkflow ? 'bg-[#ff7597]' : 'bg-[#2bd9b5]'}`} />
             </div>
@@ -360,7 +397,7 @@ export default async function ProjectPage({ params }: Props) {
             <div className="absolute inset-0 bg-gradient-to-t from-[#06070b]/60 via-transparent to-transparent pointer-events-none" />
           </div>
 
-          <div className="flex items-center justify-between border-t border-white/[0.08] bg-white/[0.02] px-5 py-3 text-xs text-[#747b8b]">
+          <div className="flex items-center justify-between border-t border-white/[0.08] bg-white/[0.02] px-5 py-3 text-xs text-[#aeb6c3]">
             <span>
               {isWorkflow
                 ? 'Verified n8n workflow architecture · Google Sheets & Telegram integration'
@@ -412,7 +449,7 @@ export default async function ProjectPage({ params }: Props) {
           <div className="border-b border-white/10 pb-5">
             <div className="flex items-center gap-2 text-[#ff7597]">
               <SiN8N size={18} />
-              <p className="eyebrow text-[#ff7597]">03 / Workflow Architecture &amp; Evidence</p>
+              <p className="eyebrow text-[#ff7597]">{numWorkflowArch} / Workflow Architecture &amp; Evidence</p>
             </div>
             <h2 className="display mt-2 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
               Actual n8n Workflow Architecture &amp; Editor Canvas
@@ -441,7 +478,7 @@ export default async function ProjectPage({ params }: Props) {
           <div className="border-b border-white/10 pb-5">
             <div className="flex items-center gap-2 text-[#69e6cd]">
               <Workflow size={18} />
-              <p className="eyebrow text-[#69e6cd]">04 / Pipeline Execution</p>
+              <p className="eyebrow text-[#69e6cd]">{numWorkflowPipeline} / Pipeline Execution</p>
             </div>
             <h2 className="display mt-2 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
               Five Sequential Workflow Steps
@@ -471,7 +508,7 @@ export default async function ProjectPage({ params }: Props) {
                   Fires automatically on a configured cron schedule (e.g., daily at 09:00 AM) to initiate the billing audit cycle without manual effort.
                 </p>
               </div>
-              <div className="mt-4 border-t border-white/[0.08] pt-3 text-[10px] font-mono text-[#747b8b]">
+              <div className="mt-4 border-t border-white/[0.08] pt-3 text-[10px] font-mono text-[#aeb6c3]">
                 Input: Cron Timer · Output: Pulse
               </div>
             </div>
@@ -495,7 +532,7 @@ export default async function ProjectPage({ params }: Props) {
                   Connects via Google Cloud OAuth2 to read client payment ledgers, fetching client names, amounts, due dates, and Telegram Chat IDs.
                 </p>
               </div>
-              <div className="mt-4 border-t border-white/[0.08] pt-3 text-[10px] font-mono text-[#747b8b]">
+              <div className="mt-4 border-t border-white/[0.08] pt-3 text-[10px] font-mono text-[#aeb6c3]">
                 Node: Get row(s) in sheet
               </div>
             </div>
@@ -519,7 +556,7 @@ export default async function ProjectPage({ params }: Props) {
                   Evaluates business logic: checks if status is &quot;Pending&quot; and due date is reached. Only &quot;true&quot; records route to notification; &quot;false&quot; branches terminate.
                 </p>
               </div>
-              <div className="mt-4 border-t border-white/[0.08] pt-3 text-[10px] font-mono text-[#747b8b]">
+              <div className="mt-4 border-t border-white/[0.08] pt-3 text-[10px] font-mono text-[#aeb6c3]">
                 Logic: Status == &quot;Pending&quot;
               </div>
             </div>
@@ -543,7 +580,7 @@ export default async function ProjectPage({ params }: Props) {
                   Calls Telegram Bot API to dispatch a formatted Markdown reminder alert with client name, invoice number, due balance, and payment instructions.
                 </p>
               </div>
-              <div className="mt-4 border-t border-white/[0.08] pt-3 text-[10px] font-mono text-[#747b8b]">
+              <div className="mt-4 border-t border-white/[0.08] pt-3 text-[10px] font-mono text-[#aeb6c3]">
                 Node: Send a text message
               </div>
             </div>
@@ -567,7 +604,7 @@ export default async function ProjectPage({ params }: Props) {
                   Writes confirmation back to Google Sheets, setting status to &quot;Sent&quot; with an ISO timestamp. Guarantees idempotency and prevents duplicate alerts.
                 </p>
               </div>
-              <div className="mt-4 border-t border-white/[0.08] pt-3 text-[10px] font-mono text-[#747b8b]">
+              <div className="mt-4 border-t border-white/[0.08] pt-3 text-[10px] font-mono text-[#aeb6c3]">
                 Node: Update row in sheet
               </div>
             </div>
@@ -581,7 +618,7 @@ export default async function ProjectPage({ params }: Props) {
           <div className="border-b border-white/10 pb-5">
             <div className="flex items-center gap-2 text-[#29b6f6]">
               <SiTelegram size={18} />
-              <p className="eyebrow text-[#29b6f6]">05 / Notification Evidence</p>
+              <p className="eyebrow text-[#29b6f6]">{numWorkflowNotification} / Notification Evidence</p>
             </div>
             <h2 className="display mt-2 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
               Telegram Notification Evidence &amp; Payload Structure
@@ -607,7 +644,7 @@ export default async function ProjectPage({ params }: Props) {
                         bot
                       </span>
                     </div>
-                    <p className="text-[11px] text-[#747b8b]">@cv_payment_reminder_bot · automated</p>
+                    <p className="text-[11px] text-[#aeb6c3]">@cv_payment_reminder_bot · automated</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-emerald-400">
@@ -620,7 +657,7 @@ export default async function ProjectPage({ params }: Props) {
               <div className="relative min-h-[300px] bg-[#0e1621] p-5 sm:p-6 bg-[radial-gradient(#17212b_1px,transparent_1px)] [background-size:16px_16px]">
                 {/* Date separator */}
                 <div className="my-2 flex justify-center">
-                  <span className="rounded-full bg-[#17212b]/90 px-3 py-1 font-mono text-[10px] text-[#747b8b]">
+                  <span className="rounded-full bg-[#17212b]/90 px-3 py-1 font-mono text-[10px] text-[#aeb6c3]">
                     Scheduled Audit Dispatch · 09:00 AM
                   </span>
                 </div>
@@ -640,19 +677,19 @@ export default async function ProjectPage({ params }: Props) {
 
                   <div className="mt-3 space-y-1.5 rounded-xl border border-white/[0.06] bg-[#121c27] p-3 font-mono text-[11px] sm:text-xs">
                     <div className="flex justify-between">
-                      <span className="text-[#747b8b]">Invoice Number:</span>
+                      <span className="text-[#aeb6c3]">Invoice Number:</span>
                       <span className="font-semibold text-white">#INV-2026-084</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-[#747b8b]">Amount Due:</span>
+                      <span className="text-[#aeb6c3]">Amount Due:</span>
                       <span className="font-semibold text-emerald-400">$150.00 USD</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-[#747b8b]">Due Date:</span>
+                      <span className="text-[#aeb6c3]">Due Date:</span>
                       <span className="text-[#ff9c90]">October 20, 2026</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-[#747b8b]">Payment Status:</span>
+                      <span className="text-[#aeb6c3]">Payment Status:</span>
                       <span className="text-[#ffbd2e]">Pending Verification</span>
                     </div>
                   </div>
@@ -669,7 +706,7 @@ export default async function ProjectPage({ params }: Props) {
               </div>
 
               {/* Chat Input Placeholder */}
-              <div className="flex h-12 items-center justify-between border-t border-white/[0.08] bg-[#17212b] px-4 text-xs text-[#747b8b]">
+              <div className="flex h-12 items-center justify-between border-t border-white/[0.08] bg-[#17212b] px-4 text-xs text-[#aeb6c3]">
                 <span>Automated bot notification feed</span>
                 <span className="font-mono text-[10px] text-[#64b5f6]">Delivered via Telegram Bot API</span>
               </div>
@@ -712,7 +749,7 @@ export default async function ProjectPage({ params }: Props) {
                 </div>
               </div>
 
-              <div className="mt-5 border-t border-white/[0.08] pt-4 text-xs text-[#747b8b]">
+              <div className="mt-5 border-t border-white/[0.08] pt-4 text-xs text-[#aeb6c3]">
                 <p>
                   <span className="font-semibold text-[#f2f3f7]">Confidentiality:</span> Real API tokens and sensitive customer identities are safely masked in accordance with production security standards.
                 </p>
@@ -728,7 +765,7 @@ export default async function ProjectPage({ params }: Props) {
           <div className="border-b border-white/10 pb-5">
             <div className="flex items-center gap-2 text-[#69e6cd]">
               <Monitor size={18} />
-              <p className="eyebrow text-[#69e6cd]">03 / Platform Showcase</p>
+              <p className="eyebrow text-[#69e6cd]">{numPlatformShowcase} / Platform Showcase</p>
             </div>
             <h2 className="display mt-2 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
               {screenshots.platformShowcase.title}
@@ -746,7 +783,7 @@ export default async function ProjectPage({ params }: Props) {
                 <span className="size-3 rounded-full bg-[#ffbd2e]/80" />
                 <span className="size-3 rounded-full bg-[#27c93f]/80" />
               </div>
-              <div className="flex max-w-[280px] sm:max-w-md items-center justify-center truncate rounded-md border border-white/[0.08] bg-black/40 px-3 py-1 font-mono text-[11px] text-[#747b8b]">
+              <div className="flex max-w-[280px] sm:max-w-md items-center justify-center truncate rounded-md border border-white/[0.08] bg-black/40 px-3 py-1 font-mono text-[11px] text-[#aeb6c3]">
                 {screenshots.platformShowcase.route ?? 'localhost:5173/'}
               </div>
               <span className="rounded-md border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold text-emerald-400">
@@ -774,7 +811,7 @@ export default async function ProjectPage({ params }: Props) {
       {/* 5. Core Features & Capabilities */}
       <section className="shell mt-16 sm:mt-20">
         <div className="border-b border-white/10 pb-5">
-          <p className="eyebrow">04 / Key Features</p>
+          <p className="eyebrow">{numKeyFeatures} / Key Features</p>
           <h2 className="display mt-2 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
             Core System Capabilities &amp; Workflows
           </h2>
@@ -791,7 +828,7 @@ export default async function ProjectPage({ params }: Props) {
               </span>
               <div>
                 <p className="text-sm font-medium text-[#f2f3f7]">{feature}</p>
-                <p className="text-[11px] text-[#747b8b] mt-0.5">Feature 0{idx + 1}</p>
+                <p className="text-[11px] text-[#aeb6c3] mt-0.5">Feature 0{idx + 1}</p>
               </div>
             </div>
           ))}
@@ -805,11 +842,12 @@ export default async function ProjectPage({ params }: Props) {
             <div className="flex items-center gap-2 text-[#aa96ff]">
               <LayoutDashboard size={18} />
               <p className="eyebrow text-[#aa96ff]">
+                {numDashboards} /{' '}
                 {caseStudy?.slug.includes('resumate')
-                  ? '05 / Conversational AI & Design Suite'
+                  ? 'Conversational AI & Design Suite'
                   : screenshots.dashboards.length > 1
-                    ? '05 / User Experience & Dashboards'
-                    : '05 / System Overview & Dashboard'}
+                    ? 'User Experience & Dashboards'
+                    : 'System Overview & Dashboard'}
               </p>
             </div>
             <h2 className="display mt-2 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
@@ -841,7 +879,7 @@ export default async function ProjectPage({ params }: Props) {
                       <span className="rounded-full border border-[rgba(168,130,255,0.3)] bg-[rgba(168,130,255,0.08)] px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#c4b5fd]">
                         {dash.badge ?? 'Dashboard'}
                       </span>
-                      <span className="font-mono text-[11px] text-[#747b8b]">
+                      <span className="font-mono text-[11px] text-[#aeb6c3]">
                         {dash.route ?? 'localhost:5173'}
                       </span>
                     </div>
@@ -862,7 +900,7 @@ export default async function ProjectPage({ params }: Props) {
                       <span className="size-3 rounded-full bg-[#ffbd2e]/80" />
                       <span className="size-3 rounded-full bg-[#27c93f]/80" />
                     </div>
-                    <div className="flex max-w-[280px] sm:max-w-md items-center justify-center truncate rounded-md border border-white/[0.08] bg-black/40 px-3 py-1 font-mono text-[11px] text-[#747b8b]">
+                    <div className="flex max-w-[280px] sm:max-w-md items-center justify-center truncate rounded-md border border-white/[0.08] bg-black/40 px-3 py-1 font-mono text-[11px] text-[#aeb6c3]">
                       {dash.route ?? '127.0.0.1:8000/admin'}
                     </div>
                     <span className="rounded-md border border-[rgba(168,130,255,0.3)] bg-[rgba(168,130,255,0.08)] px-2 py-0.5 text-[10px] font-semibold text-[#c4b5fd]">
@@ -897,9 +935,10 @@ export default async function ProjectPage({ params }: Props) {
             <div className="flex items-center gap-2 text-[#aa96ff]">
               <Workflow size={18} />
               <p className="eyebrow text-[#aa96ff]">
+                {numWorkflowShowcase} /{' '}
                 {caseStudy?.slug.includes('resumate')
-                  ? '06 / A4 Resume Output & Document Rendering'
-                  : '06 / Service Management Workflow'}
+                  ? 'A4 Resume Output & Document Rendering'
+                  : 'Service Management Workflow'}
               </p>
             </div>
             <h2 className="display mt-2 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
@@ -918,7 +957,7 @@ export default async function ProjectPage({ params }: Props) {
                 <span className="size-3 rounded-full bg-[#ffbd2e]/80" />
                 <span className="size-3 rounded-full bg-[#27c93f]/80" />
               </div>
-              <div className="flex max-w-[280px] sm:max-w-md items-center justify-center truncate rounded-md border border-white/[0.08] bg-black/40 px-3 py-1 font-mono text-[11px] text-[#747b8b]">
+              <div className="flex max-w-[280px] sm:max-w-md items-center justify-center truncate rounded-md border border-white/[0.08] bg-black/40 px-3 py-1 font-mono text-[11px] text-[#aeb6c3]">
                 {screenshots.workflowShowcase.route ?? '127.0.0.1:8000/admin/services'}
               </div>
               <span className="rounded-md border border-[rgba(168,130,255,0.3)] bg-[rgba(168,130,255,0.08)] px-2 py-0.5 text-[10px] font-semibold text-[#c4b5fd]">
@@ -949,7 +988,7 @@ export default async function ProjectPage({ params }: Props) {
           <div className="border-b border-white/10 pb-5">
             <div className="flex items-center gap-2 text-[#c4b5fd]">
               <Sparkles size={18} />
-              <p className="eyebrow text-[#c4b5fd]">06 / AI Intelligence &amp; Workflows</p>
+              <p className="eyebrow text-[#c4b5fd]">{numAiIntelligence} / AI Intelligence &amp; Workflows</p>
             </div>
             <h2 className="display mt-2 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
               Intelligent Early Warning &amp; Chat Assistant
@@ -971,7 +1010,7 @@ export default async function ProjectPage({ params }: Props) {
                     <span className="rounded-full border border-[rgba(43,217,181,0.25)] bg-[rgba(43,217,181,0.08)] px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#69e6cd]">
                       {aiItem.badge ?? 'AI Module'}
                     </span>
-                    <span className="font-mono text-[11px] text-[#747b8b]">
+                    <span className="font-mono text-[11px] text-[#aeb6c3]">
                       {aiItem.route?.replace('localhost:5173/', '/')}
                     </span>
                   </div>
@@ -1011,7 +1050,7 @@ export default async function ProjectPage({ params }: Props) {
               <div className="lg:col-span-7">
                 <div className="flex items-center gap-2 text-[#69e6cd]">
                   <Smartphone size={18} />
-                  <p className="eyebrow text-[#69e6cd]">07 / Mobile Experience</p>
+                  <p className="eyebrow text-[#69e6cd]">{numMobileExperience} / Mobile Experience</p>
                 </div>
                 <h2 className="display mt-3 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
                   {screenshots.mobileExperience.title}
@@ -1082,7 +1121,7 @@ export default async function ProjectPage({ params }: Props) {
               <Code2 size={20} />
             </span>
             <div>
-              <p className="eyebrow text-[#aa96ff]">08 / Engineering Contribution</p>
+              <p className="eyebrow text-[#aa96ff]">{numEngineeringContribution} / Engineering Contribution</p>
               <h2 className="display mt-1 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
                 My Specific Role &amp; Responsibilities
               </h2>
@@ -1110,7 +1149,7 @@ export default async function ProjectPage({ params }: Props) {
       {/* 10. Grouped Technology Stack */}
       <section className="shell mt-16 sm:mt-20">
         <div className="border-b border-white/10 pb-5">
-          <p className="eyebrow">09 / Technology Architecture</p>
+          <p className="eyebrow">{numTechArchitecture} / Technology Architecture</p>
           <h2 className="display mt-2 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
             Full-Stack Technology Decisions
           </h2>
@@ -1183,7 +1222,7 @@ export default async function ProjectPage({ params }: Props) {
               <Database size={20} />
             </span>
             <div>
-              <p className="eyebrow text-[#69e6cd]">{isWorkflow ? '07 / Data Layer' : '10 / Data Layer'}</p>
+              <p className="eyebrow text-[#69e6cd]">{numDataLayer} / Data Layer</p>
               <h2 className="display mt-1 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
                 {isWorkflow ? 'Google Sheets Ledger Schema & Data Layer' : 'Database Architecture & Relational Schema'}
               </h2>
@@ -1248,7 +1287,7 @@ export default async function ProjectPage({ params }: Props) {
                   <span className="size-2.5 rounded-full bg-[#ffbd2e]/80" />
                   <span className="size-2.5 rounded-full bg-[#27c93f]/80" />
                 </div>
-                <div className="flex max-w-[280px] sm:max-w-md items-center justify-center truncate rounded-md border border-white/[0.08] bg-black/40 px-3 py-0.5 font-mono text-[10px] text-[#747b8b]">
+                <div className="flex max-w-[280px] sm:max-w-md items-center justify-center truncate rounded-md border border-white/[0.08] bg-black/40 px-3 py-0.5 font-mono text-[10px] text-[#aeb6c3]">
                   {screenshots.technicalArchitecture.route ?? 'localhost/phpmyadmin'}
                 </div>
                 <span className="rounded-md border border-[rgba(43,217,181,0.25)] bg-[rgba(43,217,181,0.08)] px-2 py-0.5 text-[10px] font-semibold text-[#69e6cd]">
@@ -1286,7 +1325,7 @@ export default async function ProjectPage({ params }: Props) {
               <Workflow size={20} />
             </span>
             <div>
-              <p className="eyebrow">{isWorkflow ? '08 / Orchestration Flow' : '11 / System Flow'}</p>
+              <p className="eyebrow">{numSystemFlow} / {isWorkflow ? 'Orchestration Flow' : 'System Flow'}</p>
               <h2 className="display mt-1 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
                 {isWorkflow ? 'n8n Node Orchestration & API Data Flow' : 'API Architecture & Data Flow Lifecycle'}
               </h2>
@@ -1319,7 +1358,7 @@ export default async function ProjectPage({ params }: Props) {
           </div>
 
           <div className="mt-6 flex items-center justify-between rounded-xl border border-white/[0.08] bg-black/40 p-4 text-xs text-[#aeb6c3]">
-            <span className="font-semibold uppercase tracking-wider text-[#747b8b]">Authentication Mechanism</span>
+            <span className="font-semibold uppercase tracking-wider text-[#aeb6c3]">Authentication Mechanism</span>
             <span className="font-medium text-[#f2f3f7]">{caseStudy?.apiArchitecture.authMethod ?? 'Token & Session Authentication'}</span>
           </div>
         </div>
@@ -1328,7 +1367,7 @@ export default async function ProjectPage({ params }: Props) {
       {/* 13. Engineering Challenges & Problem Solving */}
       <section className="shell mt-16 sm:mt-20">
         <div className="border-b border-white/10 pb-5">
-          <p className="eyebrow">{isWorkflow ? '09 / Problem Solving' : '12 / Problem Solving'}</p>
+          <p className="eyebrow">{numProblemSolving} / Problem Solving</p>
           <h2 className="display mt-2 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
             Engineering Challenges &amp; Technical Solutions
           </h2>
@@ -1384,11 +1423,11 @@ export default async function ProjectPage({ params }: Props) {
 
             <dl className="mt-8 grid gap-4 border-t border-white/10 pt-6 sm:grid-cols-2">
               <div>
-                <dt className="text-[10px] font-semibold uppercase tracking-wider text-[#747b8b]">Report Version</dt>
+                <dt className="text-[10px] font-semibold uppercase tracking-wider text-[#aeb6c3]">Report Version</dt>
                 <dd className="mt-1.5 text-sm font-medium text-[#f2f3f7]">{publication.version}</dd>
               </div>
               <div>
-                <dt className="text-[10px] font-semibold uppercase tracking-wider text-[#747b8b]">DOI Identifier</dt>
+                <dt className="text-[10px] font-semibold uppercase tracking-wider text-[#aeb6c3]">DOI Identifier</dt>
                 <dd className="mt-1.5 break-all font-mono text-sm text-[#c4b5fd]">{publication.doi}</dd>
               </div>
             </dl>
@@ -1408,7 +1447,7 @@ export default async function ProjectPage({ params }: Props) {
       {/* 15. Final Result & Verification Summary */}
       <section className="shell mt-16 sm:mt-20">
         <div className="rounded-[24px] border border-white/10 bg-[#0b0e15] p-6 sm:p-8">
-          <p className="eyebrow">{isWorkflow ? '10 / Results & Takeaways' : '13 / Result & Verification'}</p>
+          <p className="eyebrow">{numResults} / {isWorkflow ? 'Results & Takeaways' : 'Result & Verification'}</p>
           <h2 className="display mt-2 text-2xl font-semibold text-[#f2f3f7]">
             {isWorkflow ? 'Implementation Summary & Learning Outcomes' : 'Project Delivery & Technical Achievements'}
           </h2>
@@ -1441,7 +1480,7 @@ export default async function ProjectPage({ params }: Props) {
           href={`/projects/${projectSlug(previous.title)}`}
           className="group rounded-[20px] border border-white/10 bg-[#0b0e15] p-6 transition-colors duration-150 hover:border-[rgba(124,92,255,0.4)]"
         >
-          <div className="flex items-center gap-2 text-xs text-[#747b8b]">
+          <div className="flex items-center gap-2 text-xs text-[#aeb6c3]">
             <ArrowLeft size={13} className="transition-transform group-hover:-translate-x-1" />
             <span>Previous Case Study</span>
           </div>
@@ -1454,7 +1493,7 @@ export default async function ProjectPage({ params }: Props) {
           href={`/projects/${projectSlug(next.title)}`}
           className="group rounded-[20px] border border-white/10 bg-[#0b0e15] p-6 transition-colors duration-150 hover:border-[rgba(124,92,255,0.4)] sm:text-right"
         >
-          <div className="flex items-center justify-end gap-2 text-xs text-[#747b8b]">
+          <div className="flex items-center justify-end gap-2 text-xs text-[#aeb6c3]">
             <span>Next Case Study</span>
             <ArrowRight size={13} className="transition-transform group-hover:translate-x-1" />
           </div>

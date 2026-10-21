@@ -48,7 +48,7 @@ export function ContactSection() {
         <Reveal>
           <div className="grid gap-7 lg:grid-cols-[.32fr_1fr] lg:items-end">
             <div>
-              <p className="eyebrow">13 / Contact &amp; Inquiries</p>
+              <p className="eyebrow">14 / Contact &amp; Inquiries</p>
               <p className="muted mt-4 max-w-[14rem] text-sm leading-6">
                 Let&apos;s discuss your engineering needs, open roles, or project requirements.
               </p>
@@ -87,7 +87,7 @@ export function ContactSection() {
                           <Mail size={18} aria-hidden="true" />
                         </span>
                         <div>
-                          <p className="text-[10px] font-semibold uppercase tracking-wider text-[#747b8b]">
+                          <p className="text-[10px] font-semibold uppercase tracking-wider text-[#aeb6c3]">
                             Email Address
                           </p>
                           <a
@@ -114,7 +114,7 @@ export function ContactSection() {
                         <FaWhatsapp size={18} aria-hidden="true" />
                       </span>
                       <div>
-                        <p className="text-[10px] font-semibold uppercase tracking-wider text-[#747b8b]">
+                        <p className="text-[10px] font-semibold uppercase tracking-wider text-[#aeb6c3]">
                           WhatsApp
                         </p>
                         <p className="text-xs sm:text-sm font-semibold text-[#f2f3f7] group-hover:text-emerald-400 transition">
@@ -122,7 +122,7 @@ export function ContactSection() {
                         </p>
                       </div>
                     </div>
-                    <ArrowUpRight size={15} className="text-[#747b8b] group-hover:text-emerald-400 transition" />
+                    <ArrowUpRight size={15} className="text-[#aeb6c3] group-hover:text-emerald-400 transition" />
                   </a>
 
                   {/* 3. LinkedIn Profile Link */}
@@ -137,7 +137,7 @@ export function ContactSection() {
                         <FaLinkedinIn size={18} aria-hidden="true" />
                       </span>
                       <div>
-                        <p className="text-[10px] font-semibold uppercase tracking-wider text-[#747b8b]">
+                        <p className="text-[10px] font-semibold uppercase tracking-wider text-[#aeb6c3]">
                           LinkedIn
                         </p>
                         <p className="text-xs sm:text-sm font-semibold text-[#f2f3f7] group-hover:text-[#c4b5fd] transition">
@@ -145,7 +145,7 @@ export function ContactSection() {
                         </p>
                       </div>
                     </div>
-                    <ArrowUpRight size={15} className="text-[#747b8b] group-hover:text-[#c4b5fd] transition" />
+                    <ArrowUpRight size={15} className="text-[#aeb6c3] group-hover:text-[#c4b5fd] transition" />
                   </a>
 
                   {/* 4. GitHub Profile Link */}
@@ -160,7 +160,7 @@ export function ContactSection() {
                         <FaGithub size={18} aria-hidden="true" />
                       </span>
                       <div>
-                        <p className="text-[10px] font-semibold uppercase tracking-wider text-[#747b8b]">
+                        <p className="text-[10px] font-semibold uppercase tracking-wider text-[#aeb6c3]">
                           GitHub
                         </p>
                         <p className="text-xs sm:text-sm font-semibold text-[#f2f3f7] group-hover:text-white transition">
@@ -168,7 +168,7 @@ export function ContactSection() {
                         </p>
                       </div>
                     </div>
-                    <ArrowUpRight size={15} className="text-[#747b8b] group-hover:text-white transition" />
+                    <ArrowUpRight size={15} className="text-[#aeb6c3] group-hover:text-white transition" />
                   </a>
                 </div>
               </div>
@@ -181,7 +181,7 @@ export function ContactSection() {
                   </span>
                   <div className="text-xs">
                     <p className="font-semibold text-[#f2f3f7]">{portfolioData.location}</p>
-                    <p className="text-[#747b8b] text-[11px]">UTC+6 &middot; Remote &amp; Global Availability</p>
+                    <p className="text-[#aeb6c3] text-[11px]">UTC+6 &middot; Remote &amp; Global Availability</p>
                   </div>
                 </div>
               </div>
