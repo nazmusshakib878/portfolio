@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback, memo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { animate } from 'motion/react'
 import {
   ArrowLeft,
@@ -19,6 +20,12 @@ import { SiGithub } from 'react-icons/si'
 import { Reveal } from '@/components/ui/reveal'
 import { portfolioData, projectSlug } from '@/data/portfolio'
 import { projectCovers } from '@/data/project-covers'
+
+const CAROUSEL_GEOMETRY = {
+  phone: { step: 18, radius: 420, drop: 72, perspective: 1100 },
+  tablet: { step: 24, radius: 570, drop: 120, perspective: 1300 },
+  desktop: { step: 30, radius: 680, drop: 150, perspective: 1400 },
+} as const
 
 /**
  * Returns tailored color tokens for technology badges based on category/brand
@@ -62,6 +69,8 @@ interface ProjectCardProps {
   cardWidth: number
   cardHeight: number
   isMobile: boolean
+  isPaused: boolean
+  liteMode: boolean
   onSelect: (index: number) => void
   onLinkClick: (e: React.MouseEvent) => void
   setCardRef: (el: HTMLDivElement | null) => void
@@ -81,11 +90,33 @@ const ProjectCard = memo(function ProjectCard({
   cardWidth,
   cardHeight,
   isMobile,
+  isPaused,
+  liteMode,
   onSelect,
   onLinkClick,
   setCardRef,
 }: ProjectCardProps) {
   const caseStudyHref = `/projects/${projectSlug(project.title)}`
+  const router = useRouter()
+  const tiltRafRef = useRef<number | null>(null)
+
+  const handleTilt = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (
+      !isActive || event.pointerType !== 'mouse' || liteMode ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      !window.matchMedia('(hover: hover) and (pointer: fine)').matches
+    ) return
+
+    const card = event.currentTarget
+    if (tiltRafRef.current) cancelAnimationFrame(tiltRafRef.current)
+    tiltRafRef.current = requestAnimationFrame(() => {
+      const rect = card.getBoundingClientRect()
+      const x = Math.max(-1, Math.min(1, ((event.clientX - rect.left) / rect.width) * 2 - 1))
+      const y = Math.max(-1, Math.min(1, ((event.clientY - rect.top) / rect.height) * 2 - 1))
+      card.style.setProperty('--tilt-x', `${Math.round(-y * 40) / 10}deg`)
+      card.style.setProperty('--tilt-y', `${Math.round(x * 40) / 10}deg`)
+    })
+  }
 
   return (
     <div
@@ -96,8 +127,26 @@ const ProjectCard = memo(function ProjectCard({
         if (!isActive) {
           e.preventDefault()
           onSelect(index)
+          return
+        }
+
+        if (!(e.target as HTMLElement).closest('a, button, [data-action-button="true"]')) {
+          router.push(caseStudyHref)
         }
       }}
+      onKeyDown={(e) => {
+        if (isActive && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault()
+          router.push(caseStudyHref)
+        }
+      }}
+      onPointerMove={handleTilt}
+      onPointerLeave={(event) => {
+        if (tiltRafRef.current) cancelAnimationFrame(tiltRafRef.current)
+        event.currentTarget.style.setProperty('--tilt-x', '0deg')
+        event.currentTarget.style.setProperty('--tilt-y', '0deg')
+      }}
+      data-project-card="true"
       style={{
         position: 'absolute',
         left: '50%',
@@ -105,13 +154,13 @@ const ProjectCard = memo(function ProjectCard({
         width: `${cardWidth}px`,
         height: `${cardHeight}px`,
         willChange: isActive ? 'transform' : 'auto',
-        transformStyle: 'flat',
+        transformStyle: 'preserve-3d',
         backfaceVisibility: 'hidden',
         WebkitBackfaceVisibility: 'hidden',
       }}
-      className={`group absolute flex flex-col rounded-[24px] text-left select-none touch-pan-y pointer-events-auto transition-[border-color,background-color] duration-300 ${
+      className={`group absolute flex flex-col overflow-hidden rounded-[24px] text-left select-none touch-pan-y pointer-events-auto transition-[border-color,background-color] duration-300 ${
         isActive
-          ? 'border border-[rgba(0,245,255,0.48)] bg-[rgba(13,17,26,0.98)] shadow-[0_24px_60px_rgba(0,0,0,0.85),0_0_36px_rgba(0,245,255,0.18)]'
+          ? 'cursor-pointer border border-[rgba(0,245,255,0.48)] bg-[rgba(13,17,26,0.98)] shadow-[0_24px_60px_rgba(0,0,0,0.85),0_0_36px_rgba(0,245,255,0.18)]'
           : 'cursor-pointer border border-white/10 bg-[#0c1019] hover:border-[#00f5ff]/35'
       }`}
     >
@@ -119,7 +168,7 @@ const ProjectCard = memo(function ProjectCard({
       {isActive && (
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -inset-0.5 rounded-[25px] bg-gradient-to-b from-[#00f5ff]/20 via-transparent to-transparent blur-md -z-10"
+          className="pointer-events-none absolute inset-0 z-30 rounded-[23px] border border-[#aaf8ff]/30"
         />
       )}
 
@@ -146,19 +195,11 @@ const ProjectCard = memo(function ProjectCard({
           draggable={false}
           decoding="async"
           loading={isActive || index === 0 ? 'eager' : 'lazy'}
-          className="object-cover select-none pointer-events-none transition-transform duration-500 group-hover:scale-[1.02]"
+          className={`object-cover select-none pointer-events-none transition-transform duration-[600ms] ${
+            isActive ? 'scale-[1.05]' : 'scale-100'
+          }`}
         />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#090d15] via-transparent to-transparent" />
-
-        {/* Active card overlay link for thumbnail click */}
-        {isActive && (
-          <Link
-            href={caseStudyHref}
-            onClick={onLinkClick}
-            className="absolute inset-0 z-10"
-            aria-label={`View ${project.title} case study`}
-          />
-        )}
 
         {/* Top Bar Badges */}
         <div className="pointer-events-none absolute left-3.5 top-3.5 flex items-center gap-1.5 z-20">
@@ -196,30 +237,20 @@ const ProjectCard = memo(function ProjectCard({
               )}
             </div>
 
-            <h3 className="display text-base sm:text-[19px] font-bold tracking-tight text-white leading-snug">
-              <Link
-                href={caseStudyHref}
-                onClick={onLinkClick}
-                data-action-button="true"
-                className="hover:text-[#00f5ff] transition-colors"
-              >
-                {project.title}
-              </Link>
+            <h3 className="display text-base sm:text-[18px] font-bold tracking-tight text-white leading-snug">
+              {project.title}
             </h3>
 
-            <p className="text-xs sm:text-[13px] leading-relaxed text-[#c4cad4]">
+            <p className="line-clamp-3 text-[11px] sm:text-[11.5px] leading-relaxed text-[#c4cad4]">
               {project.summary}
             </p>
           </div>
 
           {/* Middle: Key Architectural Highlights */}
           {project.keyFeatures && project.keyFeatures.length > 0 && (
-            <div className="my-auto py-1 sm:py-2 hidden sm:flex flex-col gap-1.5">
-              <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#9aa6b7]">
-                Key Highlights
-              </span>
-              <ul className="flex flex-col gap-1.5 text-[11.5px] text-[#c4cad4]">
-                {project.keyFeatures.slice(0, 2).map((feature, fIdx) => (
+            <div className="my-auto py-1.5 hidden sm:flex flex-col">
+              <ul className="flex flex-col text-[11px] text-[#c4cad4]">
+                {project.keyFeatures.slice(0, 1).map((feature, fIdx) => (
                   <li key={fIdx} className="flex items-start gap-1.5 leading-snug">
                     <Check size={12} className="shrink-0 text-[#00f5ff] mt-0.5" />
                     <span className="line-clamp-1">{feature}</span>
@@ -244,17 +275,16 @@ const ProjectCard = memo(function ProjectCard({
               ))}
             </div>
 
-            <div className="pt-3.5 border-t border-white/[0.08] flex items-center gap-2.5 relative z-20">
+            <div className="justify-end pt-3 border-t border-white/[0.08] flex items-center gap-1.5 relative z-20">
               <Link
                 href={caseStudyHref}
                 onClick={onLinkClick}
                 data-action-button="true"
-                className="button primary flex-1 min-h-[44px] rounded-xl px-4 text-xs sm:text-[13px] font-semibold shadow-[0_0_20px_rgba(0,245,255,0.25)]"
+                className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-[#00f5ff]/35 bg-[#00f5ff]/[0.07] px-2.5 text-[10px] font-semibold text-[#8ff8ff] hover:bg-[#00f5ff]/[0.13] transition shrink-0"
               >
-                <span>View Case Study</span>
-                <ArrowUpRight size={14} />
+                <ArrowUpRight size={12} />
+                <span>Case Study</span>
               </Link>
-
               {project.liveUrl && (
                 <a
                   href={project.liveUrl}
@@ -262,11 +292,12 @@ const ProjectCard = memo(function ProjectCard({
                   rel="noopener noreferrer"
                   onClick={onLinkClick}
                   data-action-button="true"
-                  className="grid size-[44px] place-items-center rounded-xl border border-emerald-500/40 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition shrink-0"
+                  className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-2.5 text-[10px] font-semibold text-emerald-400 hover:bg-emerald-500/20 transition shrink-0"
                   aria-label={`Live Demo of ${project.title}`}
                   title="Live Demo"
                 >
-                  <ExternalLink size={15} />
+                  <ExternalLink size={13} />
+                  <span>Live</span>
                 </a>
               )}
 
@@ -277,19 +308,20 @@ const ProjectCard = memo(function ProjectCard({
                   rel="noopener noreferrer"
                   onClick={onLinkClick}
                   data-action-button="true"
-                  className="grid size-[44px] place-items-center rounded-xl border border-white/15 bg-white/[0.04] text-[#d9dee7] hover:border-white/30 hover:text-white transition shrink-0"
+                  className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-white/15 bg-white/[0.04] px-2.5 text-[10px] font-semibold text-[#d9dee7] hover:border-white/30 hover:text-white transition shrink-0"
                   aria-label={`GitHub repo of ${project.title}`}
                   title="GitHub Repository"
                 >
-                  <SiGithub size={15} />
+                  <SiGithub size={13} />
+                  <span>GitHub</span>
                 </a>
               )}
             </div>
           </div>
         </div>
       ) : (
-        /* Lightened side/inactive card */
-        <div className="flex flex-1 flex-col p-4 sm:p-5">
+        /* Compact inactive preview: cover, identity and stack without an empty lower body. */
+        <div className="relative flex flex-col p-4 sm:p-5">
           <div className="flex items-center justify-between">
             <span className="font-mono text-[11px] font-medium uppercase tracking-wider text-[#9aa6b7]">
               {project.category}
@@ -303,11 +335,28 @@ const ProjectCard = memo(function ProjectCard({
             {project.title}
           </h3>
 
-          <div className="mt-auto pt-3 hidden sm:flex items-center justify-between text-xs font-medium text-[#aeb6c3] group-hover:text-[#00f5ff] transition-colors border-t border-white/[0.06]">
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {project.technologies.slice(0, 3).map((tech) => (
+              <span key={tech} className={`rounded-md border px-2 py-0.5 text-[10px] font-medium ${getTechBadgeStyle(tech)}`}>
+                {tech}
+              </span>
+            ))}
+          </div>
+
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#0c1019] to-transparent" />
+          <div className="project-wheel-select-hint relative mt-3 items-center justify-between border-t border-white/[0.06] pt-3 text-xs font-medium text-[#aeb6c3] transition-colors group-hover:text-[#00f5ff]">
             <span>Click to select</span>
             <ArrowRight size={13} className="transition group-hover:translate-x-1" />
           </div>
         </div>
+      )}
+
+      {isActive && !liteMode && (
+        <div
+          aria-hidden="true"
+          className="project-wheel-progress absolute inset-x-0 bottom-0 z-40 h-[2px] origin-left bg-[#00f5ff]"
+          style={{ animationPlayState: isPaused ? 'paused' : 'running' }}
+        />
       )}
     </div>
   )
@@ -320,6 +369,8 @@ export function ProjectWheelShowcase() {
   // React state updated strictly on card boundary change (zero per-frame state churn)
   const [activeIndex, setActiveIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
+  const [autoplayHeld, setAutoplayHeld] = useState(false)
+  const [liteMode, setLiteMode] = useState(false)
   const [windowWidth, setWindowWidth] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth : 1200
   )
@@ -334,6 +385,7 @@ export function ProjectWheelShowcase() {
   const isFocusedRef = useRef(false)
   const inViewRef = useRef(true)
   const holdUntilRef = useRef(0)
+  const holdTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Active tween reference (Motion's animate controls)
   const tweenRef = useRef<{ stop: () => void } | null>(null)
@@ -359,13 +411,14 @@ export function ProjectWheelShowcase() {
 
   // Responsive geometry parameters stored in a ref for zero-reconciliation access
   const dimsRef = useRef({
-    cardWidth: 410,
-    cardHeight: 660,
+    cardWidth: 370,
+    cardHeight: 540,
     radius: 1353,
     step: 0.3274,
+    drop: 150,
     gap: 33,
     perspective: 2870,
-    stageHeight: 740,
+    stageHeight: 615,
     isMobile: false,
   })
 
@@ -375,11 +428,20 @@ export function ProjectWheelShowcase() {
   const cardWidth = isMobile
     ? Math.min(320, Math.max(270, Math.round(windowWidth * 0.80)))
     : isTablet
-    ? 360
-    : 410
-  const cardHeight = isMobile ? 560 : isTablet ? 620 : 660
-  const stageHeight = isMobile ? 620 : isTablet ? 700 : 740
-  const perspective = Math.round(cardWidth * (isMobile ? 5.5 : 7))
+    ? 340
+    : 370
+  const cardHeight = isMobile ? 560 : isTablet ? 545 : 540
+  const stageHeight = isMobile ? 620 : isTablet ? 620 : 615
+  const perspective = (isMobile ? CAROUSEL_GEOMETRY.phone : isTablet ? CAROUSEL_GEOMETRY.tablet : CAROUSEL_GEOMETRY.desktop).perspective
+
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search)
+    setLiteMode(query.get('lite') === '1' || query.get('off') === 'carousel')
+  }, [])
+
+  useEffect(() => () => {
+    if (holdTimerRef.current) clearTimeout(holdTimerRef.current)
+  }, [])
 
   // Symmetric modulo wrap helper for continuous looping [-total/2, total/2]
   const wrapN = useCallback(
@@ -395,7 +457,7 @@ export function ProjectWheelShowcase() {
   // Direct compositor render function: writes transform, opacity, visibility & zIndex directly to card refs
   const render = useCallback(() => {
     const pos = posRef.current
-    const { radius, step, isMobile: isMobileDevice } = dimsRef.current
+    const { radius, step, drop, isMobile: isMobileDevice } = dimsRef.current
 
     // 1. Update background decorative rotary dial track
     if (dialRef.current) {
@@ -406,6 +468,9 @@ export function ProjectWheelShowcase() {
     // 2. Active index check: update React state ONLY when nearest integer changes
     const near = ((Math.round(pos) % total) + total) % total
     if (near !== activeIndexRef.current) {
+      const previousCard = cardRefs.current[activeIndexRef.current]
+      previousCard?.style.setProperty('--tilt-x', '0deg')
+      previousCard?.style.setProperty('--tilt-y', '0deg')
       activeIndexRef.current = near
       setActiveIndex(near)
     }
@@ -423,28 +488,36 @@ export function ProjectWheelShowcase() {
       const a = off * step
       const d = Math.abs(off)
 
-      const op =
-        d <= maxDist - fadeRange
-          ? 1
-          : Math.max(0, 1 - (d - (maxDist - fadeRange)) / fadeRange)
+      const baseOpacity = d <= 1 ? 1 - d * 0.3 : Math.max(0.35, 0.7 - (d - 1) * 0.35)
+      const edgeFade = d <= maxDist - fadeRange ? 1 : Math.max(0, 1 - (d - (maxDist - fadeRange)) / fadeRange)
+      const op = baseOpacity * edgeFade
       const isVisible = op > 0.005
 
-      // Inner-cylinder 3D arc formula: translate3d(sin(a)*R, 0, R*(1-cos(a))) rotateY(-a)
-      const tx = (Math.sin(a) * radius).toFixed(1)
-      const tz = (radius * (1 - Math.cos(a))).toFixed(1)
+      // Cylinder arc: side cards sweep down and back, centre card is lifted forward.
+      const tx = Math.round(Math.sin(a) * radius)
+      const depth = 1 - Math.cos(a)
+      const ty = Math.round(depth * drop)
+      const centreLift = Math.max(0, 1 - d) * 92
+      const tz = Math.round(-depth * radius + centreLift)
       const rotY = (-a * (180 / Math.PI)).toFixed(2)
+      const scale = d <= 1 ? 1 - d * 0.18 : Math.max(0.62, 0.82 - (d - 1) * 0.14)
 
-      card.style.transform = `translate(-50%, -50%) translate3d(${tx}px, 0, ${tz}px) rotateY(${rotY}deg)`
+      card.style.transform = `translate(-50%, -50%) translate3d(${tx}px, ${ty}px, ${tz}px) rotateY(${rotY}deg) scale(${scale.toFixed(3)}) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg))`
       card.style.opacity = op.toFixed(3)
       card.style.visibility = isVisible ? 'visible' : 'hidden'
       card.style.pointerEvents = op > 0.5 ? 'auto' : 'none'
-      card.style.zIndex = String(100 - Math.round(d * 10))
+      card.style.zIndex = String(1000 - Math.round(d * 100))
     }
   }, [total, wrapN])
 
   // Temporarily pause autoplay following manual user interactions
   const holdAutoplay = useCallback((ms = 4500) => {
     holdUntilRef.current = performance.now() + ms
+    setAutoplayHeld(true)
+    if (holdTimerRef.current) clearTimeout(holdTimerRef.current)
+    holdTimerRef.current = setTimeout(() => {
+      if (performance.now() >= holdUntilRef.current) setAutoplayHeld(false)
+    }, ms + 20)
   }, [])
 
   // Smooth position tween using Motion's animate() with power3.out easing (~0.9s duration)
@@ -524,20 +597,22 @@ export function ProjectWheelShowcase() {
     const cw = mobile
       ? Math.min(320, Math.max(270, Math.round(w * 0.80)))
       : tablet
-      ? 360
-      : 410
-    const ch = mobile ? 560 : tablet ? 620 : 660
-    const gap = Math.round(cw * (mobile ? 0.06 : 0.08))
-    const rad = cw * (mobile ? 3.0 : 3.3)
-    const stp = (cw + gap) / rad
-    const persp = Math.round(cw * (mobile ? 5.5 : 7))
-    const stgH = mobile ? 620 : tablet ? 700 : 740
+      ? 340
+      : 370
+    const ch = mobile ? 560 : tablet ? 545 : 540
+    const profile = mobile ? CAROUSEL_GEOMETRY.phone : tablet ? CAROUSEL_GEOMETRY.tablet : CAROUSEL_GEOMETRY.desktop
+    const gap = Math.round(cw * (mobile ? 0.05 : 0.07))
+    const rad = profile.radius
+    const stp = ((liteMode ? profile.step * 0.55 : profile.step) * Math.PI) / 180
+    const persp = profile.perspective
+    const stgH = mobile ? 620 : tablet ? 620 : 615
 
     dimsRef.current = {
       cardWidth: cw,
       cardHeight: ch,
       radius: rad,
       step: stp,
+      drop: profile.drop,
       gap,
       perspective: persp,
       stageHeight: stgH,
@@ -547,7 +622,7 @@ export function ProjectWheelShowcase() {
     if (stackRef.current) {
       stackRef.current.style.perspective = `${persp}px`
     }
-  }, [])
+  }, [liteMode])
 
   // Window resize handler debounced by 150ms
   useEffect(() => {
@@ -884,10 +959,7 @@ export function ProjectWheelShowcase() {
       className="section relative overflow-hidden !pt-7 sm:!pt-8 pb-16"
     >
       {/* Background Ambience */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-1/3 -translate-x-1/2 -translate-y-1/2 h-[450px] w-[800px] max-w-full rounded-full bg-gradient-to-b from-[#00f5ff]/10 via-[#7c5cff]/08 to-transparent blur-[120px]"
-      />
+      <div aria-hidden="true" className="pointer-events-none absolute left-1/2 top-1/3 h-[410px] w-[min(86vw,900px)] -translate-x-1/2 rounded-[50%] bg-[radial-gradient(ellipse_at_center,rgba(0,245,255,0.09),rgba(124,92,255,0.04)_40%,transparent_70%)]" />
 
       <div className="shell relative z-10">
         <Reveal>
@@ -918,7 +990,7 @@ export function ProjectWheelShowcase() {
                     return nextVal
                   })
                 }}
-                className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-medium text-[#d9dee7] backdrop-blur-md transition hover:border-[#00f5ff]/40 hover:text-white"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-medium text-[#d9dee7] transition hover:border-[#00f5ff]/40 hover:text-white"
                 aria-label={isPaused ? 'Resume auto rotation' : 'Pause auto rotation'}
               >
                 {isPaused ? (
@@ -941,7 +1013,7 @@ export function ProjectWheelShowcase() {
                 <button
                   type="button"
                   onClick={prev}
-                  className="grid size-10 sm:size-11 place-items-center rounded-xl border border-white/10 bg-white/[0.03] text-[#d9dee7] backdrop-blur-md transition hover:border-[#00f5ff] hover:bg-[#00f5ff]/10 hover:text-white active:scale-95"
+                  className="grid size-10 sm:size-11 place-items-center rounded-xl border border-white/10 bg-white/[0.03] text-[#d9dee7] transition hover:border-[#00f5ff] hover:bg-[#00f5ff]/10 hover:text-white active:scale-95"
                   aria-label="Previous project"
                 >
                   <ArrowLeft size={17} />
@@ -949,7 +1021,7 @@ export function ProjectWheelShowcase() {
                 <button
                   type="button"
                   onClick={next}
-                  className="grid size-10 sm:size-11 place-items-center rounded-xl border border-white/10 bg-white/[0.03] text-[#d9dee7] backdrop-blur-md transition hover:border-[#00f5ff] hover:bg-[#00f5ff]/10 hover:text-white active:scale-95"
+                  className="grid size-10 sm:size-11 place-items-center rounded-xl border border-white/10 bg-white/[0.03] text-[#d9dee7] transition hover:border-[#00f5ff] hover:bg-[#00f5ff]/10 hover:text-white active:scale-95"
                   aria-label="Next project"
                 >
                   <ArrowRight size={17} />
@@ -982,8 +1054,11 @@ export function ProjectWheelShowcase() {
         className="relative mt-6 sm:mt-8 w-full select-none overflow-hidden touch-pan-y focus:outline-none cursor-grab"
         aria-label="Rotating Project Wheel — drag, swipe, or use arrow keys"
       >
+        <div aria-hidden="true" className="pointer-events-none absolute bottom-7 left-1/2 h-20 w-[min(92%,980px)] -translate-x-1/2 rounded-[50%] bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.72),rgba(0,245,255,0.08)_36%,transparent_70%)]" />
+        <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 z-30 w-16 bg-gradient-to-r from-[#080b12] to-transparent sm:w-28" />
+        <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 z-30 w-16 bg-gradient-to-l from-[#080b12] to-transparent sm:w-28" />
         {/* Curved Horizon Dial Track (Decorative Background Wheel) */}
-        <div
+        {!liteMode && <div
           ref={dialRef}
           aria-hidden="true"
           style={{
@@ -997,14 +1072,14 @@ export function ProjectWheelShowcase() {
         >
           <div className="absolute inset-[10%] rounded-full border border-white/[0.04]" />
           <div className="absolute inset-[24%] rounded-full border border-white/[0.03]" />
-        </div>
+        </div>}
 
         {/* Top Active Indicator Beacon — Desktop only to prevent stacking over cards on mobile */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 z-20 hidden sm:flex flex-col items-center gap-1 opacity-90"
         >
-          <div className="flex items-center gap-1.5 rounded-full border border-[#00f5ff]/35 bg-[#080c18]/90 px-3.5 py-1 shadow-[0_0_24px_rgba(0,245,255,0.28)] backdrop-blur-md">
+          <div className="flex items-center gap-1.5 rounded-full border border-[#00f5ff]/35 bg-[#080c18]/90 px-3.5 py-1 shadow-[0_0_24px_rgba(0,245,255,0.28)]">
             <span className="size-1.5 rounded-full bg-[#00f5ff] shadow-[0_0_8px_#00f5ff] animate-pulse" />
             <span className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-[#00f5ff]">
               Active Project
@@ -1035,6 +1110,8 @@ export function ProjectWheelShowcase() {
                 cardWidth={cardWidth}
                 cardHeight={cardHeight}
                 isMobile={isMobile}
+                isPaused={isPaused || autoplayHeld}
+                liteMode={liteMode}
                 onSelect={goTo}
                 onLinkClick={handleLinkClick}
                 setCardRef={(el) => {
@@ -1050,7 +1127,7 @@ export function ProjectWheelShowcase() {
       <div className="shell relative z-20 mt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/[0.08] pt-6">
         {/* Left: Project title & position badge */}
         <div className="flex items-center gap-3">
-          <span className="font-mono text-sm font-bold text-[#00f5ff]">
+          <span key={activeIndex} className="project-wheel-counter font-mono text-sm font-bold text-[#00f5ff]">
             0{activeIndex + 1}
             <span className="text-white/60"> / 0{total}</span>
           </span>

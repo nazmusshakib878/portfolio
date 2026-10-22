@@ -395,6 +395,42 @@ p, h1, h2, h3, li, dd { overflow-wrap: anywhere }
   scrollbar-width: none;
 }
 
+/* Project wheel: compositor-safe accents only. */
+.project-wheel-progress {
+  animation: project-wheel-progress 4.2s linear forwards;
+}
+
+.project-wheel-counter {
+  animation: project-wheel-counter 220ms ease-out both;
+}
+
+.project-wheel-select-hint {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .project-wheel-select-hint {
+    display: flex;
+  }
+}
+
+@keyframes project-wheel-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@keyframes project-wheel-counter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-wheel-progress,
+  .project-wheel-counter {
+    animation: none !important;
+  }
+}
+
 /* Development process: static blueprint treatment with one-time SVG line draw. */
 .process-hero-scene path,
 .process-hero-scene circle {
