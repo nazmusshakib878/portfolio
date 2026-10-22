@@ -2,7 +2,7 @@
 
 - Preserve facts in `src/data/portfolio-facts.ts`; consume `src/data/portfolio.ts`.
 - Never invent employers, metrics, awards, dates, screenshots or outcomes.
-- Never expose provider keys in Client Components or documentation.
+- Never expose provider keys in Client Components or documentation, except `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY`: Web3Forms explicitly treats this access key as public and it may be used only for client-side contact-form submission. Never hardcode its value or expose any other API key, credential, or secret.
 - Preserve `public/images/profile.png` and `public/resume.pdf` unless explicitly replaced.
 - The hero must use the owner's real portrait. Do not add a generated or procedural face.
 - Keep portrait interaction subtle, transform-only and disabled by reduced motion.

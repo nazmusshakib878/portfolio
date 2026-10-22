@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, type ReactNode } from 'react'
+import { useRef, useState, type ReactNode } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -211,6 +211,7 @@ export function ContactSection() {
 }
 
 function ContactFormDetailed() {
+  const sendingRef = useRef(false)
   const {
     register,
     handleSubmit,
@@ -233,30 +234,40 @@ function ContactFormDetailed() {
   })
 
   async function submit(values: FormValues) {
+    if (sendingRef.current) return
+    sendingRef.current = true
     setStatus({ kind: 'idle', message: '' })
     try {
-      const response = await fetch('/api/contact', {
+      const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY?.trim()
+      if (!accessKey) {
+        throw new Error('Contact delivery is not configured yet. Please use direct email instead.')
+      }
+
+      const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
+          access_key: accessKey,
           name: values.name,
           email: values.email,
           projectType: values.projectType,
           subject: `Inquiry: ${values.projectType}`,
           message: values.message,
-          company: values.company,
+          botcheck: false,
         }),
       })
 
       const body = (await response.json().catch(() => ({}))) as {
         success?: boolean
         message?: string
+        error?: string
+        body?: { message?: string }
       }
 
-      if (!response.ok) {
+      if (!response.ok || !body.success) {
         throw new Error(
-          typeof body.message === 'string' && body.message.trim()
-            ? body.message.trim()
+          typeof (body.message || body.body?.message || body.error) === 'string' && (body.message || body.body?.message || body.error)?.trim()
+            ? (body.message || body.body?.message || body.error)?.trim()
             : 'Message could not be sent. Please try again.'
         )
       }
@@ -271,6 +282,8 @@ function ContactFormDetailed() {
         kind: 'error',
         message: error instanceof Error ? error.message : 'Message delivery failed. Please try direct email.',
       })
+    } finally {
+      sendingRef.current = false
     }
   }
 

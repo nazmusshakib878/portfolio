@@ -527,7 +527,7 @@ cp .env.example .env.local
 
 ```env
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
-WEB3FORMS_ACCESS_KEY=your_web3forms_access_key
+NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY=your_web3forms_access_key
 ```
 
 ### Environment Variable Reference
@@ -535,7 +535,7 @@ WEB3FORMS_ACCESS_KEY=your_web3forms_access_key
 | Variable | Purpose |
 |---|---|
 | `NEXT_PUBLIC_SITE_URL` | Canonical site URL used for metadata and production links |
-| `WEB3FORMS_ACCESS_KEY` | Server-side Web3Forms key used for /api/contact delivery |
+| `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY` | Public Web3Forms access key used by the browser contact form. This key is designed by Web3Forms for client-side form submission; do not use this prefix for any other credential. |
 
 > Never commit real private credentials or production secrets to GitHub.
 
@@ -723,8 +723,10 @@ flowchart LR
 
 ```env
 NEXT_PUBLIC_SITE_URL=https://your-domain.com
-WEB3FORMS_ACCESS_KEY=your_web3forms_access_key
+NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY=your_web3forms_access_key
 ```
+
+In Vercel, add `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY` for the Production, Preview, and Development environments as required, then redeploy. Do not add the key value to source control.
 
 ### After Deployment Verify
 
