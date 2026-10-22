@@ -2,14 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { contactSchema, isRateLimited } from '@/lib/contact'
 
 export async function POST(request: NextRequest) {
-  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'local'
-  if (isRateLimited(ip)) {
-    return NextResponse.json(
-      { message: 'Too many attempts. Please wait a minute and try again.' },
-      { status: 429 }
-    )
-  }
-
   let raw: unknown
   try {
     raw = await request.json()
@@ -20,6 +12,14 @@ export async function POST(request: NextRequest) {
   const parsed = contactSchema.safeParse(raw)
   if (!parsed.success) {
     return NextResponse.json({ message: 'Please check the form fields and try again.' }, { status: 400 })
+  }
+
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'local'
+  if (isRateLimited(ip)) {
+    return NextResponse.json(
+      { message: 'Too many attempts. Please wait a minute and try again.' },
+      { status: 429 }
+    )
   }
 
   const key = process.env.WEB3FORMS_ACCESS_KEY?.trim()
@@ -47,10 +47,16 @@ export async function POST(request: NextRequest) {
         subject: `Portfolio Contact: ${data.subject || data.projectType || 'General Inquiry'}`,
       }),
       cache: 'no-store',
-      signal: AbortSignal.timeout(4_000),
+      signal: AbortSignal.timeout(10_000),
     })
 
-    const result = (await response.json().catch(() => ({}))) as { success?: boolean; message?: string }
+    const result = (await response.json().catch(() => ({}))) as {
+      success?: boolean
+      message?: string
+      error?: string
+      body?: { message?: string }
+    }
+    const providerMessage = result.message || result.body?.message || result.error
 
     if (response.ok && result.success) {
       return NextResponse.json({
@@ -60,7 +66,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(
-      { message: result.message || 'Message delivery failed. Please use the email link instead.' },
+      { message: providerMessage || 'Message delivery failed. Please use the email link instead.' },
       { status: 502 }
     )
   } catch {

@@ -27,5 +27,5 @@ export function isRateLimited(key:string){
     return false
   }
   entry.count+=1
-  return entry.count>3
+  return entry.count>10
 }
