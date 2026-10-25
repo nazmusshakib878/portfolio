@@ -87,6 +87,11 @@ export const portfolioData: PortfolioData = {
       href: 'https://github.com/nazmusshakib878',
       icon: 'github',
     },
+    {
+      label: 'Instagram',
+      href: 'https://www.instagram.com/mdnazmus.shakib?xtok=NTE2bjJrYTM1ZnNm',
+      icon: 'instagram',
+    },
   ],
 
   heroStats: [

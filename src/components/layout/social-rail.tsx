@@ -1,4 +1,4 @@
-import { FaFacebookF, FaGithub, FaLinkedinIn, FaWhatsapp } from 'react-icons/fa6'
+import { FaFacebookF, FaGithub, FaInstagram, FaLinkedinIn, FaWhatsapp } from 'react-icons/fa6'
 import type { IconType } from 'react-icons'
 import { portfolioData } from '@/data/portfolio'
 
@@ -6,6 +6,7 @@ const icons: Record<string, IconType> = {
   github: FaGithub,
   linkedin: FaLinkedinIn,
   facebook: FaFacebookF,
+  instagram: FaInstagram,
   whatsapp: FaWhatsapp,
 }
 

@@ -6,7 +6,7 @@ export interface NavLink {
 export interface SocialLink {
   label: string
   href: string
-  icon: 'github' | 'linkedin' | 'facebook' | 'whatsapp' | 'email' | 'phone'
+  icon: 'github' | 'linkedin' | 'facebook' | 'instagram' | 'whatsapp' | 'email' | 'phone'
 }
 
 export interface HeroStat {
