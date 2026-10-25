@@ -177,7 +177,7 @@ export function ProjectCard({
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <ExternalLink size={13} aria-hidden="true" /> Live Demo
+                <ExternalLink size={13} aria-hidden="true" /> {project.liveLabel ?? 'Live Demo'}
               </a>
               <Link
                 className="button min-h-10 rounded-xl border-white/15 bg-white/[0.03] px-3.5 text-xs font-semibold text-[#f2f3f7] hover:border-white/30"
@@ -201,9 +201,9 @@ export function ProjectCard({
               href={project.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`View ${project.title} on GitHub`}
+              aria-label={`${project.githubLabel ?? `View ${project.title} on GitHub`}`}
             >
-              <SiGithub aria-hidden size={13} /> GitHub
+              <SiGithub aria-hidden size={13} /> {project.githubLabel ?? 'GitHub'}
             </a>
           )}
         </div>

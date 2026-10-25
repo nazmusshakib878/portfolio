@@ -376,35 +376,34 @@ export const portfolioData: PortfolioData = {
       role: 'Team Leader and Database Lead',
 
       summary:
-        'A full-stack AI-integrated academic management and student-success platform combining a modern React frontend with a secure Laravel 12 REST API and AI integrations.',
+        'A role-based university management platform for administrators, faculty, and students. Includes student monitoring, academic tools, campus services, notices, and an AI assistant.',
 
       description:
-        'A modern campus web application built with a responsive React and Vite frontend connected to a Laravel 12 RESTful backend with Sanctum authentication, MySQL relational database design, and Gemini/OpenAI API integrations for intelligent student assistance.',
+        'A role-based university management platform for administrators, faculty, and students, with student monitoring, academic tools, campus services, notices, and an AI assistant.',
 
       keyFeatures: [
-        'Led the academic project team and database architecture.',
-        'Designed and coordinated the MySQL-backed data layer.',
-        'Integrated a React and Vite frontend with a Laravel 12 REST API.',
-        'Used Laravel Sanctum for secure API authentication.',
-        'Integrated AI APIs (Gemini & OpenAI) for intelligent campus workflows.',
-        'Implemented academic and student-management workflows.',
+        'Role-based experiences for administrators, faculty, and students.',
+        'Student monitoring and academic-management tools.',
+        'Campus services and notice-management workflows.',
+        'Integrated AI assistant for campus support.',
       ],
 
       technologies: [
-        'React',
-        'Next.js / Vite',
-        'Laravel 12',
-        'Laravel Sanctum',
+        'Laravel',
+        'Vue.js',
         'MySQL',
-        'RESTful API',
-        'OpenAI & Gemini API',
+        'REST API',
       ],
 
       githubUrl:
-        'https://github.com/nazmusshakib878/CSE4204-8A-T07-ai-smart-campus-system',
+        'https://github.com/nazmusshakib878/ai-smart-campus-system-showcase/blob/main/README.md',
 
       liveUrl:
-        'https://ai-smart-campus-system-ce9i.onrender.com/',
+        'https://ai-smart-campus-system-ce9i.onrender.com',
+
+      githubLabel: 'View Project Showcase',
+
+      liveLabel: 'Live Demo',
 
       featured: false,
 
@@ -897,15 +896,16 @@ export const portfolioData: PortfolioData = {
       title: 'AI Smart Campus System',
 
       description:
-        'Academic management and student-success platform with a Laravel 12 API and React/Vite frontend.',
+        'Role-based university management platform with student monitoring, academic tools, campus services, notices, and an AI assistant.',
 
       href:
-        'https://github.com/nazmusshakib878/CSE4204-8A-T07-ai-smart-campus-system',
+        'https://github.com/nazmusshakib878/ai-smart-campus-system-showcase/blob/main/README.md',
 
       technologies: [
-        'React',
-        'Vite',
-        'Laravel 12',
+        'Laravel',
+        'Vue.js',
+        'MySQL',
+        'REST API',
       ],
     },
 

@@ -293,11 +293,11 @@ const ProjectCard = memo(function ProjectCard({
                   onClick={onLinkClick}
                   data-action-button="true"
                   className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-2.5 text-[10px] font-semibold text-emerald-400 hover:bg-emerald-500/20 transition shrink-0"
-                  aria-label={`Live Demo of ${project.title}`}
-                  title="Live Demo"
+                  aria-label={`${project.liveLabel ?? 'Live Demo'} of ${project.title}`}
+                  title={project.liveLabel ?? 'Live Demo'}
                 >
                   <ExternalLink size={13} />
-                  <span>Live</span>
+                  <span>{project.liveLabel ?? 'Live'}</span>
                 </a>
               )}
 
@@ -309,11 +309,11 @@ const ProjectCard = memo(function ProjectCard({
                   onClick={onLinkClick}
                   data-action-button="true"
                   className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-white/15 bg-white/[0.04] px-2.5 text-[10px] font-semibold text-[#d9dee7] hover:border-white/30 hover:text-white transition shrink-0"
-                  aria-label={`GitHub repo of ${project.title}`}
-                  title="GitHub Repository"
+                  aria-label={project.githubLabel ?? `GitHub repo of ${project.title}`}
+                  title={project.githubLabel ?? 'GitHub Repository'}
                 >
                   <SiGithub size={13} />
-                  <span>GitHub</span>
+                  <span>{project.githubLabel ?? 'GitHub'}</span>
                 </a>
               )}
             </div>

@@ -63,6 +63,8 @@ export interface ProjectItem {
   technologies: string[]
   githubUrl: string
   liveUrl: string
+  githubLabel?: string
+  liveLabel?: string
   featured: boolean
   accent: string
 }

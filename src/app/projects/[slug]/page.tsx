@@ -225,7 +225,7 @@ export default async function ProjectPage({ params }: Props) {
                 className="hidden sm:inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-[#d9dee7] transition hover:border-white/25 hover:text-white"
               >
                 <SiGithub size={13} />
-                <span>Source</span>
+                <span>{project.githubLabel ?? 'Source'}</span>
               </a>
             )}
             {project.liveUrl ? (
@@ -236,7 +236,7 @@ export default async function ProjectPage({ params }: Props) {
                 className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-400 transition hover:bg-emerald-500/20"
               >
                 <ExternalLink size={13} />
-                <span>Live Demo</span>
+                <span>{project.liveLabel ?? 'Live Demo'}</span>
               </a>
             ) : isWorkflow ? (
               <span className="inline-flex items-center gap-1.5 rounded-xl border border-[rgba(234,75,113,0.35)] bg-[rgba(234,75,113,0.1)] px-3 py-1.5 text-xs font-semibold text-[#ff7597]">
@@ -319,7 +319,7 @@ export default async function ProjectPage({ params }: Props) {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <ExternalLink size={14} /> View Live Demo
+              <ExternalLink size={14} /> {project.liveLabel ?? 'View Live Demo'}
             </a>
           )}
 
@@ -337,7 +337,7 @@ export default async function ProjectPage({ params }: Props) {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <SiGithub size={14} /> GitHub {isWorkflow ? 'Profile' : 'Repository'} <ArrowUpRight size={14} />
+              <SiGithub size={14} /> {project.githubLabel ?? `GitHub ${isWorkflow ? 'Profile' : 'Repository'}`} <ArrowUpRight size={14} />
             </a>
           )}
 
