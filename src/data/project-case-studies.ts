@@ -928,5 +928,132 @@ export const projectCaseStudies: Record<string, CaseStudyDetail> = {
       ],
     },
   },
+  'aurelia-maison-paris-luxury-e-commerce-platform': {
+    slug: 'aurelia-maison-paris-luxury-e-commerce-platform',
+    shortTitle: 'Aurélia Maison Paris',
+    subtitle:
+      'Luxury e-commerce storefront and administration application with optional Supabase connectivity and local browser persistence.',
+    problemStatement:
+      'A premium retail experience needs to make product discovery, shopping actions, customer account workflows, appointments, and store administration feel coherent across a storefront and a separate admin area. The application also needs predictable behavior when a live Supabase connection is not configured.',
+    solutionStatement:
+      'Built as a React 19 and TypeScript single-page application with Vite, React Router, Tailwind CSS, and a shared ShopContext for customer and store state. Supabase JavaScript services connect directly to PostgreSQL when valid credentials are configured; curated local catalog data and browser storage provide the fallback. The checkout presents payment method selection and order confirmation interfaces, while no external payment processor integration is verified.',
+    myRoleDescription:
+      'Web Application Developer. The public repository documents a React storefront, customer flows, Supabase data services, PostgreSQL schema, and a dedicated administration interface. The project entry describes the application without attributing unverified team ownership or business outcomes.',
+    myContributions: [
+      'Implemented a storefront structure for collection browsing, product search, and product quick view.',
+      'Coordinated cart, wishlist, order, and appointment state through a shared React context with localStorage persistence.',
+      'Connected product, order, account, and appointment services directly to Supabase when credentials are configured.',
+      'Maintained local catalog and browser-state fallbacks for offline or unconfigured Supabase use.',
+      'Organized customer-facing shopping flows and a standalone admin interface for catalog and order operations.',
+    ],
+    techStackGrouped: {
+      backend: ['Supabase JavaScript Client (direct data access)', 'No separate REST server'],
+      frontend: [
+        'React 19',
+        'TypeScript',
+        'Vite',
+        'Tailwind CSS 4',
+        'React Router',
+        'React Context',
+      ],
+      database: ['Supabase', 'PostgreSQL', 'Row Level Security policies'],
+      integrations: ['Supabase Auth (when configured)', 'Netlify hosting'],
+    },
+    screenshots: {
+      platformShowcase: {
+        id: 'aurelia-collection-showcase',
+        title: 'Collection Discovery',
+        subtitle: 'Storefront collection presentation',
+        description:
+          'The collection page presents the store’s featured categories and product discovery experience in the deployed storefront.',
+        src: '/projects/aurelia-maison-paris/product-collections.png',
+        alt: 'Aurelia Maison Paris storefront collection showcase with featured bags, fragrance, and fashion imagery',
+        badge: 'Storefront',
+        route: 'https://luxuryshopbd.netlify.app/#shop',
+      },
+      dashboards: [
+        {
+          id: 'aurelia-admin-dashboard',
+          title: 'Administration Dashboard',
+          subtitle: 'Catalog, orders, and inventory overview',
+          description:
+            'The administration view brings catalog navigation, order status summaries, inventory alerts, and dashboard analytics into one workspace. The displayed order data is part of the supplied demo capture.',
+          src: '/projects/aurelia-maison-paris/admin-dashboard.png',
+          alt: 'Aurelia Maison Paris admin dashboard showing analytics panels, order status summaries, and inventory alerts',
+          badge: 'Admin Dashboard',
+          route: 'https://luxuryshopbd.netlify.app/atelier-admin',
+        },
+      ],
+    },
+    databaseArchitecture: {
+      overview:
+        'The repository contains a Supabase PostgreSQL schema used through the Supabase JavaScript client. Core tables define the product catalog, customer profiles, orders and order items, and salon appointments. The app checks for configured Supabase credentials and otherwise uses local catalog data and browser storage for supported flows.',
+      keyEntities: [
+        'categories: Product collection identifiers, labels, and images',
+        'products: Catalog details, category references, prices, images, and stock status',
+        'profiles: Customer records linked to Supabase Auth users, with customer or admin roles',
+        'orders: Customer, shipping, total, status, and payment method/status fields',
+        'order_items: Product snapshots and quantities linked to an order',
+        'appointments: Salon booking details, preferred visit time, advisor, and status',
+        'coupons, product_reviews, inventory_logs, store_settings: Additional admin and store modules',
+      ],
+      schemaPrinciples: [
+        'Foreign keys connect products to categories, order items to orders, and profiles to auth.users.',
+        'Row Level Security is enabled for the core catalog, profile, order, order item, and appointment tables.',
+        'Catalog reads are public; profile and order reads are scoped to the owning user or an admin by policy.',
+        'Order creation policies allow inserts; the schema does not establish that a payment has been processed.',
+      ],
+    },
+    apiArchitecture: {
+      overview:
+        'The browser application calls Supabase directly through the JavaScript client; there is no separate application REST server in the repository. Shared context coordinates interface state, browser persistence, and optional database service calls.',
+      dataFlowSteps: [
+        'The storefront initializes product and category state from curated local data.',
+        'When valid Supabase URL and anon-key configuration is present, product and category services query PostgreSQL and retain local data as a fallback.',
+        'Cart and wishlist interactions update shared ShopContext state and persist to localStorage.',
+        'Checkout collects shipping details, presents payment method options, creates an order in local application state, and clears the cart.',
+        'When Supabase is configured, the order and line items are submitted to the orders and order_items tables in a background request.',
+        'Customer and admin data services query Supabase when configured; local state and sample catalog/order data support fallback mode.',
+      ],
+      authMethod:
+        'Supabase Auth sessions and profile roles when configured; local demo profile behavior is used in fallback mode.',
+    },
+    challenges: [
+      {
+        challenge:
+          'Keeping cart and wishlist actions consistent across storefront components and route changes.',
+        solution:
+          'The shared ShopContext exposes product actions and state to the storefront, and persists cart and wishlist values in localStorage for browser-session continuity.',
+      },
+      {
+        challenge:
+          'Allowing catalog and shopping interfaces to render when a Supabase project is not configured or reachable.',
+        solution:
+          'The Supabase client checks for valid URL and anon-key configuration; product and category services fall back to curated local data, while cart, wishlist, orders, and appointments use localStorage-backed state.',
+      },
+      {
+        challenge:
+          'Supporting customer shopping interactions alongside a broad administration interface in one client application.',
+        solution:
+          'The code separates customer components, admin routes and pages, data services, and shared state. Database reads and writes are routed through focused Supabase service modules rather than a separate REST backend.',
+      },
+      {
+        challenge:
+          'Representing payment selection without an evidenced external transaction processor.',
+        solution:
+          'The checkout UI models shipping, payment selection, and confirmation states. The case study describes these as interface workflows and does not claim verified gateway processing or successful real transactions.',
+      },
+    ],
+    finalResult: {
+      summary:
+        'The public repository and deployed Netlify demo present a luxury storefront and administration application with product discovery, cart and wishlist workflows, checkout interfaces, account and appointment flows, and catalog and order management. Supabase persistence is conditional on configuration, and the repository includes a local fallback path. No business performance figures or processed payment results are claimed.',
+      achievements: [
+        'Deployed demo and source repository linked for review',
+        'React storefront and standalone administration interfaces',
+        'Optional Supabase PostgreSQL data services with local fallback behavior',
+        'Checkout UI with payment method selection; no gateway transaction verified',
+      ],
+    },
+  },
 }
 

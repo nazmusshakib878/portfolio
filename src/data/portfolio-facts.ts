@@ -619,6 +619,49 @@ export const portfolioData: PortfolioData = {
 
       accent: 'from-rose-500/35 via-pink-500/20 to-orange-500/25',
     },
+    {
+      title: 'Aurelia Maison Paris — Luxury E-Commerce Platform',
+
+      category: 'Full-Stack E-Commerce / Admin Dashboard',
+
+      date: '2026',
+
+      role: 'Web Application Developer',
+
+      summary:
+        'A luxury e-commerce web application with a React storefront, product discovery, customer shopping workflows, and a dedicated administration experience.',
+
+      description:
+        'Aurélia Maison Paris is a React 19 and TypeScript storefront and administration application built with Vite, Tailwind CSS, React Router, and a shared shop context. It supports product browsing, search, quick view, wishlist and cart interactions, checkout interfaces, customer accounts, appointment booking, and product and order administration. Supabase services are conditional on configured credentials, with local catalog and browser storage fallbacks; payment selection is presented in the interface without a verified payment processor integration.',
+
+      keyFeatures: [
+        'Luxury storefront with product collections, category browsing, and catalog search.',
+        'Product quick view with wishlist and cart interactions backed by shared shop state.',
+        'Customer account and salon appointment workflows.',
+        'Multi-step checkout interface with payment method selection; no payment gateway transaction is verified.',
+        'Standalone administration views for products, inventory, orders, coupons, customers, and analytics.',
+        'Optional Supabase data services with local product data and localStorage persistence when credentials are unavailable.',
+      ],
+
+      technologies: [
+        'React 19',
+        'TypeScript',
+        'Vite',
+        'Tailwind CSS 4',
+        'React Router',
+        'Supabase JavaScript Client',
+        'PostgreSQL',
+        'Netlify',
+      ],
+
+      githubUrl: 'https://github.com/nazmusshakib878/Luxury',
+
+      liveUrl: 'https://luxuryshopbd.netlify.app/',
+
+      featured: true,
+
+      accent: 'from-amber-500/35 via-yellow-500/20 to-rose-500/20',
+    },
   ],
 
   publications: [
