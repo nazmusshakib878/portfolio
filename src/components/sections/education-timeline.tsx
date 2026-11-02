@@ -22,8 +22,8 @@ export function EducationTimeline() {
       title: 'B.Sc in Computer Science & Engineering',
       institution: bsc?.institution ?? 'Northern University of Business and Technology Khulna (NUBTK)',
       location: bsc?.location ?? 'Khulna, Bangladesh',
-      timeline: '2022 – 2026 (Expected: November 2026)',
-      status: bsc?.status ?? 'Final year, final semester',
+      timeline: '2022 - Present',
+      status: bsc?.status ?? 'BSc CSE',
       gradeLabel: 'Current CGPA',
       gradeValue: bsc?.cgpa ?? '3.60 / 4.00',
       category: 'Undergraduate Degree',
@@ -186,6 +186,23 @@ export function EducationTimeline() {
                           <span>{item.status}</span>
                         </div>
                       </div>
+
+                      {item.isPrimary && (
+                        <div className="mt-5 grid gap-2 sm:grid-cols-3" aria-label="BSc academic status">
+                          {[
+                            ['Academic Examinations', bsc?.academicExaminations ?? 'Completed'],
+                            ['Thesis', bsc?.thesis ?? 'In Progress'],
+                            ['Final Result', bsc?.finalResult ?? 'Awaiting Publication'],
+                          ].map(([label, value]) => (
+                            <div key={label} className="rounded-xl border border-white/[0.08] bg-white/[0.025] px-3 py-2">
+                              <p className="text-[9px] font-semibold uppercase tracking-wider text-[#747b8b]">{label}</p>
+                              <p className="mt-1 text-xs font-medium text-[#d9dee7]">{value}</p>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+
 
                       {/* Primary Coursework Chips for BSc CSE */}
                       {item.isPrimary && item.coursework && (

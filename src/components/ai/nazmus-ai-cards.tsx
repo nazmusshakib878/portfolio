@@ -228,8 +228,9 @@ export function ResumeSummaryCard({ resume }: { resume: ResumeCardData }) {
           <span className="text-[10px] uppercase tracking-wider text-[#747b8b]">Academic Degree</span>
           <p className="font-medium text-white">{resume.degree}</p>
           <p className="text-[11px] text-[#a4a9b6]">
-            {resume.institution} (Graduating {resume.graduation})
+            {resume.institution}
           </p>
+          <p className="mt-1 text-[11px] leading-relaxed text-[#a4a9b6]">{resume.academicStatus}</p>
         </div>
 
         {resume.certifications && resume.certifications.length > 0 && (

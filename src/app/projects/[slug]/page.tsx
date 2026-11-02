@@ -90,9 +90,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (index < 0) return {}
   const project = portfolioData.projects[index]
   const coverUrl = projectCovers[index]
-  const caseStudy =
-    projectCaseStudies[projectSlug(project.title)] ??
-    projectCaseStudies[Object.keys(projectCaseStudies)[index]]
+  const caseStudy = projectCaseStudies[projectSlug(project.title)]
 
   return {
     title: `${project.title} — Case Study`,
@@ -131,14 +129,15 @@ export default async function ProjectPage({ params }: Props) {
   const project = portfolioData.projects[index]
   const coverUrl = projectCovers[index]
   const canonicalSlug = projectSlug(project.title)
-  const caseStudy =
-    projectCaseStudies[canonicalSlug] ??
-    projectCaseStudies[Object.keys(projectCaseStudies)[index]]
+  const caseStudy = projectCaseStudies[canonicalSlug]
 
   const publication = portfolioData.publications.find(
     (item) => item.projectTitle === project.title
   )
   const isWorkflow = project.category === 'Workflow Automation' || canonicalSlug.includes('cv-payment-reminder')
+  const isAurelia = canonicalSlug === 'aurelia-maison-paris-luxury-e-commerce-platform'
+  const isPrimeor = canonicalSlug === 'primeor-solutions-internship-program-website'
+  const isNsErp = canonicalSlug === 'ns-erp-enterprise-resource-planning-system'
   const previous =
     portfolioData.projects[
       (index - 1 + portfolioData.projects.length) % portfolioData.projects.length
@@ -399,12 +398,22 @@ export default async function ProjectPage({ params }: Props) {
 
           <div className="flex items-center justify-between border-t border-white/[0.08] bg-white/[0.02] px-5 py-3 text-xs text-[#aeb6c3]">
             <span>
-              {isWorkflow
+              {isNsErp
+                ? 'Blue/cyan project cover artwork · Application screenshots unavailable'
+                : isAurelia
+                ? 'Authentic storefront and administration screenshots'
+                : isWorkflow
                 ? 'Verified n8n workflow architecture · Google Sheets & Telegram integration'
                 : 'Verified visual representation · Authentic project architecture'}
             </span>
             <span className="font-mono text-[11px] text-[#aeb6c3]">
-              {isWorkflow ? 'n8n Editor Verified' : 'Source Code Verified'}
+              {isNsErp
+                ? 'Cover artwork · Not a captured screen'
+                : isAurelia
+                  ? 'Live Demo Captured'
+                  : isWorkflow
+                    ? 'n8n Editor Verified'
+                    : 'Source Code Verified'}
             </span>
           </div>
         </div>
@@ -796,8 +805,8 @@ export default async function ProjectPage({ params }: Props) {
               <Image
                 src={screenshots.platformShowcase.src}
                 alt={screenshots.platformShowcase.alt}
-                width={1440}
-                height={694}
+                width={isPrimeor ? 1920 : 1440}
+                height={isPrimeor ? 1080 : 694}
                 loading="lazy"
                 decoding="async"
                 sizes="(max-width: 1200px) 100vw, 1180px"
@@ -843,7 +852,11 @@ export default async function ProjectPage({ params }: Props) {
               <LayoutDashboard size={18} />
               <p className="eyebrow text-[#aa96ff]">
                 {numDashboards} /{' '}
-                {caseStudy?.slug.includes('resumate')
+                {isPrimeor
+                  ? 'Project Gallery'
+                  : isNsErp
+                  ? 'ERP Screenshots'
+                  : caseStudy?.slug.includes('resumate')
                   ? 'Conversational AI & Design Suite'
                   : screenshots.dashboards.length > 1
                     ? 'User Experience & Dashboards'
@@ -851,14 +864,22 @@ export default async function ProjectPage({ params }: Props) {
               </p>
             </div>
             <h2 className="display mt-2 text-2xl sm:text-3xl font-semibold text-[#f2f3f7]">
-              {caseStudy?.slug.includes('resumate')
+              {isPrimeor
+                ? 'Internship Website Screenshots'
+                : isNsErp
+                ? 'NS ERP Application Screens'
+                : caseStudy?.slug.includes('resumate')
                 ? 'Conversational AI Workspaces & Template Suite'
                 : screenshots.dashboards.length > 1
                   ? 'Role-Based Portals: Faculty & Student Workspaces'
                   : screenshots.dashboards[0].title}
             </h2>
             <p className="muted mt-2 max-w-3xl text-sm sm:text-base leading-relaxed">
-              {caseStudy?.slug.includes('resumate')
+              {isPrimeor
+                ? 'Screenshots of the internship program, curriculum, services, interactive demonstrations, project gallery, and application flow.'
+                : isNsErp
+                ? 'Screenshots of the NS ERP sign-in experience and executive dashboard.'
+                : caseStudy?.slug.includes('resumate')
                 ? 'Purpose-built interfaces demonstrating multimodal document ingestion, real-time conversational editing in Banglish, global ATS layout conversion, and 1-page fit A4 document export.'
                 : screenshots.dashboards.length > 1
                   ? 'Purpose-built interfaces tailored to institutional personas, streamlining teaching oversight and student degree tracking.'
@@ -914,8 +935,8 @@ export default async function ProjectPage({ params }: Props) {
                   <Image
                     src={dash.src}
                     alt={dash.alt}
-                    width={1440}
-                    height={667}
+                    width={isPrimeor ? 1920 : 1440}
+                    height={isPrimeor ? 1080 : 667}
                     loading="lazy"
                     decoding="async"
                     sizes={screenshots.dashboards!.length > 1 ? '(max-width: 1024px) 100vw, 580px' : '(max-width: 1200px) 100vw, 1180px'}

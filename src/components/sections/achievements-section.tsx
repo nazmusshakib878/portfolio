@@ -81,7 +81,7 @@ export function AchievementsSection() {
                   </div>
 
                   <p className="muted mt-4 text-xs sm:text-sm leading-relaxed">
-                    {bsc?.institution} &middot; {bsc?.status}. Expected graduation in {bsc?.graduation}. Maintaining strong performance with a curriculum centered around distributed databases, software architecture, and algorithms.
+                    {bsc?.institution} &middot; Academic examinations completed; final thesis in progress; final result awaiting publication. Current reported CGPA: {portfolioData.currentCgpa}. Maintaining strong performance with a curriculum centered around distributed databases, software architecture, and algorithms.
                   </p>
                 </div>
 

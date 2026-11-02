@@ -85,8 +85,10 @@ export interface EducationItem {
   institution: string
   location: string
   status?: string
+  academicExaminations?: string
+  thesis?: string
+  finalResult?: string
   cgpa?: string
-  graduation?: string
   year?: string
   coursework?: string[]
 }
@@ -139,7 +141,6 @@ export interface PortfolioData {
   currentCgpa: string
   featuredProjectsCount: string
   laravelTrainingHours: string
-  expectedGraduation: string
   initials: string
   resumeHref: string
   resumeDownloadHref?: string

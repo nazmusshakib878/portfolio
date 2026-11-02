@@ -20,21 +20,19 @@ export const portfolioData: PortfolioData = {
 
   email: 'nazmusshakib335@gmail.com',
 
-  bio: 'I am a final-semester Computer Science and Engineering student specializing in full-stack web applications with a strong Laravel backend foundation. I have practical experience building robust Laravel architectures, designing normalized relational databases (1NF–3NF), developing secure RESTful APIs, and pairing them with modern Next.js and React frontends with practical AI integrations.',
+  bio: 'I specialize in full-stack web applications with a strong Laravel backend foundation, normalized relational databases, secure RESTful APIs, and modern Next.js and React frontends with practical AI integrations.',
 
   heroDescription:
     'Full Stack Developer building reliable web applications with a strong Laravel & MySQL backend foundation, modern Next.js & React interfaces, and practical AI integrations.',
 
   academicStatus:
-    'Final-semester BSc student in Computer Science and Engineering',
+    'BSc in Computer Science and Engineering — Academic examinations completed; final thesis in progress; awaiting final result publication.',
 
   currentCgpa: '3.60 / 4.00',
 
   featuredProjectsCount: '7',
 
   laravelTrainingHours: '80 Hours',
-
-  expectedGraduation: 'November 2026',
 
   initials: 'MS',
 
@@ -101,15 +99,15 @@ export const portfolioData: PortfolioData = {
     },
     {
       label: 'Selected Projects',
-      value: '7',
+      value: '10',
     },
     {
       label: 'Laravel Training',
       value: '80 Hours',
     },
     {
-      label: 'Graduation',
-      value: 'Nov 2026',
+      label: 'BSc Status',
+      value: 'Thesis in Progress',
     },
   ],
 
@@ -183,7 +181,7 @@ export const portfolioData: PortfolioData = {
     },
     {
       title: 'Current Study',
-      description: 'Final-semester BSc CSE student',
+      description: 'Academic examinations completed; final thesis in progress; awaiting final result publication.',
     },
     {
       title: 'Technical Focus',
@@ -313,6 +311,61 @@ export const portfolioData: PortfolioData = {
   ],
 
   projects: [
+    {
+      title: 'NS ERP — Enterprise Resource Planning System',
+
+      category: 'Full-Stack ERP / Enterprise Business Management',
+
+      date: '2026',
+
+      role: 'Full-Stack Developer',
+
+      summary:
+        'A unified ERP platform for sales, inventory, purchasing, customer management, finance, human resources, payroll, and business reporting.',
+
+      description:
+        'NS ERP is a full-stack business management application with a Next.js 16 and React 19 interface and a Laravel 12 REST API. Its modules cover executive dashboards, sales and invoicing, purchasing, products and warehouses, customers, employee self-service, attendance, leave, payroll, finance reports, audit logs, and role-based access. Backend resources are protected with Laravel Sanctum and role middleware. The project documents SQLite and MySQL configurations; this portfolio entry does not claim complete multi-tenant isolation or an external payment gateway.',
+
+      keyFeatures: [
+        'Executive dashboard with sales, inventory, and finance summaries and charts.',
+        'Sales workflows for POS, orders, quotations, invoices, payments, and returns.',
+        'Product, stock, warehouse, transfer, adjustment, low-stock, and inventory history workflows.',
+        'Purchasing and supplier workflows with purchase orders, goods receiving, invoices, payments, and returns.',
+        'Customer records, customer groups, and ledger and payment history views.',
+        'Employee directory, attendance clock-in/out, leave management, payroll, payslips, and self-service.',
+        'Finance accounts, transactions, general ledger, Profit & Loss, and Balance Sheet reports.',
+        'Role-based access for Company Admin, Manager, Accountant, Staff, Employee, and Super Admin roles, with configurable Staff permissions.',
+      ],
+
+      technologies: [
+        'Next.js 16',
+        'React 19',
+        'TypeScript',
+        'Tailwind CSS 4',
+        'Laravel 12',
+        'PHP 8.2',
+        'Laravel Sanctum',
+        'Eloquent ORM',
+        'SQLite',
+        'MySQL',
+        'Recharts',
+        'Lucide React',
+        'Docker',
+        'Vercel',
+      ],
+
+      githubUrl: 'https://github.com/nazmusshakib878/ERP_Software',
+
+      liveUrl: 'https://erp-rouge-five.vercel.app',
+
+      liveLabel: 'Live Demo',
+
+      githubLabel: 'GitHub Repository',
+
+      featured: true,
+
+      accent: 'from-blue-500/35 via-cyan-500/25 to-indigo-500/25',
+    },
     {
       title:
         'Securex - CCTV & Security Service Management System',
@@ -664,6 +717,51 @@ export const portfolioData: PortfolioData = {
 
       accent: 'from-amber-500/35 via-yellow-500/20 to-rose-500/20',
     },
+    {
+      title: 'Primeor Solutions — Internship Program Website',
+
+      category: 'Web Development / Internship Project',
+
+      date: 'Internship Project',
+
+      role: 'Web Developer Intern',
+
+      summary:
+        'A responsive Primeor Solutions internship website presenting the learning program, curriculum, services, interactive demonstrations, student projects, and application flow.',
+
+      description:
+        'A modern internship program website built for Primeor Solutions. The project presents three learning levels, professional web development services, interactive demonstrations, a project gallery, and contact and internship application forms. Its repository contains a React and TypeScript frontend with a Laravel API for applications, contact submissions, and program, service, and project content.',
+
+      keyFeatures: [
+        'Responsive landing page and internship program overview.',
+        'Structured curriculum with three learning levels.',
+        'Professional web development services showcase.',
+        'Interactive contact form, color-changing button, greeting generator, and addition calculator.',
+        'Featured student project gallery with image slider.',
+        'Internship application form, contact information, and footer.',
+      ],
+
+      technologies: [
+        'React 18',
+        'TypeScript',
+        'Vite',
+        'Tailwind CSS 3',
+        'Laravel 12',
+        'REST API',
+      ],
+
+      githubUrl: 'https://github.com/nazmusshakib878/internship_frontend',
+
+      liveUrl: 'https://internship-six-pied.vercel.app/',
+
+      liveLabel: 'Live Demo',
+
+      githubLabel: 'GitHub Repository',
+
+      featured: true,
+
+      accent: 'from-cyan-500/35 via-blue-500/20 to-indigo-500/25',
+    },
   ],
 
   publications: [
@@ -699,11 +797,15 @@ export const portfolioData: PortfolioData = {
 
       location: 'Khulna, Bangladesh',
 
-      status: 'Final year, final semester',
+      status: 'BSc CSE',
+
+      academicExaminations: 'Completed',
+
+      thesis: 'In Progress',
+
+      finalResult: 'Awaiting Publication',
 
       cgpa: '3.60 / 4.00',
-
-      graduation: 'November 2026',
 
       coursework: [
         'Distributed Databases',
@@ -747,7 +849,7 @@ export const portfolioData: PortfolioData = {
       title: 'Current CGPA 3.60 / 4.00',
 
       description:
-        'Maintaining a strong academic record in the final semester of the BSc in Computer Science and Engineering program.',
+        'Current reported CGPA: 3.60 / 4.00. Academic examinations are complete, the final thesis is in progress, and the final result is awaiting publication.',
     },
 
     {
@@ -878,7 +980,7 @@ export const portfolioData: PortfolioData = {
       title: 'Real Project Repositories',
 
       description:
-        'Resumate AI, Securex, AI Smart Campus System, Library Management Project, Logistica, and Nur Foodes POS are available with direct GitHub repository access.',
+        'NS ERP, Resumate AI, Securex, AI Smart Campus System, Library Management Project, Logistica, and Nur Foodes POS are available with direct GitHub repository access.',
     },
 
     {
@@ -890,6 +992,23 @@ export const portfolioData: PortfolioData = {
   ],
 
   githubRepos: [
+    {
+      title: 'NS ERP',
+
+      description:
+        'Full-stack ERP platform with sales, inventory, procurement, customer management, finance, HR, payroll, analytics, and role-based access.',
+
+      href: 'https://github.com/nazmusshakib878/ERP_Software',
+
+      technologies: [
+        'Next.js 16',
+        'React 19',
+        'TypeScript',
+        'Laravel 12',
+        'SQLite / MySQL',
+      ],
+    },
+
     {
       title: 'Resumate AI',
 

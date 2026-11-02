@@ -57,6 +57,256 @@ export interface CaseStudyDetail {
 }
 
 export const projectCaseStudies: Record<string, CaseStudyDetail> = {
+  'ns-erp-enterprise-resource-planning-system': {
+    slug: 'ns-erp-enterprise-resource-planning-system',
+    shortTitle: 'NS ERP',
+    subtitle:
+      'A modular enterprise resource planning platform for sales, purchasing, inventory, finance, and workforce operations.',
+    problemStatement:
+      'Business workflows across sales, stock, procurement, customer records, accounting, and employee operations can become difficult to coordinate when they are spread across separate tools. Teams also need role-appropriate access to the information and actions in those workflows.',
+    solutionStatement:
+      'NS ERP brings these workflows into a Next.js and React application connected to a Laravel REST API. The codebase includes sales, purchasing, inventory, customer, employee, attendance, leave, payroll, finance, analytics, settings, audit, and self-service modules. Laravel Sanctum authenticates API access, and role middleware applies role and configurable Staff permission checks.',
+    myRoleDescription:
+      'Full-Stack Developer working across the ERP interface, Laravel API, data models, and business workflow modules.',
+    myContributions: [
+      'Built the Next.js 16 and React 19 ERP interface with module navigation and interactive business dashboards.',
+      'Implemented Laravel 12 REST API resources and controller workflows for sales, products, customers, purchases, invoices, employees, attendance, leave, payroll, and finance.',
+      'Connected authenticated frontend requests to the backend using Laravel Sanctum bearer tokens.',
+      'Implemented role middleware for Super Admin, Company Admin, Manager, Accountant, Staff, and Employee access patterns.',
+      'Added configurable Staff module and action permissions, role management, and audit-log workflows.',
+    ],
+    techStackGrouped: {
+      backend: ['PHP 8.2', 'Laravel 12', 'REST API', 'Eloquent ORM'],
+      frontend: [
+        'Next.js 16',
+        'React 19',
+        'TypeScript',
+        'Tailwind CSS 4',
+        'Recharts',
+        'Lucide React',
+      ],
+      database: ['SQLite', 'MySQL'],
+      integrations: ['Laravel Sanctum', 'Docker', 'Vercel'],
+    },
+    screenshots: {
+      dashboards: [
+        {
+          id: 'ns-erp-sign-in',
+          title: 'NS ERP Sign-in Screen',
+          description:
+            'The sign-in experience for the NS ERP workspace, with role-based demo access options.',
+          src: '/projects/ns-erp/1.png',
+          alt: 'NS ERP sign-in screen with corporate email and password fields and demo role options',
+          badge: 'Authentication',
+          route: 'ERP Sign-in Screen',
+        },
+        {
+          id: 'ns-erp-executive-dashboard',
+          title: 'Executive Dashboard',
+          description:
+            'Executive overview with revenue, order, customer, and inventory metrics, charts, and recent orders.',
+          src: '/projects/ns-erp/2.png',
+          alt: 'NS ERP executive dashboard showing revenue and order metrics, charts, and recent orders',
+          badge: 'Company Admin',
+          route: 'Executive Dashboard',
+        },
+      ],
+    },
+    databaseArchitecture: {
+      overview:
+        'Laravel models and migrations define the ERP data layer using Eloquent ORM. The schema includes operational records for products, customers, employees, sales, purchases, invoices, warehouses, attendance, leave, payroll, finance, roles, permissions, and audit logs. Project configuration documents SQLite and MySQL database options.',
+      keyEntities: [
+        'products, warehouses: Product catalog, stock, and warehouse operations',
+        'customers, sales, sale_items: Customer and sales records',
+        'purchases, invoices: Procurement, goods receiving, and billing records',
+        'employees, attendances, leave_requests, payrolls: Workforce and self-service records',
+        'bank_accounts, finance_transactions, journal_entries: Finance and accounting records',
+        'roles, permissions, role_permissions: Role and permission definitions',
+        'audit_logs: Recorded operational and administration events',
+      ],
+      schemaPrinciples: [
+        'Laravel migrations define the relational tables and constraints.',
+        'Eloquent models provide the application data access layer.',
+        'SQLite and MySQL are documented configuration options; the case study does not claim isolated tenant databases.',
+      ],
+    },
+    apiArchitecture: {
+      overview:
+        'The Next.js frontend calls a Laravel 12 REST API through a shared API client. Login returns a Laravel Sanctum token used for authenticated requests. Protected routes pass through auth:sanctum and role middleware before controller actions use Eloquent models and return JSON responses.',
+      dataFlowSteps: [
+        'The frontend sends a request through its shared API client.',
+        'Laravel authenticates protected requests with Sanctum bearer tokens.',
+        'Role middleware checks the user role and, for Staff, configured module and action permissions.',
+        'Laravel controllers validate and process business operations through Eloquent models.',
+        'The API returns JSON data to the Next.js interface for dashboard and module views.',
+      ],
+      authMethod:
+        'Laravel Sanctum personal access tokens with role-based middleware and configurable Staff permissions.',
+    },
+    challenges: [
+      {
+        challenge:
+          'Bringing multiple business workflows into a consistent interface while keeping each module’s data and actions organized.',
+        solution:
+          'Structured navigation and API endpoints around business modules including sales, inventory, purchases, customers, employees, finance, and settings.',
+      },
+      {
+        challenge:
+          'Enforcing different access boundaries for platform administration, company roles, Staff, and Employee self-service.',
+        solution:
+          'Applied Sanctum authentication and role middleware, with additional module and action permission checks for Staff and path restrictions for Employee requests.',
+      },
+      {
+        challenge:
+          'Keeping financial and stock workflows connected to their corresponding operational records.',
+        solution:
+          'Implemented Laravel controller workflows and Eloquent relationships for sales, purchases, invoices, inventory, payments, and finance records.',
+      },
+    ],
+    finalResult: {
+      summary:
+        'NS ERP presents a multi-module business management application with a Next.js and React frontend and Laravel 12 API. The source includes dashboard analytics, sales and inventory workflows, procurement, customer management, finance, HR and payroll, employee self-service, and backend role checks. The supplied live demo and repository links are included for review; the live application could not be reached in this environment.',
+      achievements: [
+        'Sales, procurement, inventory, customer, finance, HR, and payroll modules in one application',
+        'Sanctum-authenticated REST API with role middleware and configurable Staff permissions',
+        'Dashboard visualizations built with Recharts',
+      ],
+    },
+  },
+  'primeor-solutions-internship-program-website': {
+    slug: 'primeor-solutions-internship-program-website',
+    shortTitle: 'Primeor Internship',
+    subtitle:
+      'A responsive internship program website presenting Primeor Solutions’ curriculum, services, interactive demonstrations, project gallery, and application experience.',
+    problemStatement:
+      'An internship program needs a clear public experience that explains its learning path, introduces professional services, gives visitors ways to explore interactive examples, and supports project discovery and applications.',
+    solutionStatement:
+      'Built a responsive React and TypeScript frontend with dedicated sections for the internship program, three curriculum levels, professional services, interactive demonstrations, student projects, contact, and applications. The repository also includes a Laravel 12 API for application and contact submissions and program, service, and project content.',
+    myRoleDescription:
+      'Web Developer Intern contributing to the Primeor Solutions internship program website.',
+    myContributions: [
+      'Built a modern responsive landing page and navigation for the internship program.',
+      'Presented the learning curriculum in three levels and organized the professional services showcase.',
+      'Added interactive examples including a color-changing button, greeting generator, and addition calculator.',
+      'Created a featured project gallery with an image slider.',
+      'Implemented contact and internship application experiences connected to the Laravel API.',
+    ],
+    techStackGrouped: {
+      backend: ['Laravel 12', 'PHP', 'REST API'],
+      frontend: ['React 18', 'TypeScript', 'Vite', 'Tailwind CSS 3'],
+      database: ['Application and contact migrations'],
+      integrations: ['Lucide React'],
+    },
+    screenshots: {
+      dashboards: [
+        {
+          id: 'primeor-about-program',
+          title: 'About the Internship Program',
+          description:
+            'Overview of the internship program and its learning approach.',
+          src: '/projects/internship/Screenshot%20(354).png',
+          alt: 'Primeor Solutions internship program overview and benefits',
+          badge: 'About Program',
+        },
+        {
+          id: 'primeor-learning-programs',
+          title: 'Structured Learning Program',
+          description:
+            'Three-level curriculum covering web development learning tracks.',
+          src: '/projects/internship/Screenshot%20(356).png',
+          alt: 'Primeor Solutions three-level web development curriculum',
+          badge: 'Learning Programs',
+        },
+        {
+          id: 'primeor-services',
+          title: 'Web Development Services',
+          description:
+            'Service cards covering web development, frontend, responsive design, UI/UX, JavaScript, and website optimization.',
+          src: '/projects/internship/Screenshot%20(357).png',
+          alt: 'Primeor Solutions professional web development services showcase',
+          badge: 'Services',
+        },
+        {
+          id: 'primeor-interactive-components',
+          title: 'Interactive Components',
+          description:
+            'Contact form and interactive color, greeting, and calculator demonstrations.',
+          src: '/projects/internship/Screenshot%20(358).png',
+          alt: 'Primeor Solutions interactive contact form, color button, greeting generator, and calculator',
+          badge: 'Interactive Demos',
+        },
+        {
+          id: 'primeor-project-gallery',
+          title: 'Featured Project Gallery',
+          description:
+            'Project gallery with a featured project and image slider controls.',
+          src: '/projects/internship/Screenshot%20(359).png',
+          alt: 'Primeor Solutions featured work gallery and project image slider',
+          badge: 'Project Gallery',
+        },
+        {
+          id: 'primeor-contact-application',
+          title: 'Contact & Internship Application',
+          description:
+            'Contact information, internship application form, and footer navigation.',
+          src: '/projects/internship/Screenshot%202026-11-02%20221539.png',
+          alt: 'Primeor Solutions internship application form, contact information, and website footer',
+          badge: 'Contact & Apply',
+        },
+      ],
+    },
+    databaseArchitecture: {
+      overview:
+        'The repository includes a Laravel 12 backend with application and contact API endpoints and content endpoints for programs, services, and projects. The frontend connects to the API through its API service module.',
+      keyEntities: [
+        'Applications: Internship application submissions handled by ApplicationController',
+        'Contacts: Contact form submissions handled by ContactController',
+        'Programs: Curriculum content exposed by ContentController',
+        'Services: Professional services content exposed by ContentController',
+        'Projects: Gallery project content exposed by ContentController',
+      ],
+      schemaPrinciples: [
+        'Application and contact submissions use separate API resources.',
+        'Program, service, and project content is exposed through dedicated read endpoints.',
+        'The repository includes application and contact migrations; no database engine is claimed here.',
+      ],
+    },
+    apiArchitecture: {
+      overview:
+        'The React frontend uses a dedicated API service module to communicate with a Laravel 12 REST API. The API exposes application and contact resources and program, service, and project content endpoints.',
+      dataFlowSteps: [
+        'Visitors explore the React and TypeScript internship website.',
+        'The frontend API service requests program, service, and project content from Laravel.',
+        'The application form submits internship application data to the applications endpoint.',
+        'The contact form submits messages to the contact endpoint and displays an in-page completion state.',
+        'Laravel controllers handle the API requests and return responses to the frontend.',
+      ],
+      authMethod: 'Not applicable to the public program and submission flows described here.',
+    },
+    challenges: [
+      {
+        challenge:
+          'Presenting curriculum, services, interactive examples, projects, and application information in one clear responsive experience.',
+        solution:
+          'Organized the website into focused sections with responsive navigation and dedicated UI components for each program area.',
+      },
+      {
+        challenge:
+          'Connecting public-facing forms and content sections to application data and managed program content.',
+        solution:
+          'Used the frontend API service with Laravel endpoints for applications, contact messages, programs, services, and projects; the contact UI also handles unavailable API responses locally.',
+      },
+    ],
+    finalResult: {
+      summary:
+        'The Primeor Solutions internship website combines a responsive React frontend with a Laravel API for program content and visitor submissions.',
+      achievements: [
+        'Responsive internship program website linked to its live demo and repository',
+        'Curriculum, services, interactive examples, and student project gallery',
+        'Laravel API endpoints for applications, contact messages, and site content',
+      ],
+    },
+  },
   'resumate-ai-conversational-ai-resume-builder-and-ats-optimization-platform': {
     slug: 'resumate-ai-conversational-ai-resume-builder-and-ats-optimization-platform',
     shortTitle: 'Resumate AI',
@@ -1056,4 +1306,3 @@ export const projectCaseStudies: Record<string, CaseStudyDetail> = {
     },
   },
 }
-

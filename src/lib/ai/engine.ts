@@ -1652,7 +1652,7 @@ function handleEducationAndLocation(
   // Multi-entity: Both Location and Education / CGPA requested
   if (wantsLocation && wantsEduOrCgpa) {
     if (isBangla) {
-      let reply = `মোঃ নাজমুল শাকিব বর্তমানে **খুলনা, বাংলাদেশ**-এ অবস্থান করছেন (হোমটাউন: সাতক্ষীরা) এবং নর্দান ইউনিভার্সিটি অব বিজনেস অ্যান্ড টেকনোলজি খুলনা-তে সিএসই ফাইনাল সেমিস্টারে অধ্যয়নরত (বর্তমান **CGPA ৩.৬০ / ৪.০০**)।`
+      let reply = `মোঃ নাজমুল শাকিব বর্তমানে **খুলনা, বাংলাদেশ**-এ অবস্থান করছেন (হোমটাউন: সাতক্ষীরা)। তাঁর BSc CSE-এর একাডেমিক পরীক্ষা সম্পন্ন; চূড়ান্ত থিসিস চলমান এবং চূড়ান্ত ফল প্রকাশের অপেক্ষায়। তাঁর বর্তমান রিপোর্টকৃত **CGPA ৩.৬০ / ৪.০০**; এটি প্রকাশিত চূড়ান্ত ফল নয়।`
       if (constraints.exactSentences) {
         reply = enforceExactSentenceCount(reply, constraints.exactSentences, true)
       }
@@ -1663,7 +1663,7 @@ function handleEducationAndLocation(
       }
     }
 
-    let reply = `Md. Nazmus Shakib is located in **Khulna, Bangladesh** (hometown: Satkhira) and is currently in his final semester of BSc in CSE at Northern University of Business and Technology Khulna with a **3.60 / 4.00 CGPA**.`
+    let reply = `Md. Nazmus Shakib is located in **Khulna, Bangladesh** (hometown: Satkhira). He has completed the academic examinations for his BSc in CSE at Northern University of Business and Technology Khulna; his final thesis is in progress and the final result is awaiting publication. His current reported CGPA is **3.60 / 4.00**, not a published final result.`
     if (constraints.exactSentences) {
       reply = enforceExactSentenceCount(reply, constraints.exactSentences, false)
     }
@@ -1693,7 +1693,7 @@ function handleEducationAndLocation(
   // Academic Education & CGPA
   if (wantsEduOrCgpa) {
     if (isBangla) {
-      let reply = `মোঃ নাজমুল শাকিব নর্দান ইউনিভার্সিটি অব বিজনেস অ্যান্ড টেকনোলজি খুলনা (NUBTK)-তে **কম্পিউটার সায়েন্স অ্যান্ড ইঞ্জিনিয়ারিং (BSc in CSE)**-এর ফাইনাল সেমিস্টারে অধ্যয়নরত। তাঁর বর্তমান **CGPA ৩.৬০ / ৪.০০** এবং গ্র্যাজুয়েশন ২০২৬ সালে। পূর্বে তিনি HSC (GPA ৫.০০) এবং SSC (GPA ৫.০০) অর্জন করেছেন।`
+      let reply = `মোঃ নাজমুল শাকিব নর্দান ইউনিভার্সিটি অব বিজনেস অ্যান্ড টেকনোলজি খুলনা (NUBTK)-তে **কম্পিউটার সায়েন্স অ্যান্ড ইঞ্জিনিয়ারিং (BSc in CSE)**-এর একাডেমিক পরীক্ষা সম্পন্ন করেছেন। তাঁর চূড়ান্ত থিসিস চলমান এবং চূড়ান্ত ফল প্রকাশের অপেক্ষায়। বর্তমান রিপোর্টকৃত **CGPA ৩.৬০ / ৪.০০**; এটি প্রকাশিত চূড়ান্ত ফল নয়। পূর্বে তিনি HSC (GPA ৫.০০) এবং SSC (GPA ৫.০০) অর্জন করেছেন।`
       if (constraints.exactSentences) {
         reply = enforceExactSentenceCount(reply, constraints.exactSentences, true)
       }
@@ -1704,7 +1704,7 @@ function handleEducationAndLocation(
       }
     }
 
-    let reply = `Md. Nazmus Shakib is in his final semester of **BSc in Computer Science & Engineering** at Northern University of Business and Technology Khulna. He holds a current **CGPA of 3.60 / 4.00** with expected graduation in 2026. His prior academics include HSC (GPA 5.00/5.00) and SSC (GPA 5.00/5.00).`
+    let reply = `Md. Nazmus Shakib has completed the academic examinations for his **BSc in Computer Science & Engineering** at Northern University of Business and Technology Khulna. His final thesis is in progress, and the final result is awaiting publication. His current reported **CGPA is 3.60 / 4.00**; this is not a published final result. His prior academics include HSC (GPA 5.00/5.00) and SSC (GPA 5.00/5.00).`
     if (constraints.exactSentences) {
       reply = enforceExactSentenceCount(reply, constraints.exactSentences, false)
     }
@@ -2680,14 +2680,14 @@ export function generateLocalResponse(
   ) {
     if (isBangla) {
       return {
-        reply: `আমি **Shakib AI**, মোঃ নাজমুল শাকিবের ডিজিটাল পোর্টফোলিও অ্যাসিস্ট্যান্ট।\n\n**মোঃ নাজমুল শাকিব** একজন ফুল-স্ট্যাক সফটওয়্যার ইঞ্জিনিয়ার (লারাভেল, নেক্সট.জেএস এবং মাইএসকিউএল বিশেষজ্ঞ), খুলনাতে অবস্থান করছেন। তিনি অ্যাপস্টিক টেক ফার্মে ইন্টার্ন হিসেবে কাজ করেছেন এবং নর্দান ইউনিভার্সিটিতে সিএসই ফাইনাল সেমিস্টারে অধ্যয়নরত (CGPA ৩.৬০/৪.০০)।`,
+        reply: `আমি **Shakib AI**, মোঃ নাজমুস শাকিবের ডিজিটাল পোর্টফোলিও অ্যাসিস্ট্যান্ট।\n\n**মোঃ নাজমুস শাকিব** একজন ফুল-স্ট্যাক সফটওয়্যার ইঞ্জিনিয়ার, খুলনায় অবস্থান করছেন এবং অ্যাপস্টিক টেক ফার্মে ইন্টার্ন হিসেবে কাজ করেছেন। তাঁর BSc CSE-এর একাডেমিক পরীক্ষা সম্পন্ন; চূড়ান্ত থিসিস চলমান, চূড়ান্ত ফল প্রকাশের অপেক্ষায়, এবং বর্তমান রিপোর্টকৃত CGPA ৩.৬০/৪.০০।`,
         cards: [],
         suggestedQueries: ['তাঁর সেরা প্রজেক্টগুলো দেখাও', 'ফেসবুক লিংকটা দাও', 'যোগাযোগের মাধ্যম', 'হায়ার করতে চাই'],
         provider: 'local-brain',
       }
     }
     return {
-      reply: `I am **Shakib AI**, the portfolio assistant for **Md. Nazmus Shakib**.\n\n**Md. Nazmus Shakib** is a Full Stack Developer specializing in robust Laravel backend systems, normalized MySQL databases, modern Next.js/React frontends, and n8n workflow automations. He is based in Khulna, Bangladesh, and holds a CGPA of 3.60/4.00 in BSc CSE.`,
+      reply: `I am **Shakib AI**, the portfolio assistant for **Md. Nazmus Shakib**.\n\n**Md. Nazmus Shakib** is a Full Stack Developer specializing in robust Laravel backend systems, normalized MySQL databases, modern Next.js/React frontends, and n8n workflow automations. He is based in Khulna, Bangladesh. He has completed the academic examinations for his BSc CSE; his final thesis is in progress, and the final result is awaiting publication. His current reported CGPA is 3.60/4.00, not a published final result.`,
       cards: [],
       suggestedQueries: ['Show me his best projects', 'Give me Facebook link', 'What technologies does he use?', 'How to hire him?'],
       provider: 'local-brain',

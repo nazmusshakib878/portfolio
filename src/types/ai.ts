@@ -25,7 +25,7 @@ export interface ResumeCardData {
   cgpa: string
   degree: string
   institution: string
-  graduation: string
+  academicStatus: string
   resumeHref: string
   resumeDownloadHref?: string
   certifications: Array<{ title: string; provider: string; duration?: string }>

@@ -1,6 +1,10 @@
 import {
   ArrowUpRight,
+  Check,
   FileText,
+  GraduationCap,
+  LoaderCircle,
+  Clock3,
 } from 'lucide-react'
 import { Hero } from '@/components/sections/hero'
 import { WhatIDo } from '@/components/sections/what-i-do'
@@ -73,14 +77,51 @@ export default function Home() {
 
             <div className="mt-14 grid gap-5 lg:mt-16 lg:grid-cols-[1.12fr_.88fr]">
               <Reveal>
-                <article className="h-full rounded-[24px] border border-white/10 bg-[rgba(15,18,25,.72)] p-6 backdrop-blur-md sm:p-8 lg:p-10">
-                  <div className="flex items-center gap-3">
-                    <span aria-hidden="true" className="size-2 rounded-full bg-[#2bd9b5] shadow-[0_0_18px_rgba(43,217,181,.7)]" />
-                    <p className="eyebrow">About me</p>
+                <article className="relative h-full overflow-hidden rounded-[24px] border border-white/10 bg-[linear-gradient(145deg,rgba(17,25,30,.96),rgba(12,15,22,.92)_55%,rgba(10,25,24,.88))] p-6 backdrop-blur-md sm:p-8 lg:p-10">
+                  <div aria-hidden="true" className="absolute -right-20 -top-24 size-64 rounded-full bg-[#2bd9b5]/[0.07] blur-3xl" />
+                  <div className="relative">
+                    <div className="flex items-center gap-3">
+                      <span className="flex size-10 items-center justify-center rounded-xl border border-[#2bd9b5]/20 bg-[#2bd9b5]/[0.08] text-[#69e6cd]">
+                        <GraduationCap size={19} aria-hidden="true" />
+                      </span>
+                      <div>
+                        <p className="eyebrow">BSc CSE · Academic status</p>
+                        <p className="mt-1 text-xs text-[#929aa7]">Northern University of Business and Technology Khulna</p>
+                      </div>
+                    </div>
+
+                    <h3 className="display mt-7 max-w-2xl text-2xl font-semibold leading-tight text-[#f2f3f7] sm:text-3xl">
+                      Examinations complete. <span className="text-[#69e6cd]">Thesis in progress.</span>
+                    </h3>
+                    <p className="mt-3 max-w-2xl text-sm leading-6 text-[#aeb6c2]">
+                      My final result will be published after I complete the thesis.
+                    </p>
+
+                    <dl className="mt-7 grid gap-2 sm:grid-cols-3">
+                      {[
+                        { label: 'Academic exams', value: 'Completed', icon: Check, tone: 'text-[#69e6cd]' },
+                        { label: 'Final thesis', value: 'In Progress', icon: LoaderCircle, tone: 'text-[#9fd9ff]' },
+                        { label: 'Final result', value: 'Awaiting publication', icon: Clock3, tone: 'text-[#c4b5fd]' },
+                      ].map((item) => {
+                        const StatusIcon = item.icon
+                        return (
+                          <div key={item.label} className="rounded-xl border border-white/[0.08] bg-black/20 px-3.5 py-3">
+                            <dt className="text-[9px] font-semibold uppercase tracking-[.14em] text-[#858e9b]">{item.label}</dt>
+                            <dd className={`mt-2 flex items-center gap-2 text-xs font-semibold ${item.tone}`}>
+                              <StatusIcon size={13} aria-hidden="true" />
+                              {item.value}
+                            </dd>
+                          </div>
+                        )
+                      })}
+                    </dl>
+
+                    <div className="my-7 h-px bg-gradient-to-r from-white/15 via-white/[0.06] to-transparent" />
+                    <p className="eyebrow">Engineering focus</p>
+                    <p className="mt-3 max-w-3xl text-base leading-7 text-[#d9dee7] sm:text-lg">
+                      {portfolioData.bio}
+                    </p>
                   </div>
-                  <p className="mt-8 max-w-3xl text-[clamp(1.2rem,2vw,1.65rem)] leading-[1.55] text-[#d9dee7]">
-                    {portfolioData.bio}
-                  </p>
                 </article>
               </Reveal>
 

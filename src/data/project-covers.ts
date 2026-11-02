@@ -1,4 +1,5 @@
 export const projectCovers = [
+  '/projects/ns-erp/cover.svg',
   '/projects/securex-cover-v2.webp',
   '/projects/ai-smart-campus-cover-v2.webp',
   '/projects/logistica-cover-v3.webp',
@@ -7,5 +8,6 @@ export const projectCovers = [
   '/projects/resumate-ai-cover-v2.webp',
   '/projects/cv-payment-reminder-cover.webp',
   '/projects/aurelia-maison-paris/storefront-home.png',
+  '/projects/internship/Screenshot%20(353).png',
 ] as const
 

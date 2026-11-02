@@ -13,7 +13,6 @@ export function getSystemPrompt(): string {
     availability,
     academicStatus,
     currentCgpa,
-    expectedGraduation,
     resumeHref,
     githubUrl,
     skills,
@@ -115,7 +114,7 @@ Facebook: ${socialLinks.facebook}
 LinkedIn: ${socialLinks.linkedin}
 GitHub: ${githubUrl}
 Availability: ${availability}
-Education: ${academicStatus} at Northern University of Business and Technology Khulna (CGPA: ${currentCgpa} / 4.00, Graduation: ${expectedGraduation})
+Education: ${academicStatus} at Northern University of Business and Technology Khulna. Current reported CGPA: ${currentCgpa} / 4.00; this is not represented as a published final result.
 Experience: Backend Developer Intern at Appstick Tech Firm (${portfolioData.experience[0]?.period || 'Feb 2026 – Mar 2026'}, Khulna)
 Resume Link: ${resumeHref}
 
@@ -175,7 +174,7 @@ export function getResumeCardData(): ResumeCardData {
     cgpa: portfolioData.currentCgpa,
     degree: primaryDegree?.title || 'BSc in CSE',
     institution: primaryDegree?.institution || 'Northern University of Business and Technology Khulna',
-    graduation: portfolioData.expectedGraduation,
+    academicStatus: portfolioData.academicStatus,
     resumeHref: portfolioData.resumeHref,
     resumeDownloadHref: portfolioData.resumeDownloadHref,
     certifications: portfolioData.certifications.map((c) => ({
