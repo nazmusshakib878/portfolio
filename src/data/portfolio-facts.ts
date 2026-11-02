@@ -358,7 +358,9 @@ export const portfolioData: PortfolioData = {
       githubUrl:
         'https://github.com/nazmusshakib878/Securex',
 
-      liveUrl: '',
+      liveUrl: 'https://securex-vgh6.onrender.com/',
+
+      liveLabel: 'Live Demo',
 
       featured: true,
 

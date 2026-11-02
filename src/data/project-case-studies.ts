@@ -253,7 +253,7 @@ export const projectCaseStudies: Record<string, CaseStudyDetail> = {
         src: '/projects/securex/landing-showcase.webp',
         alt: 'Securex CCTV and Security Platform Landing Page and Product Showcase',
         badge: 'Product Showcase',
-        route: '127.0.0.1:8000',
+        route: 'https://securex-vgh6.onrender.com/',
       },
       dashboards: [
         {
@@ -265,7 +265,7 @@ export const projectCaseStudies: Record<string, CaseStudyDetail> = {
           src: '/projects/securex/admin-dashboard.webp',
           alt: 'Securex Admin Control Room Dashboard and Security Service Management Panel',
           badge: 'Admin Control Room',
-          route: '127.0.0.1:8000/admin/dashboard',
+          route: 'https://securex-vgh6.onrender.com/admin/dashboard',
         },
       ],
       workflowShowcase: {
@@ -277,7 +277,7 @@ export const projectCaseStudies: Record<string, CaseStudyDetail> = {
         src: '/projects/securex/service-workflow.webp',
         alt: 'Securex Service Management Workflow and Admin Operations Interface',
         badge: 'Service Operations',
-        route: '127.0.0.1:8000/admin/services',
+        route: 'https://securex-vgh6.onrender.com/admin/services',
       },
     },
     databaseArchitecture: {
