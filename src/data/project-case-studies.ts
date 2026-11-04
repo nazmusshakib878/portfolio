@@ -995,7 +995,7 @@ export const projectCaseStudies: Record<string, CaseStudyDetail> = {
         src: '/projects/nur-foodes/pos-terminal-v3.png',
         alt: 'Nur Foodes Restaurant POS Terminal Interface',
         badge: 'POS Terminal',
-        route: 'https://food-software-sigma.vercel.app/',
+        route: 'https://food-software.onrender.com/',
       },
       mobileExperience: {
         id: 'nur-foodes-mobile-pos',
@@ -1005,7 +1005,7 @@ export const projectCaseStudies: Record<string, CaseStudyDetail> = {
         src: '/projects/nur-foodes/mobile-pos-v3.png',
         alt: 'Nur Foodes Responsive Mobile POS Interface',
         badge: 'Mobile Viewport',
-        route: 'https://food-software-sigma.vercel.app/',
+        route: 'https://food-software.onrender.com/',
       },
     },
     databaseArchitecture: {

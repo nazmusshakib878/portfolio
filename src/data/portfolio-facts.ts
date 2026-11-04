@@ -543,7 +543,7 @@ export const portfolioData: PortfolioData = {
 
       githubUrl: 'https://github.com/nazmusshakib878/food_software',
 
-      liveUrl: 'https://food-software-sigma.vercel.app/',
+      liveUrl: 'https://food-software.onrender.com/',
 
       featured: true,
 

@@ -1343,13 +1343,13 @@ function handleSpecificProject(
     const proj = projects.find((p) => p.title.toLowerCase().includes('nur foodes'))!
     if (isBangla) {
       return {
-        reply: `**Nur Foodes** হলো জাভাস্ক্রিপ্ট, এইচটিএমএল৫ ও সিএসএস৩ দিয়ে তৈরি একটি টাচ-অপ্টিমাইজড রেস্টুরেন্ট পিওএস ও ইআরপি সিস্টেম। এতে ক্যাশিয়ার অর্ডারিং, স্প্লিট পেমেন্ট, সৌদি ১৫% ভ্যাট ও ZATCA ফেজ-২ কিউআর ইনভয়েসিং এবং আরবি/ইংরেজি ইন্টারফেস রয়েছে।\n\n*লাইভ ডেমো: [food-software-sigma.vercel.app](https://food-software-sigma.vercel.app/)*`,
+        reply: `**Nur Foodes** হলো জাভাস্ক্রিপ্ট, এইচটিএমএল৫ ও সিএসএস৩ দিয়ে তৈরি একটি টাচ-অপ্টিমাইজড রেস্টুরেন্ট পিওএস ও ইআরপি সিস্টেম। এতে ক্যাশিয়ার অর্ডারিং, স্প্লিট পেমেন্ট, সৌদি ১৫% ভ্যাট ও ZATCA ফেজ-২ কিউআর ইনভয়েসিং এবং আরবি/ইংরেজি ইন্টারফেস রয়েছে।\n\n*লাইভ ডেমো: [food-software.onrender.com](https://food-software.onrender.com/)*`,
         cards: [{ type: 'project-detail', data: proj }],
         suggestedQueries: ['অন্যান্য প্রজেক্ট দেখাও', 'Securex প্রজেক্ট দেখাও', 'হায়ার করতে চাই'],
       }
     }
     return {
-      reply: `**Nur Foodes** is a touch-optimized restaurant POS and store ERP built with modular JavaScript, HTML5, CSS3, and Vite. It features fast cashier order entry, split payments, Saudi 15% VAT calculation, ZATCA Phase-2 QR invoicing, and bilingual Arabic/English support.\n\n*Live Demo: [food-software-sigma.vercel.app](https://food-software-sigma.vercel.app/)*`,
+      reply: `**Nur Foodes** is a touch-optimized restaurant POS and store ERP built with modular JavaScript, HTML5, CSS3, and Vite. It features fast cashier order entry, split payments, Saudi 15% VAT calculation, ZATCA Phase-2 QR invoicing, and bilingual Arabic/English support.\n\n*Live Demo: [food-software.onrender.com](https://food-software.onrender.com/)*`,
       cards: [{ type: 'project-detail', data: proj }],
       suggestedQueries: ['Show all projects', 'Tell me about Securex', 'How to hire Shakib?'],
     }
