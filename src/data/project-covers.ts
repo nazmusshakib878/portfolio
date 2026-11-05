@@ -5,9 +5,10 @@ export const projectCovers = [
   '/projects/logistica-cover-v3.webp',
   '/projects/nur-foodes-cover-v2.webp',
   '/projects/library-management-cover-v2.webp',
-  '/projects/resumate-ai-cover-v2.webp',
   '/projects/cv-payment-reminder-cover.webp',
   '/projects/aurelia-maison-paris/storefront-home.png',
   '/projects/internship/Screenshot%20(353).png',
+  '/projects/resumate-ai-cover-v2.webp',
+  '/projects/assessment-exam-platform-cover.svg',
 ] as const
 

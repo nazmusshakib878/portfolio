@@ -44,7 +44,7 @@ body {
     var(--bg);
   font-family: var(--font-body), sans-serif;
   overflow-x: hidden;
-  min-width: 320px;
+  min-width: 0;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -79,6 +79,10 @@ p, h1, h2, h3, li, dd { overflow-wrap: anywhere }
   scroll-margin-top: calc(6.5rem + env(safe-area-inset-top, 0px));
 }
 @media (max-width: 640px) {
+  .shell {
+    width: min(var(--container), calc(100% - 1.25rem));
+  }
+
   [id] {
     scroll-margin-top: calc(5rem + env(safe-area-inset-top, 0px));
   }

@@ -157,31 +157,31 @@ export function NazmusAiPanel({
         <div className="h-1 w-full bg-gradient-to-r from-[#2bd9b5] via-[#8b72ff] to-[#aa96ff]" />
 
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-white/[0.08] px-4 py-3 sm:px-5 bg-white/[0.015]">
-          <div className="flex items-center gap-3">
+        <div className="flex items-center justify-between border-b border-white/[0.08] bg-white/[0.015] px-3 py-3 sm:px-5">
+          <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
             <div className="relative flex size-10 items-center justify-center rounded-full border border-[rgba(80,180,255,0.5)] bg-[rgba(10,15,30,0.85)] shadow-[0_0_15px_rgba(0,234,255,0.35)]">
               <ShakibOrbLogo className="size-8" />
               <span className="absolute -bottom-0.5 -right-0.5 size-2.5 rounded-full border-2 border-[#070912] bg-[#00ff9d] shadow-[0_0_6px_#00ff9d]" />
             </div>
-            <div>
+            <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <h3 className="text-sm font-bold tracking-wide text-white">Shakib AI</h3>
+                <h3 className="truncate text-sm font-bold tracking-wide text-white">Shakib AI</h3>
                 <span className="rounded-full border border-[rgba(43,217,181,0.3)] bg-[rgba(43,217,181,0.08)] px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-[#69e6cd]">
                   Online
                 </span>
               </div>
-              <p className="text-[11px] text-[#8e95a5]">Your Digital Portfolio Assistant</p>
+              <p className="truncate text-[11px] text-[#8e95a5]">Your Digital Portfolio Assistant</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-1">
+          <div className="flex shrink-0 items-center gap-0.5 sm:gap-1">
             {/* TTS narration toggle */}
             <button
               type="button"
               onClick={onToggleTts}
               title={isTtsEnabled ? 'Disable Voice Narration' : 'Enable Voice Narration'}
               aria-label={isTtsEnabled ? 'Mute AI Voice' : 'Unmute AI Voice'}
-              className={`rounded-lg p-2 transition ${
+              className={`rounded-lg p-1.5 transition sm:p-2 ${
                 isTtsEnabled
                   ? 'bg-[rgba(43,217,181,0.15)] text-[#2bd9b5]'
                   : 'text-[#747b8b] hover:bg-white/[0.06] hover:text-white'
@@ -196,7 +196,7 @@ export function NazmusAiPanel({
               onClick={onClearHistory}
               title="Reset conversation"
               aria-label="Clear chat history"
-              className="rounded-lg p-2 text-[#747b8b] transition hover:bg-white/[0.06] hover:text-white"
+              className="rounded-lg p-1.5 text-[#747b8b] transition hover:bg-white/[0.06] hover:text-white sm:p-2"
             >
               <RotateCcw size={16} />
             </button>
@@ -218,7 +218,7 @@ export function NazmusAiPanel({
               onClick={onClose}
               title="Close panel"
               aria-label="Close Shakib AI Assistant"
-              className="rounded-lg p-2 text-[#747b8b] transition hover:bg-white/[0.06] hover:text-white"
+              className="rounded-lg p-1.5 text-[#747b8b] transition hover:bg-white/[0.06] hover:text-white sm:p-2"
             >
               <X size={18} />
             </button>

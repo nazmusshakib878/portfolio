@@ -130,6 +130,21 @@ export function parseConstraints(query: string): ParsedConstraints {
     exactSentences = wordToNum[val] ?? parseInt(val, 10)
   }
 
+  const lineMatchEn = query.match(
+    /\b(?:in|just|exactly|only|within)?\s*(\d+|one|two|three|four|five)\s*lines?\b/i
+  )
+  if (lineMatchEn && !exactSentences) {
+    const val = lineMatchEn[1].toLowerCase()
+    const wordToNum: Record<string, number> = {
+      one: 1,
+      two: 2,
+      three: 3,
+      four: 4,
+      five: 5,
+    }
+    exactSentences = wordToNum[val] ?? parseInt(val, 10)
+  }
+
   const sentenceMatchBn = query.match(/(?:মাত্র|ঠিক|শুধুমাত্র)?\s*(\d+|১|২|৩|৪|৫)\s*(?:টি\s*)?বাক্যে?/i)
   if (sentenceMatchBn && !exactSentences) {
     const bnToNum: Record<string, number> = { '১': 1, '২': 2, '৩': 3, '৪': 4, '৫': 5 }
@@ -1173,7 +1188,79 @@ function handleSpecificProject(
   const q = query.toLowerCase()
   const projects = getProjectCardDataList()
 
-  // 7a. CV Payment Reminder Automation (n8n, Google Sheets, Telegram)
+  // 7a. NS ERP — keep an ERP project query from falling through to the
+  // generic project-list response.
+  const isNsErpQuery =
+    q.includes('ns erp') ||
+    (/\berp\b/i.test(q) &&
+      !q.includes('nur foodes') &&
+      !q.includes('restaurant') &&
+      !/\bpos\b/i.test(q))
+
+  if (isNsErpQuery) {
+    const proj = projects.find((p) => p.title.toLowerCase().includes('ns erp'))
+    if (!proj) return null
+
+    let reply = isBangla
+      ? '**NS ERP** একটি full-stack enterprise resource planning system, যেখানে sales, inventory, purchasing, customer, finance, HR, payroll ও reporting-এর workflow এক প্ল্যাটফর্মে রাখা হয়েছে। এর frontend Next.js ও React দিয়ে এবং backend Laravel REST API, Sanctum authentication ও role-based access দিয়ে তৈরি।'
+      : '**NS ERP** is a full-stack enterprise resource planning system that brings sales, inventory, purchasing, customers, finance, HR, payroll, and reporting workflows into one platform. Its frontend uses Next.js and React, while the backend uses a Laravel REST API with Sanctum authentication and role-based access.'
+
+    if (constraints.exactSentences) {
+      reply = enforceExactSentenceCount(reply, constraints.exactSentences, isBangla)
+    }
+
+    return {
+      reply,
+      cards: [{ type: 'project-detail', data: proj }],
+      suggestedQueries: isBangla
+        ? ['NS ERP-এর technology stack কী?', 'NS ERP-এর live demo দেখাও', 'অন্য প্রজেক্ট দেখাও']
+        : ['What is the NS ERP tech stack?', 'Show the NS ERP live demo', 'Show other projects'],
+    }
+  }
+
+  // Resolve named projects from the canonical portfolio data before any legacy
+  // handcrafted response branch. This keeps titles, summaries, and technology
+  // lists synchronized whenever the portfolio data changes.
+  const projectAliases: Array<{ titlePart: string; matches: string[] }> = [
+    { titlePart: 'assessment exam', matches: ['assessment exam', 'exam platform', 'assessment platform'] },
+    { titlePart: 'resumate', matches: ['resumate', 'resume builder', 'ai cv'] },
+    { titlePart: 'securex', matches: ['securex', 'cctv', 'security service'] },
+    { titlePart: 'smart campus', matches: ['smart campus', 'campus system'] },
+    { titlePart: 'logistica', matches: ['logistica'] },
+    { titlePart: 'nur foodes', matches: ['nur foodes', 'food software', 'restaurant pos'] },
+    { titlePart: 'library management', matches: ['library management', 'library project'] },
+    { titlePart: 'cv payment', matches: ['cv payment', 'payment reminder', 'telegram reminder'] },
+    { titlePart: 'aurelia maison', matches: ['aurelia', 'luxury e-commerce', 'luxury ecommerce'] },
+    { titlePart: 'primeor', matches: ['primeor', 'internship program website'] },
+  ]
+  const matchedProjectAlias = projectAliases.find((alias) =>
+    alias.matches.some((term) => q.includes(term))
+  )
+
+  if (matchedProjectAlias) {
+    const proj = projects.find((p) => p.title.toLowerCase().includes(matchedProjectAlias.titlePart))
+    if (proj) {
+      const techStack = proj.technologies.slice(0, 6).join(', ')
+      const highlights = proj.keyFeatures.slice(0, 3).join(' ')
+      let reply = constraints.isDetailed
+        ? `**${proj.title}** — ${proj.description}\n\nKey capabilities: ${highlights}\n\nVerified tech stack: ${proj.technologies.join(', ')}.`
+        : `**${proj.title}** — ${proj.summary}\n\nVerified tech stack: ${techStack}.`
+
+      if (constraints.exactSentences) {
+        reply = enforceExactSentenceCount(reply, constraints.exactSentences, isBangla)
+      }
+
+      return {
+        reply,
+        cards: [{ type: 'project-detail', data: proj }],
+        suggestedQueries: isBangla
+          ? ['এর technology stack কী?', 'এর live demo দেখাও', 'অন্য প্রজেক্ট দেখাও']
+          : ['What is its tech stack?', 'Show the live demo', 'Show other projects'],
+      }
+    }
+  }
+
+  // 7b. CV Payment Reminder Automation (n8n, Google Sheets, Telegram)
   if (
     q.includes('cv payment') ||
     q.includes('payment reminder') ||
@@ -2205,9 +2292,14 @@ export async function processAiMessage(
     return generateLocalResponse('', mode, history)
   }
 
-  // 1. Check for Gemini API Key
+  // Default to the deterministic, portfolio-grounded engine. Remote models are
+  // opt-in because an otherwise fluent response can still introduce facts that
+  // are not documented in the portfolio data.
+  const allowRemoteProvider = process.env.AI_ALLOW_REMOTE === 'true'
+
+  // 1. Check for Gemini API Key only when explicitly enabled.
   const geminiKey = process.env.GEMINI_API_KEY?.trim()
-  if (geminiKey) {
+  if (allowRemoteProvider && geminiKey) {
     try {
       const response = await callGeminiApi(cleanQuery, history, geminiKey)
       if (response) {
@@ -2224,9 +2316,9 @@ export async function processAiMessage(
     }
   }
 
-  // 2. Check for OpenAI API Key
+  // 2. Check for OpenAI API Key only when explicitly enabled.
   const openaiKey = process.env.OPENAI_API_KEY?.trim()
-  if (openaiKey) {
+  if (allowRemoteProvider && openaiKey) {
     try {
       const response = await callOpenAiApi(cleanQuery, history, openaiKey)
       if (response) {

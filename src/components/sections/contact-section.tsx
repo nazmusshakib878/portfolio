@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, type ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -211,7 +211,7 @@ export function ContactSection() {
 }
 
 function ContactFormDetailed() {
-  const sendingRef = useRef(false)
+  const [isSending, setIsSending] = useState(false)
   const {
     register,
     handleSubmit,
@@ -234,8 +234,8 @@ function ContactFormDetailed() {
   })
 
   async function submit(values: FormValues) {
-    if (sendingRef.current) return
-    sendingRef.current = true
+    if (isSending) return
+    setIsSending(true)
     setStatus({ kind: 'idle', message: '' })
     try {
       const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY?.trim()
@@ -283,7 +283,7 @@ function ContactFormDetailed() {
         message: error instanceof Error ? error.message : 'Message delivery failed. Please try direct email.',
       })
     } finally {
-      sendingRef.current = false
+      setIsSending(false)
     }
   }
 
@@ -376,11 +376,11 @@ function ContactFormDetailed() {
       {/* Submit Button */}
       <div className="pt-2">
         <button
-          disabled={isSubmitting}
+          disabled={isSubmitting || isSending}
           className="button primary min-w-[200px] justify-center rounded-xl py-3 px-6 text-xs font-semibold"
           type="submit"
         >
-          {isSubmitting ? (
+          {isSubmitting || isSending ? (
             <>
               <LoaderCircle className="animate-spin" size={16} />
               <span>Sending message...</span>

@@ -30,7 +30,7 @@ export const portfolioData: PortfolioData = {
 
   currentCgpa: '3.60 / 4.00',
 
-  featuredProjectsCount: '7',
+  featuredProjectsCount: '8',
 
   laravelTrainingHours: '80 Hours',
 
@@ -99,7 +99,7 @@ export const portfolioData: PortfolioData = {
     },
     {
       label: 'Selected Projects',
-      value: '10',
+      value: '11',
     },
     {
       label: 'Laravel Training',
@@ -762,6 +762,50 @@ export const portfolioData: PortfolioData = {
 
       accent: 'from-cyan-500/35 via-blue-500/20 to-indigo-500/25',
     },
+    {
+      title: 'Assessment Exam Platform',
+
+      category: 'Full-Stack Assessment Platform',
+
+      date: 'Live Project',
+
+      summary:
+        'A full-stack assessment and examination platform with a Next.js frontend, Laravel REST API, Laravel Sanctum authentication, and PostgreSQL.',
+
+      description:
+        'Assessment Exam Platform is a web application for assessment and examination workflows. It uses a Next.js and Tailwind CSS frontend connected to a Laravel REST API secured with Laravel Sanctum and backed by PostgreSQL. The frontend is deployed on Vercel and the backend API is deployed on Render.',
+
+      keyFeatures: [
+        'Next.js frontend styled with Tailwind CSS.',
+        'Laravel REST API for application data and workflows.',
+        'Laravel Sanctum authentication for API access.',
+        'PostgreSQL database with separate Vercel and Render deployments.',
+      ],
+
+      technologies: [
+        'Next.js',
+        'Tailwind CSS',
+        'Laravel',
+        'REST API',
+        'Laravel Sanctum',
+        'PostgreSQL',
+        'Vercel',
+        'Render',
+      ],
+
+      githubUrl:
+        'https://github.com/nazmusshakib878/Assessment-Exam-platform-',
+
+      liveUrl: 'https://assessment-exam-platform.vercel.app/',
+
+      liveLabel: 'Live Application',
+
+      githubLabel: 'GitHub Repository',
+
+      featured: true,
+
+      accent: 'from-indigo-500/35 via-violet-500/20 to-cyan-500/25',
+    },
   ],
 
   publications: [
@@ -992,6 +1036,22 @@ export const portfolioData: PortfolioData = {
   ],
 
   githubRepos: [
+    {
+      title: 'Assessment Exam Platform',
+
+      description:
+        'Full-stack assessment and examination platform with a Next.js frontend, Laravel REST API, Sanctum authentication, and PostgreSQL.',
+
+      href:
+        'https://github.com/nazmusshakib878/Assessment-Exam-platform-',
+
+      technologies: [
+        'Next.js',
+        'Laravel',
+        'PostgreSQL',
+        'Laravel Sanctum',
+      ],
+    },
     {
       title: 'NS ERP',
 

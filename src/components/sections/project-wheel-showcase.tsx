@@ -204,10 +204,10 @@ const ProjectCard = memo(function ProjectCard({
         {/* Top Bar Badges */}
         <div className="pointer-events-none absolute left-3.5 top-3.5 flex items-center gap-1.5 z-20">
           <span className="rounded-full border border-white/15 bg-black/80 px-2.5 py-0.5 font-mono text-[10px] font-bold text-white shadow-sm">
-            0{index + 1}
+            {String(index + 1).padStart(2, '0')}
           </span>
           {isActive && (
-            <span className="rounded-full border border-[#00f5ff]/35 bg-[#00f5ff]/12 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#00f5ff]">
+            <span className="max-w-[calc(100%-5.5rem)] truncate rounded-full border border-[#00f5ff]/35 bg-[#00f5ff]/12 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#00f5ff]">
               {project.category}
             </span>
           )}
@@ -275,12 +275,12 @@ const ProjectCard = memo(function ProjectCard({
               ))}
             </div>
 
-            <div className="justify-end pt-3 border-t border-white/[0.08] flex items-center gap-1.5 relative z-20">
+            <div className="grid grid-cols-3 gap-1.5 border-t border-white/[0.08] pt-3 relative z-20">
               <Link
                 href={caseStudyHref}
                 onClick={onLinkClick}
                 data-action-button="true"
-                className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-[#00f5ff]/35 bg-[#00f5ff]/[0.07] px-2.5 text-[10px] font-semibold text-[#8ff8ff] hover:bg-[#00f5ff]/[0.13] transition shrink-0"
+                className="inline-flex h-10 min-w-0 items-center justify-center gap-1.5 rounded-lg border border-[#00f5ff]/35 bg-[#00f5ff]/[0.07] px-2 text-[10px] font-semibold text-[#8ff8ff] transition hover:bg-[#00f5ff]/[0.13] sm:h-8"
               >
                 <ArrowUpRight size={12} />
                 <span>Case Study</span>
@@ -292,12 +292,12 @@ const ProjectCard = memo(function ProjectCard({
                   rel="noopener noreferrer"
                   onClick={onLinkClick}
                   data-action-button="true"
-                  className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-2.5 text-[10px] font-semibold text-emerald-400 hover:bg-emerald-500/20 transition shrink-0"
+                  className="inline-flex h-10 min-w-0 items-center justify-center gap-1.5 rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-2 text-[10px] font-semibold text-emerald-400 transition hover:bg-emerald-500/20 sm:h-8"
                   aria-label={`${project.liveLabel ?? 'Live Demo'} of ${project.title}`}
                   title={project.liveLabel ?? 'Live Demo'}
                 >
                   <ExternalLink size={13} />
-                  <span>{project.liveLabel ?? 'Live'}</span>
+                  <span>Live</span>
                 </a>
               )}
 
@@ -308,12 +308,12 @@ const ProjectCard = memo(function ProjectCard({
                   rel="noopener noreferrer"
                   onClick={onLinkClick}
                   data-action-button="true"
-                  className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-white/15 bg-white/[0.04] px-2.5 text-[10px] font-semibold text-[#d9dee7] hover:border-white/30 hover:text-white transition shrink-0"
+                  className="inline-flex h-10 min-w-0 items-center justify-center gap-1.5 rounded-lg border border-white/15 bg-white/[0.04] px-2 text-[10px] font-semibold text-[#d9dee7] transition hover:border-white/30 hover:text-white sm:h-8"
                   aria-label={project.githubLabel ?? `GitHub repo of ${project.title}`}
                   title={project.githubLabel ?? 'GitHub Repository'}
                 >
                   <SiGithub size={13} />
-                  <span>{project.githubLabel ?? 'GitHub'}</span>
+                  <span>GitHub</span>
                 </a>
               )}
             </div>
@@ -327,7 +327,7 @@ const ProjectCard = memo(function ProjectCard({
               {project.category}
             </span>
             <span className="font-mono text-[11px] text-[#aeb6c3]">
-              0{index + 1}
+              {String(index + 1).padStart(2, '0')}
             </span>
           </div>
 
@@ -430,13 +430,16 @@ export function ProjectWheelShowcase() {
     : isTablet
     ? 340
     : 370
-  const cardHeight = isMobile ? 560 : isTablet ? 545 : 540
-  const stageHeight = isMobile ? 620 : isTablet ? 620 : 615
+  const cardHeight = isMobile ? 585 : isTablet ? 545 : 540
+  const stageHeight = isMobile ? 645 : isTablet ? 620 : 615
   const perspective = (isMobile ? CAROUSEL_GEOMETRY.phone : isTablet ? CAROUSEL_GEOMETRY.tablet : CAROUSEL_GEOMETRY.desktop).perspective
 
   useEffect(() => {
     const query = new URLSearchParams(window.location.search)
-    setLiteMode(query.get('lite') === '1' || query.get('off') === 'carousel')
+    const updateMode = window.setTimeout(() => {
+      setLiteMode(query.get('lite') === '1' || query.get('off') === 'carousel')
+    }, 0)
+    return () => window.clearTimeout(updateMode)
   }, [])
 
   useEffect(() => () => {
@@ -599,13 +602,13 @@ export function ProjectWheelShowcase() {
       : tablet
       ? 340
       : 370
-    const ch = mobile ? 560 : tablet ? 545 : 540
+    const ch = mobile ? 585 : tablet ? 545 : 540
     const profile = mobile ? CAROUSEL_GEOMETRY.phone : tablet ? CAROUSEL_GEOMETRY.tablet : CAROUSEL_GEOMETRY.desktop
     const gap = Math.round(cw * (mobile ? 0.05 : 0.07))
     const rad = profile.radius
     const stp = ((liteMode ? profile.step * 0.55 : profile.step) * Math.PI) / 180
     const persp = profile.perspective
-    const stgH = mobile ? 620 : tablet ? 620 : 615
+    const stgH = mobile ? 645 : tablet ? 620 : 615
 
     dimsRef.current = {
       cardWidth: cw,
@@ -1077,7 +1080,7 @@ export function ProjectWheelShowcase() {
         {/* Top Active Indicator Beacon — Desktop only to prevent stacking over cards on mobile */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 z-20 hidden sm:flex flex-col items-center gap-1 opacity-90"
+          className="hidden"
         >
           <div className="flex items-center gap-1.5 rounded-full border border-[#00f5ff]/35 bg-[#080c18]/90 px-3.5 py-1 shadow-[0_0_24px_rgba(0,245,255,0.28)]">
             <span className="size-1.5 rounded-full bg-[#00f5ff] shadow-[0_0_8px_#00f5ff] animate-pulse" />
@@ -1128,8 +1131,8 @@ export function ProjectWheelShowcase() {
         {/* Left: Project title & position badge */}
         <div className="flex items-center gap-3">
           <span key={activeIndex} className="project-wheel-counter font-mono text-sm font-bold text-[#00f5ff]">
-            0{activeIndex + 1}
-            <span className="text-white/60"> / 0{total}</span>
+            {String(activeIndex + 1).padStart(2, '0')}
+            <span className="text-white/60"> / {String(total).padStart(2, '0')}</span>
           </span>
           <span className="h-4 w-px bg-white/10" />
           <p className="display text-sm sm:text-base font-semibold text-[#f2f3f7] max-w-full sm:max-w-md">

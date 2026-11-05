@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, type ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -17,7 +17,7 @@ const schema = z.object({
 type Values = z.infer<typeof schema>
 
 export function ContactForm() {
-  const sendingRef = useRef(false)
+  const [isSending, setIsSending] = useState(false)
   const {
     register,
     handleSubmit,
@@ -33,8 +33,8 @@ export function ContactForm() {
   })
 
   async function submit(values: Values) {
-    if (sendingRef.current) return
-    sendingRef.current = true
+    if (isSending) return
+    setIsSending(true)
     setStatus({ kind: 'idle', message: '' })
     try {
       const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY?.trim()
@@ -83,7 +83,7 @@ export function ContactForm() {
         message: error instanceof Error ? error.message : 'Message could not be sent.',
       })
     } finally {
-      sendingRef.current = false
+      setIsSending(false)
     }
   }
 
@@ -118,12 +118,12 @@ export function ContactForm() {
       </p>
 
       <button
-        disabled={isSubmitting}
+        disabled={isSubmitting || isSending}
         className="button primary min-w-[180px] justify-center sm:w-auto"
         type="submit"
       >
-        {isSubmitting ? <LoaderCircle className="animate-spin" size={16} /> : <Send size={16} />}{' '}
-        {isSubmitting ? 'Sending...' : 'Send message'}
+        {isSubmitting || isSending ? <LoaderCircle className="animate-spin" size={16} /> : <Send size={16} />}{' '}
+        {isSubmitting || isSending ? 'Sending...' : 'Send message'}
       </button>
     </form>
   )
