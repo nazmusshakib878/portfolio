@@ -33,7 +33,7 @@ export const portfolioData = {
   ...facts,
   projects,
   resumeHref: '/resume.pdf?v=2',
-  resumeDownloadHref: '/Nazmus_Shakib_CV.pdf',
+  resumeDownloadHref: '/MD_Nazmus_Shakib_CV.pdf',
   linkedinUrl: socialLinks.linkedin,
   socialLinks: [
     ...facts.socialLinks,
